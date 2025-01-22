@@ -16,7 +16,7 @@
     <groupId>es.cesguiro</groupId>
     <artifactId>daw2-bookstore</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
     <name>${project.groupId}.${project.artifactId}</name>
     <description>Demo project for domain layer</description>
     <url>https://github.com/cesguiro/${project.artifactId}</url>
@@ -43,11 +43,10 @@
         </developer>
     </developers>
     <modules>
-        <module>app</module>
-        <module>web</module>
         <module>domain</module>
         <module>persistence</module>
-        <module>domain</module>
+        <module>web</module>
+        <module>app</module>
     </modules>
 
     <dependencyManagement>
@@ -55,7 +54,7 @@
             <dependency>
                 <groupId>es.cesguiro</groupId>
                 <artifactId>domain</artifactId>
-                <version>0.0.1-snapshot</version>
+                <version>0.1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>es.cesguiro</groupId>

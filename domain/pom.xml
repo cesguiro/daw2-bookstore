@@ -10,6 +10,8 @@
     </parent>
 
     <artifactId>domain</artifactId>
+    <version>0.1.0-SNAPSHOT</version>git
+    <packaging>jar</packaging>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
