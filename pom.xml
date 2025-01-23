@@ -47,6 +47,7 @@
         <module>persistence</module>
         <module>web</module>
         <module>app</module>
+        <module>util</module>
     </modules>
 
     <dependencyManagement>
