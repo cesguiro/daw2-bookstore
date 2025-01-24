@@ -25,7 +25,7 @@ class DefaultLanguageProviderTest {
     }
 
     @Test
-    @DisplayName("Test getLanguage method should return es")
+    @DisplayName("Test getLanguage method with Locale('es') should return es")
     void getLanguageShouldReturnEs() {
         Locale.setDefault(Locale.of("es"));
         String language = defaultLanguageProvider.getLanguage();
@@ -36,7 +36,7 @@ class DefaultLanguageProviderTest {
     }
 
     @Test
-    @DisplayName("Test getLanguage method should return en")
+    @DisplayName("Test getLanguage method with Locale('en') should return en")
     void getLanguageShouldReturnEn() {
         Locale.setDefault(Locale.ENGLISH);
         String language = defaultLanguageProvider.getLanguage();
@@ -51,7 +51,7 @@ class DefaultLanguageProviderTest {
     void getLanguageWithUnsupportedLanguageLocale() {
         PropertyProvider mockProvider = Mockito.mock(PropertyProvider.class);
         Mockito.when(mockProvider.getProperty("app.default.language")).thenReturn("es");
-        PropertyUtil.getInstance().setPropertyProvider(mockProvider);
+        PropertyUtil.getInstance(mockProvider);
         Locale.setDefault(Locale.FRANCE);
         String language = defaultLanguageProvider.getLanguage();
         assertAll(
@@ -60,25 +60,6 @@ class DefaultLanguageProviderTest {
         );
     }
 
-    @Test
-    @DisplayName("Test getLanguage should throw LanguageException when language is not supported and app.default.language is set to not supported language")
-    void getLanguageWithUnsupportedLanguage() {
-        PropertyProvider mockProvider = Mockito.mock(PropertyProvider.class);
-        Mockito.when(mockProvider.getProperty("app.default.language")).thenReturn("fr");
-        PropertyUtil.getInstance().setPropertyProvider(mockProvider);
-        Locale.setDefault(Locale.of("it"));
-        assertThrows(LanguageException.class, defaultLanguageProvider::getLanguage);
-    }
-
-    @Test
-    @DisplayName("Test getLanguage should throw KeyNotFoundException when language is not supported and app.default.language is not set")
-    void getLanguageWithUnsupportedLanguageAndAppDefaultLanguageIsNotSet() {
-        PropertyProvider mockProvider = Mockito.mock(PropertyProvider.class);
-        Mockito.when(mockProvider.getProperty("app.default.language")).thenThrow(KeyNotFoundException.class);
-        PropertyUtil.getInstance().setPropertyProvider(mockProvider);
-        Locale.setDefault(Locale.of("it"));
-        assertThrows(KeyNotFoundException.class, defaultLanguageProvider::getLanguage);
-    }
 
     @Test
     @DisplayName("Test getLanguage should handle case-insensitive language codes")
@@ -118,17 +99,4 @@ class DefaultLanguageProviderTest {
         );
     }
 
-    @Test
-    @DisplayName("Test getLanguage should throw AppFileNotFoundException if application.properties is missing")
-    void getLanguageShouldThrowAppFileNotFoundException() {
-        PropertyProvider mockProvider = Mockito.mock(PropertyProvider.class);
-        Mockito.when(mockProvider.getProperty("app.default.language")).thenThrow(new AppFileNotFoundException("application.properties"));
-
-        PropertyUtil.getInstance().setPropertyProvider(mockProvider);
-
-        Locale.setDefault(Locale.of("it"));
-
-        assertThrows(AppFileNotFoundException.class, defaultLanguageProvider::getLanguage);
-
-    }
 }

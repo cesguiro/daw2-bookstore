@@ -2,16 +2,23 @@ package es.cesguiro.property;
 
 import es.cesguiro.exception.AppFileNotFoundException;
 import es.cesguiro.exception.KeyNotFoundException;
+import es.cesguiro.exception.PropertyUtilException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doThrow;
 
+@ExtendWith(MockitoExtension.class)
 class PropertyUtilTest {
+
+    @Mock
+    private PropertyProvider mockPropertyProvider;
 
     @BeforeEach
     void resetPropertyUtil() {
@@ -37,38 +44,30 @@ class PropertyUtilTest {
     }
 
     @Test
-    @DisplayName("Test setPropertyProvider should throw IllegalArgumentException if null is passed")
+    @DisplayName("Test getInstance with null PropertyProvider should throw PropertyUtilException")
     void testSetPropertyProviderNull() {
-        PropertyUtil propertyUtil = PropertyUtil.getInstance();
-
-        // Verifica que el proveedor de propiedades no puede ser nulo
-        assertThrows(IllegalArgumentException.class, () -> propertyUtil.setPropertyProvider(null),
-                "setPropertyProvider should throw IllegalArgumentException if null is passed");
+        assertThrows(PropertyUtilException.class, () -> PropertyUtil.getInstance((PropertyProvider) null),
+                "getInstance with null PropertyProvider should throw PropertyUtilException");
     }
 
     @Test
-    @DisplayName("Test getProperty should throw AppFileNotFoundException if application.properties is missing")
+    @DisplayName("Test getInstance with empty property file should throw PropertyUtilException")
+    void testSetPropertyProviderEmpty() {
+        assertThrows(PropertyUtilException.class, () -> PropertyUtil.getInstance("", mockPropertyProvider),
+                "getInstance with empty property file should throw PropertyUtilException");
+    }
+
+    @Test
+    @DisplayName("Test getProperty should throw AppFileNotFoundException if properties file is missing")
     void testGetPropertyAppFileNotFoundException() {
-        PropertyProvider mockPropertyProvider = Mockito.mock(PropertyProvider.class);
-
-        // Simulamos que al intentar cargar el archivo, se lanza la excepción AppFileNotFoundException
-        doThrow(new AppFileNotFoundException("application.properties"))
-                .when(mockPropertyProvider).getProperty(anyString());
-
-        PropertyUtil propertyUtil = PropertyUtil.getInstance();
-        propertyUtil.setPropertyProvider(mockPropertyProvider);
-
-        assertThrows(AppFileNotFoundException.class, () -> propertyUtil.getProperty("app.name"),
+        assertThrows(AppFileNotFoundException.class, () -> PropertyUtil.getInstance("non-existing.properties", mockPropertyProvider),
                 "getProperty should throw AppFileNotFoundException if application.properties is missing");
     }
 
     @Test
-    @DisplayName("Test getProperty should return correct value from default PropertyProvider")
+    @DisplayName("Test getProperty should return correct value from custom PropertyProvider")
     void testGetProperty() {
-
-        PropertyProvider mockPropertyProvider = Mockito.mock(PropertyProvider.class);
-        PropertyUtil propertyUtil = PropertyUtil.getInstance();
-        propertyUtil.setPropertyProvider(mockPropertyProvider);
+        PropertyUtil propertyUtil = PropertyUtil.getInstance(mockPropertyProvider);
         Mockito.when(mockPropertyProvider.getProperty("app.name")).thenReturn("util");
 
         String property = propertyUtil.getProperty("app.name");
@@ -82,9 +81,7 @@ class PropertyUtilTest {
     @Test
     @DisplayName("Test get non-existing property should throw KeyNotFoundException")
     void testGetPropertyKeyNotFound() {
-        PropertyProvider mockPropertyProvider = Mockito.mock(PropertyProvider.class);
-        PropertyUtil propertyUtil = PropertyUtil.getInstance();
-        propertyUtil.setPropertyProvider(mockPropertyProvider);
+        PropertyUtil propertyUtil = PropertyUtil.getInstance(mockPropertyProvider);
         Mockito.when(mockPropertyProvider.getProperty("app.name")).thenThrow(KeyNotFoundException.class);
 
         assertThrows(KeyNotFoundException.class, () -> propertyUtil.getProperty("app.name"),
@@ -94,9 +91,7 @@ class PropertyUtilTest {
     @Test
     @DisplayName("Test get property with empty key should throw KeyNotFoundException")
     void testGetPropertyEmptyKey() {
-        PropertyProvider mockPropertyProvider = Mockito.mock(PropertyProvider.class);
-        PropertyUtil propertyUtil = PropertyUtil.getInstance();
-        propertyUtil.setPropertyProvider(mockPropertyProvider);
+        PropertyUtil propertyUtil = PropertyUtil.getInstance(mockPropertyProvider);
         Mockito.when(mockPropertyProvider.getProperty("")).thenThrow(KeyNotFoundException.class);
 
         assertThrows(KeyNotFoundException.class, () -> propertyUtil.getProperty(""),
@@ -106,9 +101,7 @@ class PropertyUtilTest {
     @Test
     @DisplayName("Test get property with null key should throw KeyNotFoundException")
     void testGetPropertyNullKey() {
-        PropertyProvider mockPropertyProvider = Mockito.mock(PropertyProvider.class);
-        PropertyUtil propertyUtil = PropertyUtil.getInstance();
-        propertyUtil.setPropertyProvider(mockPropertyProvider);
+        PropertyUtil propertyUtil = PropertyUtil.getInstance(mockPropertyProvider);
         Mockito.when(mockPropertyProvider.getProperty(null)).thenThrow(KeyNotFoundException.class);
 
         assertThrows(KeyNotFoundException.class, () -> propertyUtil.getProperty(null),

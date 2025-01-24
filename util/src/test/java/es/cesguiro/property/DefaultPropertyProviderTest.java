@@ -2,18 +2,9 @@ package es.cesguiro.property;
 
 import es.cesguiro.exception.AppFileNotFoundException;
 import es.cesguiro.exception.KeyNotFoundException;
-import es.cesguiro.exception.LoadPropertyFileException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
-import java.io.IOException;
-import java.io.InputStream;
-
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 class DefaultPropertyProviderTest {
 

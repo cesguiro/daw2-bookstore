@@ -2,7 +2,7 @@ package es.cesguiro.property;
 
 import es.cesguiro.exception.AppFileNotFoundException;
 import es.cesguiro.exception.KeyNotFoundException;
-import es.cesguiro.exception.LoadPropertyFileException;
+import es.cesguiro.exception.LoadPropertiesFileException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,7 +20,7 @@ public class DefaultPropertyProvider implements PropertyProvider{
             }
             properties.load(input);
         } catch (IOException e) {
-            throw new LoadPropertyFileException(filename, e);
+            throw new LoadPropertiesFileException(filename, e);
         }
     }
 
