@@ -1,8 +1,11 @@
 package es.cesguiro.usecase.book.query.impl;
 
+import es.cesguiro.exception.DomainException;
 import es.cesguiro.model.Book;
+import es.cesguiro.pagination.PagedCollection;
 import es.cesguiro.repository.AuthorRepository;
 import es.cesguiro.repository.BookRepository;
+import es.cesguiro.repository.model.BookEntity;
 import es.cesguiro.usecase.book.query.FindAllUseCase;
 import es.cesguiro.usecase.book.query.mapper.AuthorMapper;
 import es.cesguiro.usecase.book.query.mapper.BookMapper;
@@ -21,9 +24,13 @@ public class FindAllService implements FindAllUseCase {
     }
 
     @Override
-    public List<BookCollectionDto> execute(int page, int size) {
-        List<Book> books = bookRepository
-                .findAll(page, size)
+    public PagedCollection<BookCollectionDto> execute(int page, int size) {
+        if(page < 0 || size <= 0) {
+            throw new DomainException("Page number and page size must be greater than zero");
+        }
+        PagedCollection<BookEntity> bookEntityPage = bookRepository.findAll(page, size);
+        List<Book> books = bookEntityPage
+                .data()
                 .stream()
                 .map(BookMapper::toBook)
                 .toList();
@@ -38,6 +45,11 @@ public class FindAllService implements FindAllUseCase {
                     );
                 }
         );
-        return  books.stream().map(BookMapper::toBookCollectionDto).toList();
+        return new PagedCollection<>(
+                books.stream().map(BookMapper::toBookCollectionDto).toList(),
+                page,
+                size,
+                bookEntityPage.totalElements()
+        );
     }
 }

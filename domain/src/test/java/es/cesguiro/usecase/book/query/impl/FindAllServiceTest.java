@@ -1,5 +1,8 @@
 package es.cesguiro.usecase.book.query.impl;
 
+import es.cesguiro.exception.DomainException;
+import es.cesguiro.exception.PagedCollectionException;
+import es.cesguiro.pagination.PagedCollection;
 import es.cesguiro.repository.AuthorRepository;
 import es.cesguiro.repository.BookRepository;
 import es.cesguiro.repository.model.AuthorEntity;
@@ -36,39 +39,55 @@ class FindAllServiceTest {
     private FindAllService findAllService;
 
     @Test
-    @DisplayName("Test execute method returns list of BookCollectionDto")
+    @DisplayName("Test execute method returns PagedCollection of BookCollectionDto")
     void executeReturnsBookCollectionDtoList() {
         // Arrange
-        int page = 0;
-        int size = 2;
+        int page = 1;
+        int size = 4;
 
         // Mock books
         BookEntity bookEntity1 = new BookEntity("123", "Title 1", "Synopsis 1", new BigDecimal("10.00"), 5.00, "cover1.jpg", LocalDate.of(2020, 1, 1));
         BookEntity bookEntity2 = new BookEntity("456", "Title 2", "Synopsis 2", new BigDecimal("20.00"), 10.00, "cover2.jpg", LocalDate.of(2021, 6, 15));
-        List<BookEntity> bookEntities = List.of(bookEntity1, bookEntity2);
-        when(bookRepository.findAll(page, size)).thenReturn(bookEntities);
+        BookEntity bookEntity3 = new BookEntity("789", "Title 3", "Synopsis 3", new BigDecimal("30.00"), 15.00, "cover3.jpg", LocalDate.of(2022, 12, 31));
+        BookEntity bookEntity4 = new BookEntity("012", "Title 4", "Synopsis 4", new BigDecimal("40.00"), 20.00, "cover4.jpg", LocalDate.of(2023, 3, 10));
+        List<BookEntity> bookEntities = List.of(bookEntity1, bookEntity2, bookEntity3, bookEntity4);
+        when(bookRepository.findAll(page, size)).thenReturn(new PagedCollection<>(bookEntities, page, size, bookEntities.size()));
 
         // Mock authors
         AuthorEntity authorEntity1 = new AuthorEntity("Author 1", "Nationality 1", "Bio 1", 1970, null, "slug1");
         AuthorEntity authorEntity2 = new AuthorEntity("Author 2", "Nationality 2", "Bio 2", 1980, null, "slug2");
+        AuthorEntity authorEntity3 = new AuthorEntity("Author 3", "Nationality 3", "Bio 3", 1990, null, "slug3");
+        AuthorEntity authorEntity4 = new AuthorEntity("Author 4", "Nationality 4", "Bio 4", 2000, null, "slug4");
+        AuthorEntity authorEntity5 = new AuthorEntity("Author 5", "Nationality 5", "Bio 5", 2010, null, "slug5");
         List<AuthorEntity> authorEntities1 = List.of(authorEntity1);
         List<AuthorEntity> authorEntities2 = List.of(authorEntity2);
+        List<AuthorEntity> authorEntities3 = List.of(authorEntity3);
+        List<AuthorEntity> authorEntities4 = List.of(authorEntity4, authorEntity5);
         when(authorRepository.findAllByBookIsbn("123")).thenReturn(authorEntities1);
         when(authorRepository.findAllByBookIsbn("456")).thenReturn(authorEntities2);
+        when(authorRepository.findAllByBookIsbn("789")).thenReturn(authorEntities3);
+        when(authorRepository.findAllByBookIsbn("012")).thenReturn(authorEntities4);
 
         // Act
-        List<BookCollectionDto> result = findAllService.execute(page, size);
+        PagedCollection<BookCollectionDto> result = findAllService.execute(page, size);
 
-        // Assert
         assertAll(
-                () -> assertEquals(2, result.size(), "Result list size should match"),
-                () -> assertEquals("123", result.getFirst().isbn(), "First book ISBN should match"),
-                () -> assertEquals("456", result.get(1).isbn(), "Second book ISBN should match"),
-                () -> assertEquals(1, result.getFirst().authors().size(), "First book authors size should match"),
-                () -> assertEquals(1, result.get(1).authors().size(), "Second book authors size should match"),
-                () -> assertEquals("Author 1", result.getFirst().authors().getFirst().name(), "First book author name should match"),
-                () -> assertEquals("Author 2", result.get(1).authors().getFirst().name(), "Second book author name should match")
+                () -> assertEquals(4, result.data().size(), "Result list size should match"),
+                () -> assertEquals("123", result.data().get(0).isbn(), "First book ISBN should match"),
+                () -> assertEquals("456", result.data().get(1).isbn(), "Second book ISBN should match"),
+                () -> assertEquals("789", result.data().get(2).isbn(), "Third book ISBN should match"),
+                () -> assertEquals("012", result.data().get(3).isbn(), "Fourth book ISBN should match"),
+                () -> assertEquals(1, result.data().get(0).authors().size(), "First book authors size should match"),
+                () -> assertEquals(1, result.data().get(1).authors().size(), "Second book authors size should match"),
+                () -> assertEquals(1, result.data().get(2).authors().size(), "Third book authors size should match"),
+                () -> assertEquals(2, result.data().get(3).authors().size(), "Fourth book authors size should match"),
+                () -> assertEquals("Author 1", result.data().get(0).authors().get(0).name(), "First book author name should match"),
+                () -> assertEquals("Author 2", result.data().get(1).authors().get(0).name(), "Second book author name should match"),
+                () -> assertEquals("Author 3", result.data().get(2).authors().get(0).name(), "Third book author name should match"),
+                () -> assertEquals("Author 4", result.data().get(3).authors().get(0).name(), "Fourth book first author name should match"),
+                () -> assertEquals("Author 5", result.data().get(3).authors().get(1).name(), "Fourth book second author name should match")
         );
+
 
         // Verify interactions with repositories
         Mockito.verify(bookRepository).findAll(page, size);
@@ -80,13 +99,13 @@ class FindAllServiceTest {
     @DisplayName("Test when bookRepository returns an empty list")
     void testEmptyBookList() {
         // Arrange
-        when(bookRepository.findAll(0, 10)).thenReturn(Collections.emptyList());
+        when(bookRepository.findAll(2, 10)).thenReturn(new PagedCollection<>(Collections.emptyList(), 2, 10, 10));
 
         // Act
-        List<BookCollectionDto> result = findAllService.execute(0, 10);
+        PagedCollection<BookCollectionDto> result = findAllService.execute(2, 10);
 
         // Assert
-        assertTrue(result.isEmpty(), "The result should be an empty list when no books are found");
+        assertTrue(result.data().isEmpty(), "The result should be an empty list when no books are found");
     }
 
     @Test
@@ -94,87 +113,57 @@ class FindAllServiceTest {
     void testEmptyAuthorList() {
         // Arrange
         BookEntity bookEntity = new BookEntity("isbn1", "title", "synopsis", BigDecimal.TEN, 10.00, "cover", LocalDate.now());
-        when(bookRepository.findAll(0, 10)).thenReturn(List.of(bookEntity)); // Cambiar a BookEntity
+        when(bookRepository.findAll(1,2)).thenReturn(new PagedCollection<>(List.of(bookEntity), 1, 2, 1));
         when(authorRepository.findAllByBookIsbn(bookEntity.isbn())).thenReturn(Collections.emptyList());
 
         // Act
-        List<BookCollectionDto> result = findAllService.execute(0, 10);
+        PagedCollection<BookCollectionDto> result = findAllService.execute(1, 2);
 
         // Assert
-        assertFalse(result.isEmpty(), "The result should not be empty");
-        assertTrue(result.get(0).authors().isEmpty(), "The authors list should be empty for books with no authors");
+        assertFalse(result.data().isEmpty(), "The result should not be empty");
+        assertTrue(result.data().getFirst().authors().isEmpty(), "The authors list should be empty for books with no authors");
     }
 
     @Test
-    @DisplayName("Test when both bookRepository and authorRepository return valid data")
-    void testValidData() {
-        // Arrange
-        AuthorEntity authorEntity = new AuthorEntity("authorName", "authorNationality", "biography", 1980, 2020, "slug");
-        BookEntity bookEntity = new BookEntity("isbn1", "title", "synopsis", BigDecimal.TEN, 10.00, "cover", LocalDate.now());
-        when(bookRepository.findAll(0, 10)).thenReturn(List.of(bookEntity));
-        when(authorRepository.findAllByBookIsbn(bookEntity.isbn())).thenReturn(List.of(authorEntity));
-
-        // Act
-        List<BookCollectionDto> result = findAllService.execute(0, 10);
-
-        // Assert
-        assertFalse(result.isEmpty(), "The result should not be empty");
-        assertEquals(1, result.size(), "The result should contain one book");
-        assertEquals(1, result.get(0).authors().size(), "The book should have one author");
-        assertEquals(authorEntity.slug(), result.get(0).authors().get(0).slug(), "The author's slug should match");
-    }
-
-    @Test
-    @DisplayName("Test pagination with different page and size values")
-    void testPagination() {
+    @DisplayName(("Test when some books have authors and some don't"))
+    void testBooksAndAuthors() {
         // Arrange
         BookEntity bookEntity1 = new BookEntity("isbn1", "title1", "synopsis1", BigDecimal.TEN, 10.00, "cover", LocalDate.now());
         BookEntity bookEntity2 = new BookEntity("isbn2", "title2", "synopsis2", BigDecimal.TEN, 10.00, "cover", LocalDate.now());
-        when(bookRepository.findAll(0, 2)).thenReturn(List.of(bookEntity1, bookEntity2));
+        when(bookRepository.findAll(0, 2)).thenReturn(new PagedCollection<>(List.of(bookEntity1, bookEntity2), 0, 2, 2));
+        when(authorRepository.findAllByBookIsbn(bookEntity1.isbn())).thenReturn(Collections.emptyList());
+        AuthorEntity authorEntity = new AuthorEntity("authorName", "authorNationality", "biography", 1980, 2020, "slug");
+        when(authorRepository.findAllByBookIsbn(bookEntity2.isbn())).thenReturn(List.of(authorEntity));
 
         // Act
-        List<BookCollectionDto> result = findAllService.execute(0, 2);
+        PagedCollection<BookCollectionDto> result = findAllService.execute(0, 2);
 
         // Assert
-        assertEquals(2, result.size(), "The result should contain two books for the first page with size 2");
-        assertEquals(bookEntity1.isbn(), result.get(0).isbn(), "The first book's ISBN should match");
-        assertEquals(bookEntity2.isbn(), result.get(1).isbn(), "The second book's ISBN should match");
+        assertEquals(2, result.data().size(), "The result should contain two books");
+        assertTrue(result.data().get(0).authors().isEmpty(), "The first book should have no authors");
+        assertEquals(1, result.data().get(1).authors().size(), "The second book should have one author");
+        assertEquals("authorName", result.data().get(1).authors().get(0).name(), "The author's name should match");
     }
 
-    @Test
-    @DisplayName("Test when books have no authors associated")
-    void testBooksWithoutAuthors() {
-        // Arrange
-        BookEntity bookEntity = new BookEntity("isbn1", "title", "synopsis", BigDecimal.TEN, 10.00, "cover", LocalDate.now());
-        when(bookRepository.findAll(0, 10)).thenReturn(List.of(bookEntity));
-        when(authorRepository.findAllByBookIsbn(bookEntity.isbn())).thenReturn(Collections.emptyList());
-
-        // Act
-        List<BookCollectionDto> result = findAllService.execute(0, 10);
-
-        // Assert
-        assertFalse(result.isEmpty(), "The result should not be empty");
-        assertTrue(result.get(0).authors().isEmpty(), "Books with no authors should have an empty authors list");
-    }
 
     @Test
     @DisplayName("Test when book has multiple authors")
     void testMultipleAuthors() {
         // Arrange
-        AuthorEntity author1 = new AuthorEntity("authorName1", "authorNationality", "biography", 1980, 2020, "slug1");
-        AuthorEntity author2 = new AuthorEntity("authorName2", "authorNationality", "biography", 1980, 2020, "slug2");
         BookEntity bookEntity = new BookEntity("isbn1", "title", "synopsis", BigDecimal.TEN, 10.00, "cover", LocalDate.now());
-        when(bookRepository.findAll(0, 10)).thenReturn(List.of(bookEntity));
-        when(authorRepository.findAllByBookIsbn(bookEntity.isbn())).thenReturn(List.of(author1, author2));
+        when(bookRepository.findAll(0, 10)).thenReturn(new PagedCollection<>(List.of(bookEntity), 0, 10, 1));
+        AuthorEntity authorEntity1 = new AuthorEntity("author1", "nationality1", "bio1", 1980, 2020, "slug1");
+        AuthorEntity authorEntity2 = new AuthorEntity("author2", "nationality2", "bio2", 1990, 2021, "slug2");
+        when(authorRepository.findAllByBookIsbn(bookEntity.isbn())).thenReturn(List.of(authorEntity1, authorEntity2));
 
         // Act
-        List<BookCollectionDto> result = findAllService.execute(0, 10);
+        PagedCollection<BookCollectionDto> result = findAllService.execute(0, 10);
 
         // Assert
-        assertFalse(result.isEmpty(), "The result should not be empty");
-        assertEquals(2, result.get(0).authors().size(), "The book should have two authors");
-        assertEquals("slug1", result.get(0).authors().get(0).slug(), "The first author's slug should match");
-        assertEquals("slug2", result.get(0).authors().get(1).slug(), "The second author's slug should match");
+        assertEquals(1, result.data().size(), "The result should contain one book");
+        assertEquals(2, result.data().get(0).authors().size(), "The book should have two authors");
+        assertEquals("author1", result.data().get(0).authors().get(0).name(), "The first author's name should match");
+        assertEquals("author2", result.data().get(0).authors().get(1).name(), "The second author's name should match");
     }
 
     @Test
@@ -192,7 +181,7 @@ class FindAllServiceTest {
     void testAuthorRepositoryException() {
         // Arrange
         BookEntity bookEntity = new BookEntity("isbn1", "title", "synopsis", BigDecimal.TEN, 10.00, "cover", LocalDate.now());
-        when(bookRepository.findAll(0, 10)).thenReturn(List.of(bookEntity));
+        when(bookRepository.findAll(0, 10)).thenReturn(new PagedCollection<>(List.of(bookEntity), 0, 10, 1));
         when(authorRepository.findAllByBookIsbn(bookEntity.isbn())).thenThrow(new RuntimeException("Database error"));
 
         // Act & Assert
@@ -205,14 +194,14 @@ class FindAllServiceTest {
         // Arrange
         BookEntity bookEntity1 = new BookEntity("isbn1", "title1", "synopsis1", BigDecimal.TEN, 10.00, "cover", LocalDate.now());
         BookEntity bookEntity2 = new BookEntity("isbn2", "title2", "synopsis2", BigDecimal.TEN, 20.00, "cover", LocalDate.now());
-        when(bookRepository.findAll(0, 10)).thenReturn(List.of(bookEntity1, bookEntity2));
+        when(bookRepository.findAll(0, 10)).thenReturn(new PagedCollection<>(List.of(bookEntity1, bookEntity2), 0, 10, 2));
 
         // Act
-        List<BookCollectionDto> result = findAllService.execute(0, 10);
+        PagedCollection<BookCollectionDto> result = findAllService.execute(0, 10);
 
         // Assert
-        assertEquals(new BigDecimal("9.00"), result.get(0).finalPrice(), "The final price should be correctly calculated with 10% discount");
-        assertEquals(new BigDecimal("8.00"), result.get(1).finalPrice(), "The final price should be correctly calculated with 20% discount");
+        assertEquals(new BigDecimal("9.00"), result.data().getFirst().finalPrice(), "The final price should be correctly calculated with 10% discount");
+        assertEquals(new BigDecimal("8.00"), result.data().get(1).finalPrice(), "The final price should be correctly calculated with 20% discount");
     }
 
     @Test
@@ -220,75 +209,47 @@ class FindAllServiceTest {
     void testBooksWithIncompleteInformation() {
         // Arrange
         BookEntity bookEntity = new BookEntity("isbn1", "title1", null, BigDecimal.ZERO, 10.00, null, LocalDate.now());
-        when(bookRepository.findAll(0, 10)).thenReturn(List.of(bookEntity));
+        when(bookRepository.findAll(0, 10)).thenReturn(new PagedCollection<>(List.of(bookEntity), 0, 10, 1));
 
         // Act
-        List<BookCollectionDto> result = findAllService.execute(0, 10);
+        PagedCollection<BookCollectionDto> result = findAllService.execute(0, 10);
 
         // Assert
-        assertFalse(result.isEmpty(), "The result should not be empty");
-        assertEquals(BigDecimal.ZERO, result.get(0).basePrice(), "The book's basePrice should be BigDecimal.ZERO when it is null in the entity");
-        assertNull(result.getFirst().cover(), "The book's cover should be null");
+        assertFalse(result.data().isEmpty(), "The result should not be empty");
+        assertEquals(BigDecimal.ZERO, result.data().getFirst().basePrice(), "The book's basePrice should be BigDecimal.ZERO when it is null in the entity");
+        assertNull(result.data().getFirst().cover(), "The book's cover should be null");
     }
 
     @Test
-    @DisplayName("Test edge case pagination with page = 0 and size = 0")
+    @DisplayName("Test pagination with size = 0 should throw DomainException")
     void testEdgePaginationZeroPageSize() {
-        // Arrange
-        BookEntity bookEntity = new BookEntity("isbn1", "title", "synopsis", BigDecimal.TEN, 10.00, "cover", LocalDate.now());
-        // Simulamos que el repositorio devuelve una lista vacía cuando page = 0 y size = 0
-        when(bookRepository.findAll(0, 0)).thenReturn(Collections.emptyList());
+        // Act & Assert
+        assertThrows(DomainException.class, () -> findAllService.execute(0, 0), "Expected exception to be thrown");
+    }
 
-        // Act
-        List<BookCollectionDto> result = findAllService.execute(0, 0);
-
-        // Assert
-        assertTrue(result.isEmpty(), "The result should be empty when page = 0 and size = 0");
+    @Test
+    @DisplayName("Test pagination with negative page value should throw DomainException")
+    void testEdgePaginationNegativePageValue() {
+        // Act & Assert
+        assertThrows(DomainException.class, () -> findAllService.execute(-1, 10), "Expected exception to be thrown");
     }
 
     @Test
     @DisplayName("Test edge case pagination with page = Integer.MAX_VALUE and size = Integer.MAX_VALUE")
     void testEdgePaginationMaxValues() {
         // Arrange
-        BookEntity bookEntity = new BookEntity("isbn1", "title", "synopsis", BigDecimal.TEN, 10.00, "cover", LocalDate.now());
-        when(bookRepository.findAll(Integer.MAX_VALUE, Integer.MAX_VALUE)).thenReturn(List.of(bookEntity));
-
-        // Act
-        List<BookCollectionDto> result = findAllService.execute(Integer.MAX_VALUE, Integer.MAX_VALUE);
-
-        // Assert
-        assertEquals(1, result.size(), "The result should contain one book with max page and size");
-    }
-
-    @Test
-    @DisplayName("Test negative page value in pagination")
-    void testNegativePageValue() {
-        // Arrange
-        BookEntity bookEntity = new BookEntity("isbn1", "title", "synopsis", BigDecimal.TEN, 10.00, "cover", LocalDate.now());
-        when(bookRepository.findAll(-1, 10)).thenReturn(List.of());
-
-        // Act
-        List<BookCollectionDto> result = findAllService.execute(-1, 10);
-
-        // Assert
-        assertTrue(result.isEmpty(), "The result should be empty when page is negative");
-    }
-
-    @Test
-    @DisplayName("Test large lists performance")
-    void testLargeListPerformance() {
-        // Arrange
-        List<BookEntity> largeBookList = IntStream.range(0, 1000)
-                .mapToObj(i -> new BookEntity("isbn" + i, "title" + i, "synopsis", BigDecimal.TEN, 10.00, "cover", LocalDate.now()))
+        List<BookEntity> bookEntities = IntStream.range(0, 10)
+                .mapToObj(i -> new BookEntity("isbn" + i, "title" + i, "synopsis" + i, BigDecimal.TEN, 10.00, "cover" + i, LocalDate.now()))
                 .collect(Collectors.toList());
-        when(bookRepository.findAll(0, 1000)).thenReturn(largeBookList);
+        when(bookRepository.findAll(Integer.MAX_VALUE, Integer.MAX_VALUE)).thenReturn(new PagedCollection<>(bookEntities, Integer.MAX_VALUE, Integer.MAX_VALUE, 10));
 
         // Act
-        List<BookCollectionDto> result = findAllService.execute(0, 1000);
+        PagedCollection<BookCollectionDto> result = findAllService.execute(Integer.MAX_VALUE, Integer.MAX_VALUE);
 
         // Assert
-        assertEquals(1000, result.size(), "The result should contain 1000 books");
+        assertEquals(10, result.data().size(), "The result should contain 10 books");
     }
+
 
 
 }
