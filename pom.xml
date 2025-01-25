@@ -45,7 +45,7 @@
     <modules>
         <module>domain</module>
         <module>persistence</module>
-        <module>web</module>
+        <module>api</module>
         <module>app</module>
         <module>util</module>
     </modules>
@@ -64,7 +64,7 @@
             </dependency>
             <dependency>
                 <groupId>es.cesguiro</groupId>
-                <artifactId>web</artifactId>
+                <artifactId>api</artifactId>
                 <version>0.0.1-SNAPSHOT</version>
             </dependency>
             <dependency>
