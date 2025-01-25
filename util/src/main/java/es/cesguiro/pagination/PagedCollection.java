@@ -11,6 +11,17 @@ public record PagedCollection<T>(
         long totalElements,
         int totalPages
 ) {
+
+    /**
+     * Creates a new instance of PagedCollection.
+     *
+     * @param data         the data to be paginated
+     * @param pageNumber   the page number
+     * @param pageSize     the page size
+     * @param totalElements the total number of elements
+     *
+     * @throws PagedCollectionException if the data is null, the page number is negative, or the page size is less than or equal to zero
+     */
     public PagedCollection(List<T> data, int pageNumber, int pageSize, long totalElements) {
         this(
                 validateDataSize(data, pageSize),

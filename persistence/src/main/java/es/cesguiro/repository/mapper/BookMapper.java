@@ -1,6 +1,7 @@
 package es.cesguiro.repository.mapper;
 
 import es.cesguiro.dao.jpa.entity.BookEntityJpa;
+import es.cesguiro.lang.LanguageUtil;
 import es.cesguiro.repository.model.BookEntity;
 
 public class BookMapper {
@@ -9,10 +10,11 @@ public class BookMapper {
         if(bookEntityJpa == null) {
             return null;
         }
+        String language = LanguageUtil.getInstance().getLanguage();
         return new BookEntity(
                 bookEntityJpa.getIsbn(),
-                bookEntityJpa.getTitleEs(),
-                bookEntityJpa.getSynopsisEs(),
+                language.equals("en") ? bookEntityJpa.getTitleEn() : bookEntityJpa.getTitleEs(),
+                language.equals("en") ? bookEntityJpa.getSynopsisEn() : bookEntityJpa.getSynopsisEs(),
                 bookEntityJpa.getBasePrice(),
                 bookEntityJpa.getDiscountPercentage(),
                 bookEntityJpa.getCover(),
