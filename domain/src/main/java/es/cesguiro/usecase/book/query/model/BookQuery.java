@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-public record BookDto(
+public record BookQuery(
         String isbn,
         String title,
         String synopsis,
@@ -13,10 +13,10 @@ public record BookDto(
         BigDecimal finalPrice,
         String cover,
         LocalDate publicationDate,
-        PublisherDto publisher,
-        CategoryDto category,
-        List<GenreDto> genres,
-        List<AuthorDto> authors
+        PublisherQuery publisher,
+        CategoryQuery category,
+        List<GenreQuery> genres,
+        List<AuthorQuery> authors
 
 ) {
 }

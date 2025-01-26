@@ -1,6 +1,6 @@
 package es.cesguiro.usecase.book.query.model;
 
-public record AuthorDto(
+public record GenreQuery(
         String name,
         String slug
 ) {

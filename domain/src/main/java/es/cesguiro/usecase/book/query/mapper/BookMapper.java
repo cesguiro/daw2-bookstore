@@ -2,8 +2,8 @@ package es.cesguiro.usecase.book.query.mapper;
 
 import es.cesguiro.model.Book;
 import es.cesguiro.repository.model.BookEntity;
-import es.cesguiro.usecase.book.query.model.BookCollectionDto;
-import es.cesguiro.usecase.book.query.model.BookDto;
+import es.cesguiro.usecase.book.query.model.BookCollectionQuery;
+import es.cesguiro.usecase.book.query.model.BookQuery;
 
 public class BookMapper {
 
@@ -22,11 +22,11 @@ public class BookMapper {
         );
     }
 
-    public static BookCollectionDto toBookCollectionDto(Book book){
+    public static BookCollectionQuery toBookCollectionDto(Book book){
         if(book == null){
             return null;
         }
-        return new BookCollectionDto(
+        return new BookCollectionQuery(
                 book.getIsbn(),
                 book.getTitle(),
                 book.getBasePrice(),
@@ -37,11 +37,11 @@ public class BookMapper {
         );
     }
 
-    public static BookDto toBookDto(Book book){
+    public static BookQuery toBookDto(Book book){
         if(book == null){
             return null;
         }
-        return new BookDto(
+        return new BookQuery(
                 book.getIsbn(),
                 book.getTitle(),
                 book.getSynopsis(),

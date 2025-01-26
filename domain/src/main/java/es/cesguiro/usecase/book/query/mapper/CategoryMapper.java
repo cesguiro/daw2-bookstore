@@ -2,7 +2,7 @@ package es.cesguiro.usecase.book.query.mapper;
 
 import es.cesguiro.model.Category;
 import es.cesguiro.repository.model.CategoryEntity;
-import es.cesguiro.usecase.book.query.model.CategoryDto;
+import es.cesguiro.usecase.book.query.model.CategoryQuery;
 
 public class CategoryMapper {
 
@@ -16,11 +16,11 @@ public class CategoryMapper {
         );
     }
 
-    public static CategoryDto toCategoryDto(Category category) {
+    public static CategoryQuery toCategoryDto(Category category) {
         if(category == null){
             return null;
         }
-        return new CategoryDto(
+        return new CategoryQuery(
                 category.getName(),
                 category.getSlug()
         );

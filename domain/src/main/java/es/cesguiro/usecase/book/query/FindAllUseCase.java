@@ -2,11 +2,9 @@ package es.cesguiro.usecase.book.query;
 
 
 import es.cesguiro.pagination.PagedCollection;
-import es.cesguiro.usecase.book.query.model.BookCollectionDto;
-
-import java.util.List;
+import es.cesguiro.usecase.book.query.model.BookCollectionQuery;
 
 public interface FindAllUseCase {
 
-    PagedCollection<BookCollectionDto> execute(int page, int size);
+    PagedCollection<BookCollectionQuery> findAll(int page, int size);
 }

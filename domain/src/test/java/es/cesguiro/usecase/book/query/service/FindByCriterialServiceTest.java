@@ -1,13 +1,11 @@
-package es.cesguiro.usecase.book.query.impl;
+package es.cesguiro.usecase.book.query.service;
 
 import es.cesguiro.exception.DomainException;
-import es.cesguiro.exception.PagedCollectionException;
 import es.cesguiro.pagination.PagedCollection;
-import es.cesguiro.repository.AuthorRepository;
-import es.cesguiro.repository.BookRepository;
-import es.cesguiro.repository.model.AuthorEntity;
-import es.cesguiro.repository.model.BookEntity;
-import es.cesguiro.usecase.book.query.model.BookCollectionDto;
+import es.cesguiro.repository.*;
+import es.cesguiro.repository.model.*;
+import es.cesguiro.usecase.book.query.model.BookCollectionQuery;
+import es.cesguiro.usecase.book.query.model.BookQuery;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,6 +18,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -27,20 +26,25 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class FindAllServiceTest {
+class FindByCriterialServiceTest {
 
     @Mock
     private BookRepository bookRepository;
-
     @Mock
     private AuthorRepository authorRepository;
+    @Mock
+    private GenreRepository genreRepository;
+    @Mock
+    private CategoryRepository categoryRepository;
+    @Mock
+    private PublisherRepository publisherRepository;
 
     @InjectMocks
-    private FindAllService findAllService;
+    private FindByCriterialService findByCriterialService;
 
     @Test
     @DisplayName("Test execute method returns PagedCollection of BookCollectionDto")
-    void executeReturnsBookCollectionDtoList() {
+    void findAllReturnsBookCollectionDtoList() {
         // Arrange
         int page = 1;
         int size = 4;
@@ -69,7 +73,7 @@ class FindAllServiceTest {
         when(authorRepository.findAllByBookIsbn("012")).thenReturn(authorEntities4);
 
         // Act
-        PagedCollection<BookCollectionDto> result = findAllService.execute(page, size);
+        PagedCollection<BookCollectionQuery> result = findByCriterialService.findAll(page, size);
 
         assertAll(
                 () -> assertEquals(4, result.data().size(), "Result list size should match"),
@@ -102,7 +106,7 @@ class FindAllServiceTest {
         when(bookRepository.findAll(2, 10)).thenReturn(new PagedCollection<>(Collections.emptyList(), 2, 10, 10));
 
         // Act
-        PagedCollection<BookCollectionDto> result = findAllService.execute(2, 10);
+        PagedCollection<BookCollectionQuery> result = findByCriterialService.findAll(2, 10);
 
         // Assert
         assertTrue(result.data().isEmpty(), "The result should be an empty list when no books are found");
@@ -117,7 +121,7 @@ class FindAllServiceTest {
         when(authorRepository.findAllByBookIsbn(bookEntity.isbn())).thenReturn(Collections.emptyList());
 
         // Act
-        PagedCollection<BookCollectionDto> result = findAllService.execute(1, 2);
+        PagedCollection<BookCollectionQuery> result = findByCriterialService.findAll(1, 2);
 
         // Assert
         assertFalse(result.data().isEmpty(), "The result should not be empty");
@@ -136,7 +140,7 @@ class FindAllServiceTest {
         when(authorRepository.findAllByBookIsbn(bookEntity2.isbn())).thenReturn(List.of(authorEntity));
 
         // Act
-        PagedCollection<BookCollectionDto> result = findAllService.execute(0, 2);
+        PagedCollection<BookCollectionQuery> result = findByCriterialService.findAll(0, 2);
 
         // Assert
         assertEquals(2, result.data().size(), "The result should contain two books");
@@ -157,7 +161,7 @@ class FindAllServiceTest {
         when(authorRepository.findAllByBookIsbn(bookEntity.isbn())).thenReturn(List.of(authorEntity1, authorEntity2));
 
         // Act
-        PagedCollection<BookCollectionDto> result = findAllService.execute(0, 10);
+        PagedCollection<BookCollectionQuery> result = findByCriterialService.findAll(0, 10);
 
         // Assert
         assertEquals(1, result.data().size(), "The result should contain one book");
@@ -173,7 +177,7 @@ class FindAllServiceTest {
         when(bookRepository.findAll(0, 10)).thenThrow(new RuntimeException("Database error"));
 
         // Act & Assert
-        assertThrows(RuntimeException.class, () -> findAllService.execute(0, 10), "Expected exception to be thrown");
+        assertThrows(RuntimeException.class, () -> findByCriterialService.findAll(0, 10), "Expected exception to be thrown");
     }
 
     @Test
@@ -185,7 +189,7 @@ class FindAllServiceTest {
         when(authorRepository.findAllByBookIsbn(bookEntity.isbn())).thenThrow(new RuntimeException("Database error"));
 
         // Act & Assert
-        assertThrows(RuntimeException.class, () -> findAllService.execute(0, 10), "Expected exception to be thrown");
+        assertThrows(RuntimeException.class, () -> findByCriterialService.findAll(0, 10), "Expected exception to be thrown");
     }
 
     @Test
@@ -197,7 +201,7 @@ class FindAllServiceTest {
         when(bookRepository.findAll(0, 10)).thenReturn(new PagedCollection<>(List.of(bookEntity1, bookEntity2), 0, 10, 2));
 
         // Act
-        PagedCollection<BookCollectionDto> result = findAllService.execute(0, 10);
+        PagedCollection<BookCollectionQuery> result = findByCriterialService.findAll(0, 10);
 
         // Assert
         assertEquals(new BigDecimal("9.00"), result.data().getFirst().finalPrice(), "The final price should be correctly calculated with 10% discount");
@@ -212,7 +216,7 @@ class FindAllServiceTest {
         when(bookRepository.findAll(0, 10)).thenReturn(new PagedCollection<>(List.of(bookEntity), 0, 10, 1));
 
         // Act
-        PagedCollection<BookCollectionDto> result = findAllService.execute(0, 10);
+        PagedCollection<BookCollectionQuery> result = findByCriterialService.findAll(0, 10);
 
         // Assert
         assertFalse(result.data().isEmpty(), "The result should not be empty");
@@ -224,14 +228,14 @@ class FindAllServiceTest {
     @DisplayName("Test pagination with size = 0 should throw DomainException")
     void testEdgePaginationZeroPageSize() {
         // Act & Assert
-        assertThrows(DomainException.class, () -> findAllService.execute(0, 0), "Expected exception to be thrown");
+        assertThrows(DomainException.class, () -> findByCriterialService.findAll(0, 0), "Expected exception to be thrown");
     }
 
     @Test
     @DisplayName("Test pagination with negative page value should throw DomainException")
     void testEdgePaginationNegativePageValue() {
         // Act & Assert
-        assertThrows(DomainException.class, () -> findAllService.execute(-1, 10), "Expected exception to be thrown");
+        assertThrows(DomainException.class, () -> findByCriterialService.findAll(-1, 10), "Expected exception to be thrown");
     }
 
     @Test
@@ -244,12 +248,79 @@ class FindAllServiceTest {
         when(bookRepository.findAll(Integer.MAX_VALUE, Integer.MAX_VALUE)).thenReturn(new PagedCollection<>(bookEntities, Integer.MAX_VALUE, Integer.MAX_VALUE, 10));
 
         // Act
-        PagedCollection<BookCollectionDto> result = findAllService.execute(Integer.MAX_VALUE, Integer.MAX_VALUE);
+        PagedCollection<BookCollectionQuery> result = findByCriterialService.findAll(Integer.MAX_VALUE, Integer.MAX_VALUE);
 
         // Assert
         assertEquals(10, result.data().size(), "The result should contain 10 books");
     }
 
+    @Test
+    @DisplayName("Test execute method return BookDto")
+    void testFindByIsbnMethodReturnBookDto() {
+        // Arrange
+        String isbn = "978-84-376-0494-7";
+        // Act
+        when(bookRepository.findByIsbn(isbn)).thenReturn(
+                Optional.of(
+                        new BookEntity(
+                                isbn,
+                                "title",
+                                "synopsis",
+                                new BigDecimal("10.00"),
+                                5,
+                                isbn + ".jpg",
+                                LocalDate.of(2021, 1, 1)
+                        )
+                )
+        );
+        when(authorRepository.findAllByBookIsbn(isbn)).thenReturn(
+                List.of(
+                        new AuthorEntity("author1", "nationality1", "Bio 1", 1970, null, "slug1"),
+                        new AuthorEntity("author2", "nationality2", "Bio 2", 1980, 2024, "slug2")
+                )
+        );
+        when(genreRepository.findAllByBookIsbn(isbn)).thenReturn(
+                List.of(
+                        new GenreEntity("genre1", "slug1"),
+                        new GenreEntity("genre2", "slug2")
+                )
+        );
+        when(publisherRepository.findByBookIsbn(isbn)).thenReturn(
+                Optional.of(new PublisherEntity("publisher", "slug"))
+        );
+        when(categoryRepository.findByBookIsbn(isbn)).thenReturn(
+                Optional.of(new CategoryEntity("category", "slug"))
+        );
+        BookQuery bookQuery = findByCriterialService.findByIsbn(isbn);
+        // Assert
+        assertAll("bookDto",
+                () -> assertNotNull(bookQuery),
+                () -> assertEquals(isbn, bookQuery.isbn()),
+                () -> assertNotNull(bookQuery.title()),
+                () -> assertNotNull(bookQuery.authors()),
+                () -> assertNotNull(bookQuery.genres()),
+                () -> assertNotNull(bookQuery.publisher()),
+                () -> assertNotNull(bookQuery.category()),
+                () -> assertEquals("author1", bookQuery.authors().getFirst().name()),
+                () -> assertEquals("author2", bookQuery.authors().get(1).name()),
+                () -> assertEquals("genre1", bookQuery.genres().getFirst().name()),
+                () -> assertEquals("genre2", bookQuery.genres().get(1).name()),
+                () -> assertEquals("publisher", bookQuery.publisher().name()),
+                () -> assertEquals("category", bookQuery.category().name()),
+                () -> assertEquals(0, bookQuery.finalPrice().compareTo(new BigDecimal("9.50")))
+        );
+    }
+
+    @Test
+    @DisplayName("Test when book not found then throw IllegalArgumentException")
+    void testWhenBookNotFoundThenThrowIllegalArgumentException() {
+        // Arrange
+        String isbn = "978-84-376-0494-7";
+        // Act
+        when(bookRepository.findByIsbn(isbn)).thenReturn(Optional.empty());
+        // Assert
+        assertThrows(IllegalArgumentException.class, () -> findByCriterialService.findByIsbn(isbn));
+    }
 
 
 }

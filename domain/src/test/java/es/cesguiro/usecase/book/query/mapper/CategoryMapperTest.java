@@ -2,7 +2,7 @@ package es.cesguiro.usecase.book.query.mapper;
 
 import es.cesguiro.model.Category;
 import es.cesguiro.repository.model.CategoryEntity;
-import es.cesguiro.usecase.book.query.model.CategoryDto;
+import es.cesguiro.usecase.book.query.model.CategoryQuery;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -32,18 +32,18 @@ class CategoryMapperTest {
     @DisplayName("Test map Category to CategoryDto")
     void toCategoryDto() {
         Category category = new Category("Fantasy", "fantasy");
-        CategoryDto categoryDto = CategoryMapper.toCategoryDto(category);
+        CategoryQuery categoryQuery = CategoryMapper.toCategoryDto(category);
         assertAll(
-                () -> assertEquals(category.getName(), categoryDto.name(), "Names should match"),
-                () -> assertEquals(category.getSlug(), categoryDto.slug(), "Slugs should match")
+                () -> assertEquals(category.getName(), categoryQuery.name(), "Names should match"),
+                () -> assertEquals(category.getSlug(), categoryQuery.slug(), "Slugs should match")
         );
     }
 
     @Test
     @DisplayName("Test null Category returns null CategoryDto")
     void toCategoryDtoNull() {
-        CategoryDto categoryDto = CategoryMapper.toCategoryDto(null);
-        assertNull(categoryDto, "Mapping null Category should return null CategoryDto");
+        CategoryQuery categoryQuery = CategoryMapper.toCategoryDto(null);
+        assertNull(categoryQuery, "Mapping null Category should return null CategoryDto");
     }
 
 

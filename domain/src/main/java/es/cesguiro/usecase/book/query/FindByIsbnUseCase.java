@@ -1,8 +1,8 @@
 package es.cesguiro.usecase.book.query;
 
-import es.cesguiro.usecase.book.query.model.BookDto;
+import es.cesguiro.usecase.book.query.model.BookQuery;
 
 public interface FindByIsbnUseCase {
 
-    BookDto execute(String isbn);
+    BookQuery findByIsbn(String isbn);
 }

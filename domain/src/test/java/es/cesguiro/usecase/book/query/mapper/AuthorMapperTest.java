@@ -2,8 +2,8 @@ package es.cesguiro.usecase.book.query.mapper;
 
 import es.cesguiro.model.Author;
 import es.cesguiro.repository.model.AuthorEntity;
-import es.cesguiro.usecase.book.query.model.AuthorCollectionDto;
-import es.cesguiro.usecase.book.query.model.AuthorDto;
+import es.cesguiro.usecase.book.query.model.AuthorCollectionQuery;
+import es.cesguiro.usecase.book.query.model.AuthorQuery;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -95,7 +95,7 @@ class AuthorMapperTest {
         );
 
         // Act
-        AuthorCollectionDto dto = AuthorMapper.toAuthorCollectionDto(author);
+        AuthorCollectionQuery dto = AuthorMapper.toAuthorCollectionDto(author);
 
         // Assert
         assertAll(
@@ -108,7 +108,7 @@ class AuthorMapperTest {
     @DisplayName("Test null Author returns null AuthorCollectionDto")
     void toAuthorCollectionDtoNull() {
         // Act
-        AuthorCollectionDto dto = AuthorMapper.toAuthorCollectionDto(null);
+        AuthorCollectionQuery dto = AuthorMapper.toAuthorCollectionDto(null);
 
         // Assert
         assertNull(dto, "Mapping null Author should return null AuthorCollectionDto");
@@ -139,7 +139,7 @@ class AuthorMapperTest {
         List<Author> authors = List.of(author1, author2);
 
         // Act
-        List<AuthorCollectionDto> dtos = authors.stream()
+        List<AuthorCollectionQuery> dtos = authors.stream()
                 .map(AuthorMapper::toAuthorCollectionDto)
                 .toList();
 
@@ -158,7 +158,7 @@ class AuthorMapperTest {
         List<Author> authors = Collections.emptyList();
 
         // Act
-        List<AuthorCollectionDto> dtos = authors.stream()
+        List<AuthorCollectionQuery> dtos = authors.stream()
                 .map(AuthorMapper::toAuthorCollectionDto)
                 .toList();
 
@@ -178,10 +178,10 @@ class AuthorMapperTest {
                 2020,
                 "author-slug"
         );
-        AuthorDto authorDto = AuthorMapper.toAuthorDto(author);
+        AuthorQuery authorQuery = AuthorMapper.toAuthorDto(author);
         assertAll(
-                () -> assertEquals(author.getName(), authorDto.name(), "Names should match"),
-                () -> assertEquals(author.getSlug(), authorDto.slug(), "Slugs should match")
+                () -> assertEquals(author.getName(), authorQuery.name(), "Names should match"),
+                () -> assertEquals(author.getSlug(), authorQuery.slug(), "Slugs should match")
         );
     }
 
@@ -189,8 +189,8 @@ class AuthorMapperTest {
     @DisplayName("Test null Author returns null AuthorDto")
     void toAuthorDtoNull() {
         // Act
-        AuthorDto authorDto = AuthorMapper.toAuthorDto(null);
-        assertNull(authorDto, "Mapping null Author should return null AuthorDto");
+        AuthorQuery authorQuery = AuthorMapper.toAuthorDto(null);
+        assertNull(authorQuery, "Mapping null Author should return null AuthorDto");
     }
 
     @Test
@@ -214,13 +214,13 @@ class AuthorMapperTest {
                 "author-slug-2"
         );
         List<Author> authors = List.of(author1, author2);
-        List<AuthorDto> authorDtos = authors.stream()
+        List<AuthorQuery> authorQueries = authors.stream()
                 .map(AuthorMapper::toAuthorDto)
                 .toList();
         assertAll(
-                () -> assertEquals(authors.size(), authorDtos.size(), "List sizes should match"),
-                () -> assertEquals(authors.get(0).getName(), authorDtos.get(0).name(), "First author's name should match"),
-                () -> assertEquals(authors.get(1).getSlug(), authorDtos.get(1).slug(), "Second author's slug should match")
+                () -> assertEquals(authors.size(), authorQueries.size(), "List sizes should match"),
+                () -> assertEquals(authors.get(0).getName(), authorQueries.get(0).name(), "First author's name should match"),
+                () -> assertEquals(authors.get(1).getSlug(), authorQueries.get(1).slug(), "Second author's slug should match")
         );
     }
 
@@ -229,10 +229,10 @@ class AuthorMapperTest {
     void toAuthorDtoEmptyList() {
         // Arrange
         List<Author> authors = Collections.emptyList();
-        List<AuthorDto> authorDtos = authors.stream()
+        List<AuthorQuery> authorQueries = authors.stream()
                 .map(AuthorMapper::toAuthorDto)
                 .toList();
-        assertTrue(authorDtos.isEmpty(), "Mapping an empty list should return an empty list");
+        assertTrue(authorQueries.isEmpty(), "Mapping an empty list should return an empty list");
     }
 
 }

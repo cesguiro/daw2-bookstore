@@ -2,7 +2,7 @@ package es.cesguiro.usecase.book.query.mapper;
 
 import es.cesguiro.model.Publisher;
 import es.cesguiro.repository.model.PublisherEntity;
-import es.cesguiro.usecase.book.query.model.PublisherDto;
+import es.cesguiro.usecase.book.query.model.PublisherQuery;
 
 public class PublisherMapper {
 
@@ -16,11 +16,11 @@ public class PublisherMapper {
         );
     }
 
-    public static PublisherDto toPublisherDto(Publisher publisher) {
+    public static PublisherQuery toPublisherDto(Publisher publisher) {
         if(publisher == null) {
             return null;
         }
-        return new PublisherDto(
+        return new PublisherQuery(
                 publisher.getName(),
                 publisher.getSlug()
         );

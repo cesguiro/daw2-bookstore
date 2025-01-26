@@ -3,7 +3,7 @@ package es.cesguiro.usecase.book.query.mapper;
 import es.cesguiro.model.Author;
 import es.cesguiro.model.Book;
 import es.cesguiro.repository.model.BookEntity;
-import es.cesguiro.usecase.book.query.model.BookCollectionDto;
+import es.cesguiro.usecase.book.query.model.BookCollectionQuery;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -74,7 +74,7 @@ class BookMapperTest {
         book.setAuthors(List.of(author1, author2));
 
         // Act
-        BookCollectionDto dto = BookMapper.toBookCollectionDto(book);
+        BookCollectionQuery dto = BookMapper.toBookCollectionDto(book);
 
         // Assert
         assertAll(
@@ -96,7 +96,7 @@ class BookMapperTest {
     @DisplayName("Test null Book returns null BookCollectionDto")
     void toBookCollectionDtoNull() {
         // Act
-        BookCollectionDto dto = BookMapper.toBookCollectionDto(null);
+        BookCollectionQuery dto = BookMapper.toBookCollectionDto(null);
 
         // Assert
         assertNull(dto, "Mapping null Book should return null BookCollectionDto");
@@ -168,7 +168,7 @@ class BookMapperTest {
         List<Book> books = List.of(book1, book2);
 
         // Act
-        List<BookCollectionDto> dtos = books.stream()
+        List<BookCollectionQuery> dtos = books.stream()
                 .map(BookMapper::toBookCollectionDto)
                 .toList();
 
@@ -187,7 +187,7 @@ class BookMapperTest {
         List<Book> books = Collections.emptyList();
 
         // Act
-        List<BookCollectionDto> dtos = books.stream()
+        List<BookCollectionQuery> dtos = books.stream()
                 .map(BookMapper::toBookCollectionDto)
                 .toList();
 

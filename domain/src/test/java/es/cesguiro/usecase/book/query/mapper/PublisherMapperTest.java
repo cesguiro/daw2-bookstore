@@ -2,7 +2,7 @@ package es.cesguiro.usecase.book.query.mapper;
 
 import es.cesguiro.model.Publisher;
 import es.cesguiro.repository.model.PublisherEntity;
-import es.cesguiro.usecase.book.query.model.PublisherDto;
+import es.cesguiro.usecase.book.query.model.PublisherQuery;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -32,18 +32,18 @@ class PublisherMapperTest {
     @DisplayName("Test map Publisher to PublisherDto")
     void toPublisherDto() {
         Publisher publisher = new Publisher("name", "slug");
-        PublisherDto publisherDto = PublisherMapper.toPublisherDto(publisher);
+        PublisherQuery publisherQuery = PublisherMapper.toPublisherDto(publisher);
         assertAll(
-                () -> assertEquals(publisher.getName(), publisherDto.name(), "Names should match"),
-                () -> assertEquals(publisher.getSlug(), publisherDto.slug(), "Slugs should match")
+                () -> assertEquals(publisher.getName(), publisherQuery.name(), "Names should match"),
+                () -> assertEquals(publisher.getSlug(), publisherQuery.slug(), "Slugs should match")
         );
     }
 
     @Test
     @DisplayName("Test null Publisher returns null PublisherDto")
     void toPublisherDtoNull() {
-        PublisherDto publisherDto = PublisherMapper.toPublisherDto(null);
-        assertNull(publisherDto, "Mapping null Publisher should return null PublisherDto");
+        PublisherQuery publisherQuery = PublisherMapper.toPublisherDto(null);
+        assertNull(publisherQuery, "Mapping null Publisher should return null PublisherDto");
     }
 
 }

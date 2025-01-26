@@ -2,7 +2,7 @@ package es.cesguiro.usecase.book.query.mapper;
 
 import es.cesguiro.model.Genre;
 import es.cesguiro.repository.model.GenreEntity;
-import es.cesguiro.usecase.book.query.model.GenreDto;
+import es.cesguiro.usecase.book.query.model.GenreQuery;
 
 public class GenreMapper {
 
@@ -16,11 +16,11 @@ public class GenreMapper {
         );
     }
 
-    public static GenreDto toGenreDto(Genre genre) {
+    public static GenreQuery toGenreDto(Genre genre) {
         if(genre == null){
             return null;
         }
-        return new GenreDto(
+        return new GenreQuery(
                 genre.getName(),
                 genre.getSlug()
         );
