@@ -2,7 +2,7 @@ package es.cesguiro.usecase.book.query.service;
 
 import es.cesguiro.exception.DomainException;
 import es.cesguiro.model.*;
-import es.cesguiro.pagination.PagedCollection;
+import es.cesguiro.pagination.Page;
 import es.cesguiro.repository.*;
 import es.cesguiro.repository.model.BookEntity;
 import es.cesguiro.usecase.book.query.FindAllUseCase;
@@ -31,11 +31,11 @@ public class FindByCriterialService implements FindAllUseCase, FindByIsbnUseCase
     }
 
     @Override
-    public PagedCollection<BookCollectionQuery> findAll(int page, int size) {
-        if(page < 0 || size <= 0) {
+    public Page<BookCollectionQuery> findAll(int page, int size) {
+        if(page <= 0 || size <= 0) {
             throw new DomainException("Page number and page size must be greater than zero");
         }
-        PagedCollection<BookEntity> bookEntityPage = bookRepository.findAll(page, size);
+        Page<BookEntity> bookEntityPage = bookRepository.findAll(page, size);
         List<Book> books = bookEntityPage
                 .data()
                 .stream()
@@ -52,8 +52,8 @@ public class FindByCriterialService implements FindAllUseCase, FindByIsbnUseCase
                     );
                 }
         );
-        return new PagedCollection<>(
-                books.stream().map(BookMapper::toBookCollectionDto).toList(),
+        return new Page<>(
+                books.stream().map(BookMapper::toBookCollectionQuery).toList(),
                 page,
                 size,
                 bookEntityPage.totalElements()
@@ -64,7 +64,7 @@ public class FindByCriterialService implements FindAllUseCase, FindByIsbnUseCase
     public BookQuery findByIsbn(String isbn) {
         Book book = BookMapper.toBook(
                 bookRepository.findByIsbn(isbn)
-                        .orElseThrow(() -> new IllegalArgumentException("Book not found"))
+                        .orElseThrow(() -> new DomainException("Book not found"))
         );
         List<Author> authors = authorRepository
                 .findAllByBookIsbn(book.getIsbn())
@@ -88,7 +88,7 @@ public class FindByCriterialService implements FindAllUseCase, FindByIsbnUseCase
                 .map(CategoryMapper::toCategory)
                 .orElse(null);
         book.setCategory(category);
-        return BookMapper.toBookDto(book);
+        return BookMapper.toBookQuery(book);
     }
 
 

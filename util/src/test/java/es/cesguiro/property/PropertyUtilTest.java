@@ -1,13 +1,9 @@
 package es.cesguiro.property;
 
-import es.cesguiro.exception.AppFileNotFoundException;
 import es.cesguiro.exception.KeyNotFoundException;
 import es.cesguiro.exception.PropertyUtilException;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -20,7 +16,7 @@ class PropertyUtilTest {
     @Mock
     private PropertyProvider mockPropertyProvider;
 
-    @BeforeEach
+    @AfterEach
     void resetPropertyUtil() {
         PropertyUtil.resetInstance();
     }
@@ -51,21 +47,24 @@ class PropertyUtilTest {
     }
 
     @Test
-    @DisplayName("Test getInstance with empty property file should throw PropertyUtilException")
-    void testSetPropertyProviderEmpty() {
-        assertThrows(PropertyUtilException.class, () -> PropertyUtil.getInstance("", mockPropertyProvider),
-                "getInstance with empty property file should throw PropertyUtilException");
+    @DisplayName("Test getInstance with no PropertyProvider should return instance with DefaultPropertyProvider")
+    void testSetPropertyProviderDefault() {
+        PropertyUtil propertyUtil = PropertyUtil.getInstance();
+        assertEquals(DefaultPropertyProvider.class, propertyUtil.getPropertyProvider().getClass(),
+                "getInstance with no PropertyProvider should return instance with DefaultPropertyProvider");
     }
 
     @Test
-    @DisplayName("Test getProperty should throw AppFileNotFoundException if properties file is missing")
-    void testGetPropertyAppFileNotFoundException() {
-        assertThrows(AppFileNotFoundException.class, () -> PropertyUtil.getInstance("non-existing.properties", mockPropertyProvider),
-                "getProperty should throw AppFileNotFoundException if application.properties is missing");
+    @DisplayName("Test getInstance with custom PropertyProvider should return instance with custom PropertyProvider")
+    void testSetPropertyProviderCustom() {
+        PropertyUtil propertyUtil = PropertyUtil.getInstance(mockPropertyProvider);
+        assertEquals(mockPropertyProvider, propertyUtil.getPropertyProvider(),
+                "getInstance with custom PropertyProvider should return instance with custom PropertyProvider");
     }
 
+
     @Test
-    @DisplayName("Test getProperty should return correct value from custom PropertyProvider")
+    @DisplayName("Test getProperty should return correct value if key exists")
     void testGetProperty() {
         PropertyUtil propertyUtil = PropertyUtil.getInstance(mockPropertyProvider);
         Mockito.when(mockPropertyProvider.getProperty("app.name")).thenReturn("util");

@@ -1,6 +1,7 @@
 package es.cesguiro.usecase.book.query.mapper;
 
 import es.cesguiro.model.Author;
+import es.cesguiro.model.vo.LocaleString;
 import es.cesguiro.repository.model.AuthorEntity;
 import es.cesguiro.usecase.book.query.model.AuthorCollectionQuery;
 import es.cesguiro.usecase.book.query.model.AuthorQuery;
@@ -14,14 +15,14 @@ public class AuthorMapper {
         return new Author(
                 authorEntity.name(),
                 authorEntity.nationality(),
-                authorEntity.biography(),
+                new LocaleString(authorEntity.biographyEs(), authorEntity.biographyEn()),
                 authorEntity.birthYear(),
                 authorEntity.deathYear(),
                 authorEntity.slug()
         );
     }
 
-    public static AuthorCollectionQuery toAuthorCollectionDto(Author author) {
+    public static AuthorCollectionQuery toAuthorCollectionQuery(Author author) {
         if(author == null){
             return null;
         }
@@ -31,7 +32,7 @@ public class AuthorMapper {
         );
     }
 
-    public static AuthorQuery toAuthorDto(Author author) {
+    public static AuthorQuery toAuthorQuery(Author author) {
         if(author == null){
             return null;
         }

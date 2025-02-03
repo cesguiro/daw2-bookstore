@@ -12,15 +12,24 @@ public class DefaultPropertyProvider implements PropertyProvider{
 
 
     private final Properties properties = new Properties();
+    public static final String DEFAULT_PROPERTIES_FILE = System.getProperty("default.property.file", "application.properties");
 
-    public DefaultPropertyProvider(String filename) {
-        try (InputStream input = getClass().getClassLoader().getResourceAsStream(filename)) {
+    public DefaultPropertyProvider(String propertiesFile) {
+        this.loadProperties(propertiesFile);
+    }
+
+    public DefaultPropertyProvider() {
+        this.loadProperties(DEFAULT_PROPERTIES_FILE);
+    }
+
+    private void loadProperties(String propertiesFile) {
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream(propertiesFile)) {
             if (input == null) {
-                throw new AppFileNotFoundException(filename);
+                throw new AppFileNotFoundException(propertiesFile);
             }
             properties.load(input);
         } catch (IOException e) {
-            throw new LoadPropertiesFileException(filename, e);
+            throw new LoadPropertiesFileException(propertiesFile, e);
         }
     }
 
@@ -33,6 +42,11 @@ public class DefaultPropertyProvider implements PropertyProvider{
             throw new KeyNotFoundException(key);
         }
         return properties.getProperty(key);
+    }
+
+    @Override
+    public String getProperty(String key, String defaultValue) {
+        return properties.getProperty(key, defaultValue);
     }
 
 }

@@ -1,9 +1,12 @@
 package es.cesguiro.usecase.book.query.mapper;
 
+import es.cesguiro.locale.LocaleUtil;
 import es.cesguiro.model.Author;
 import es.cesguiro.repository.model.AuthorEntity;
+import es.cesguiro.usecase.book.query.data.AuthorData;
 import es.cesguiro.usecase.book.query.model.AuthorCollectionQuery;
 import es.cesguiro.usecase.book.query.model.AuthorQuery;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -14,225 +17,169 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class AuthorMapperTest {
 
+    @AfterEach
+    void teardown() {
+        LocaleUtil.resetInstance();
+    }
+
     @Test
     @DisplayName("Test map AuthorEntity to Author")
     void toAuthor() {
-        // Arrange
-        AuthorEntity authorEntity = new AuthorEntity("name", "nationality", "biography", 1990, 2020, "slug");
+        AuthorEntity authorEntity = AuthorData.getAuthorEntity(0);
 
-        // Act
-        Author author = AuthorMapper.toAuthor(authorEntity);
+        Author result = AuthorMapper.toAuthor(authorEntity);
 
-        // Assert
         assertAll(
-                () -> assertEquals(authorEntity.name(), author.getName(), "Names should match"),
-                () -> assertEquals(authorEntity.nationality(), author.getNationality(), "Nationalities should match"),
-                () -> assertEquals(authorEntity.biography(), author.getBiography(), "Biographies should match"),
-                () -> assertEquals(authorEntity.birthYear(), author.getBirthYear(), "Birth years should match"),
-                () -> assertEquals(authorEntity.deathYear(), author.getDeathYear(), "Death years should match"),
-                () -> assertEquals(authorEntity.slug(), author.getSlug(), "Slugs should match")
+                () -> assertEquals(authorEntity.name(), result.getName(), "Names should match"),
+                () -> assertEquals(authorEntity.nationality(), result.getNationality(), "Nationalities should match"),
+                () -> assertEquals(authorEntity.biographyEs(), result.getBiography("es"), "Biographies in ES should match"),
+                () -> assertEquals(authorEntity.biographyEn(), result.getBiography("en"), "Biographies in EN should match"),
+                () -> assertEquals(authorEntity.birthYear(), result.getBirthYear(), "Birth years should match"),
+                () -> assertEquals(authorEntity.deathYear(), result.getDeathYear(), "Death years should match"),
+                () -> assertEquals(authorEntity.slug(), result.getSlug(), "Slugs should match")
         );
     }
 
     @Test
     @DisplayName("Test null AuthorEntity returns null Author")
     void toAuthorNull() {
-        // Act
-        Author author = AuthorMapper.toAuthor(null);
+        Author result = AuthorMapper.toAuthor(null);
 
-        // Assert
-        assertNull(author, "Mapping null AuthorEntity should return null Author");
+        assertNull(result, "Mapping null AuthorEntity should return null Author");
     }
 
     @Test
     @DisplayName("Test map list of AuthorEntity to list of Author")
     void toAuthorList() {
-        // Arrange
         List<AuthorEntity> authorEntities = List.of(
-                new AuthorEntity("name1", "nationality1", "biography1", 1980, 2000, "slug1"),
-                new AuthorEntity("name2", "nationality2", "biography2", 1990, 2010, "slug2")
+                AuthorData.getAuthorEntity(0),
+                AuthorData.getAuthorEntity(1)
         );
 
-        // Act
-        List<Author> authors = authorEntities.stream()
+        List<Author> result = authorEntities.stream()
                 .map(AuthorMapper::toAuthor)
                 .toList();
 
-        // Assert
         assertAll(
-                () -> assertEquals(authorEntities.size(), authors.size(), "List sizes should match"),
-                () -> assertEquals(authorEntities.getFirst().name(), authors.getFirst().getName(), "First author's name should match"),
-                () -> assertEquals(authorEntities.get(1).biography(), authors.get(1).getBiography(), "Second author's biography should match")
+                () -> assertEquals(authorEntities.size(), result.size(), "List sizes should match"),
+                () -> assertEquals(authorEntities.getFirst().name(), result.getFirst().getName(), "First author's name should match"),
+                () -> assertEquals(authorEntities.get(1).biographyEs(), result.get(1).getBiography("es"), "Second author's biography should match")
         );
     }
 
     @Test
     @DisplayName("Test map empty list of AuthorEntity returns empty list of Author")
     void toAuthorEmptyList() {
-        // Arrange
         List<AuthorEntity> authorEntities = Collections.emptyList();
 
-        // Act
-        List<Author> authors = authorEntities.stream()
+        List<Author> result = authorEntities.stream()
                 .map(AuthorMapper::toAuthor)
                 .toList();
 
-        // Assert
-        assertTrue(authors.isEmpty(), "Mapping an empty list should return an empty list");
+        assertTrue(result.isEmpty(), "Mapping an empty list should return an empty list");
     }
 
     @Test
-    @DisplayName("Test map Author to AuthorCollectionDto")
-    void toAuthorCollectionDto() {
-        // Arrange
-        Author author = new Author(
-                "Author Name",
-                "Author Nationality",
-                "Author Biography",
-                1990,
-                2020,
-                "author-slug"
-        );
+    @DisplayName("Test map Author to AuthorCollectionQuery")
+    void toAuthorCollectionQuery() {
+        Author author = AuthorData.getAuthor(0);
 
-        // Act
-        AuthorCollectionQuery dto = AuthorMapper.toAuthorCollectionDto(author);
+        AuthorCollectionQuery result = AuthorMapper.toAuthorCollectionQuery(author);
 
-        // Assert
         assertAll(
-                () -> assertEquals(author.getName(), dto.name(), "Names should match"),
-                () -> assertEquals(author.getSlug(), dto.slug(), "Slugs should match")
+                () -> assertEquals(author.getName(), result.name(), "Names should match"),
+                () -> assertEquals(author.getSlug(), result.slug(), "Slugs should match")
         );
     }
 
     @Test
-    @DisplayName("Test null Author returns null AuthorCollectionDto")
-    void toAuthorCollectionDtoNull() {
-        // Act
-        AuthorCollectionQuery dto = AuthorMapper.toAuthorCollectionDto(null);
+    @DisplayName("Test null Author returns null AuthorCollectionQuery")
+    void toAuthorCollectionQueryNull() {
+        AuthorCollectionQuery result = AuthorMapper.toAuthorCollectionQuery(null);
 
-        // Assert
-        assertNull(dto, "Mapping null Author should return null AuthorCollectionDto");
+        assertNull(result, "Mapping null Author should return null AuthorCollectionDto");
     }
 
     @Test
-    @DisplayName("Test map list of Author to list of AuthorCollectionDto")
-    void toAuthorCollectionDtoList() {
-        // Arrange
-        Author author1 = new Author(
-                "Author Name",
-                "Author National",
-                "Author Bio",
-                1990,
-                2020,
-                "author-slug"
+    @DisplayName("Test map list of Author to list of AuthorCollectionQuery")
+    void toAuthorCollectionQueryList() {
+        List<Author> authors = List.of(
+                AuthorData.getAuthor(0),
+                AuthorData.getAuthor(1)
         );
 
-        Author author2 = new Author(
-                "Author Name 2",
-                "Author National 2",
-                "Author Bio 2",
-                1991,
-                2021,
-                "author-slug-2"
-        );
-
-        List<Author> authors = List.of(author1, author2);
-
-        // Act
-        List<AuthorCollectionQuery> dtos = authors.stream()
-                .map(AuthorMapper::toAuthorCollectionDto)
+        List<AuthorCollectionQuery> result = authors.stream()
+                .map(AuthorMapper::toAuthorCollectionQuery)
                 .toList();
 
-        // Assert
         assertAll(
-                () -> assertEquals(authors.size(), dtos.size(), "List sizes should match"),
-                () -> assertEquals(authors.get(0).getName(), dtos.get(0).name(), "First author's name should match"),
-                () -> assertEquals(authors.get(1).getSlug(), dtos.get(1).slug(), "Second author's slug should match")
+                () -> assertEquals(authors.size(), result.size(), "List sizes should match"),
+                () -> assertEquals(authors.getFirst().getName(), result.getFirst().name(), "First author's name should match"),
+                () -> assertEquals(authors.get(1).getSlug(), result.get(1).slug(), "Second author's slug should match")
         );
     }
 
     @Test
     @DisplayName("Test map empty list of Author returns empty list of AuthorCollectionDto")
-    void toAuthorCollectionDtoEmptyList() {
-        // Arrange
+    void toAuthorCollectionQueryEmptyList() {
         List<Author> authors = Collections.emptyList();
 
-        // Act
-        List<AuthorCollectionQuery> dtos = authors.stream()
-                .map(AuthorMapper::toAuthorCollectionDto)
+        List<AuthorCollectionQuery> result = authors.stream()
+                .map(AuthorMapper::toAuthorCollectionQuery)
                 .toList();
 
-        // Assert
-        assertTrue(dtos.isEmpty(), "Mapping an empty list should return an empty list");
+        assertTrue(result.isEmpty(), "Mapping an empty list should return an empty list");
     }
 
     @Test
-    @DisplayName("Test map Author to AuthorDto")
-    void toAuthorDto() {
-        // Arrange
-        Author author = new Author(
-                "Author Name",
-                "Author National",
-                "Author Bio",
-                1990,
-                2020,
-                "author-slug"
-        );
-        AuthorQuery authorQuery = AuthorMapper.toAuthorDto(author);
+    @DisplayName("Test map Author to AuthorQuery")
+    void toAuthorQuery() {
+        Author author = AuthorData.getAuthor(0);
+
+        AuthorQuery result = AuthorMapper.toAuthorQuery(author);
+
         assertAll(
-                () -> assertEquals(author.getName(), authorQuery.name(), "Names should match"),
-                () -> assertEquals(author.getSlug(), authorQuery.slug(), "Slugs should match")
+                () -> assertEquals(author.getName(), result.name(), "Names should match"),
+                () -> assertEquals(author.getSlug(), result.slug(), "Slugs should match")
         );
     }
 
     @Test
-    @DisplayName("Test null Author returns null AuthorDto")
-    void toAuthorDtoNull() {
-        // Act
-        AuthorQuery authorQuery = AuthorMapper.toAuthorDto(null);
-        assertNull(authorQuery, "Mapping null Author should return null AuthorDto");
+    @DisplayName("Test null Author returns null AuthorQuery")
+    void toAuthorQueryNull() {
+        AuthorQuery result = AuthorMapper.toAuthorQuery(null);
+
+        assertNull(result, "Mapping null Author should return null AuthorQuery");
     }
 
     @Test
     @DisplayName("Test map list of Author to list of AuthorDto")
-    void toAuthorDtoList() {
-        // Arrange
-        Author author1 = new Author(
-                "Author Name",
-                "Author National",
-                "Author Bio",
-                1990,
-                2020,
-                "author-slug"
+    void toAuthorQueryList() {
+        List<Author> authors = List.of(
+                AuthorData.getAuthor(0),
+                AuthorData.getAuthor(1)
         );
-        Author author2 = new Author(
-                "Author Name 2",
-                "Author National 2",
-                "Author Bio 2",
-                1991,
-                2021,
-                "author-slug-2"
-        );
-        List<Author> authors = List.of(author1, author2);
-        List<AuthorQuery> authorQueries = authors.stream()
-                .map(AuthorMapper::toAuthorDto)
+
+        List<AuthorQuery> result = authors.stream()
+                .map(AuthorMapper::toAuthorQuery)
                 .toList();
+
         assertAll(
-                () -> assertEquals(authors.size(), authorQueries.size(), "List sizes should match"),
-                () -> assertEquals(authors.get(0).getName(), authorQueries.get(0).name(), "First author's name should match"),
-                () -> assertEquals(authors.get(1).getSlug(), authorQueries.get(1).slug(), "Second author's slug should match")
+                () -> assertEquals(authors.size(), result.size(), "List sizes should match"),
+                () -> assertEquals(authors.getFirst().getName(), result.getFirst().name(), "First author's name should match"),
+                () -> assertEquals(authors.get(1).getSlug(), result.get(1).slug(), "Second author's slug should match")
         );
     }
 
     @Test
     @DisplayName("Test map empty list of Author returns empty list of AuthorDto")
-    void toAuthorDtoEmptyList() {
+    void toAuthorQueryEmptyList() {
         // Arrange
         List<Author> authors = Collections.emptyList();
-        List<AuthorQuery> authorQueries = authors.stream()
-                .map(AuthorMapper::toAuthorDto)
+        List<AuthorQuery> result = authors.stream()
+                .map(AuthorMapper::toAuthorQuery)
                 .toList();
-        assertTrue(authorQueries.isEmpty(), "Mapping an empty list should return an empty list");
+        assertTrue(result.isEmpty(), "Mapping an empty list should return an empty list");
     }
 
 }

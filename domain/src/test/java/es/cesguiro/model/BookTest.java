@@ -1,5 +1,6 @@
 package es.cesguiro.model;
 
+import es.cesguiro.model.vo.LocaleString;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -15,8 +16,12 @@ class BookTest{
     void testCreateBook(){
         // Arrange
         String isbn = "978-84-376-0494-7";
-        String title = "title";
-        String synopsis = "synopsis";
+        String titleEs = "titleEs";
+        String titleEn = "titleEn";
+        LocaleString title = new LocaleString(titleEs, titleEn);
+        String synopsisEs = "biographyEs";
+        String synopsisEn = "biographyEn";
+        LocaleString synopsis = new LocaleString(synopsisEs, synopsisEn);
         BigDecimal basePrice = new BigDecimal("10.00");
         double discountPercentage = 5.00;
         String cover = "978-84-376-0494-7.jpg";
@@ -26,8 +31,10 @@ class BookTest{
         // Assert
         assertAll(
             () -> assertEquals(isbn, book.getIsbn(), "ISBNs should match"),
-            () -> assertEquals(title, book.getTitle(), "Titles should match"),
-            () -> assertEquals(synopsis, book.getSynopsis(), "Synopses should match"),
+            () -> assertEquals(titleEs, book.getTitle("es"), "Title ES should match"),
+            () -> assertEquals(titleEn, book.getTitle("en"), "Title EN should match"),
+            () -> assertEquals(synopsisEs, book.getSynopsis("es"), "Synopse ES should match"),
+            () -> assertEquals(synopsisEn, book.getSynopsis("en"), "Synopse EN should match"),
             () -> assertEquals(basePrice, book.getBasePrice(), "Base prices should match"),
             () -> assertEquals(discountPercentage, book.getDiscountPercentage(), "Discounts should match"),
             () -> assertEquals(cover, book.getCover(), "Covers should match"),
@@ -36,12 +43,114 @@ class BookTest{
     }
 
     @Test
+    @DisplayName("Test get title in Spanish")
+    void testGetTitleInSpanish(){
+        String language = "es";
+        String isbn = "978-84-376-0494-7";
+        LocaleString title = new LocaleString("titleEs", "titleEn");
+        LocaleString synopsis = new LocaleString("synopsisEs", "synopsisEn");
+        BigDecimal basePrice = new BigDecimal("10.00");
+        double discountPercentage = 5.00;
+        String cover = "978-84-376-0494-7.jpg";
+        LocalDate publicationDate = LocalDate.of(2021, 1, 1);
+
+        Book book = new Book(isbn, title, synopsis, basePrice, discountPercentage, cover, publicationDate);
+
+        assertEquals("titleEs", book.getTitle(language), "Titles should match");
+    }
+
+    @Test
+    @DisplayName("Test get title in English")
+    void testGetTitleInEnglish(){
+        String language = "en";
+        String isbn = "978-84-376-0494-7";
+        LocaleString title = new LocaleString("titleEs", "titleEn");
+        LocaleString synopsis = new LocaleString("synopsisEs", "synopsisEn");
+        BigDecimal basePrice = new BigDecimal("10.00");
+        double discountPercentage = 5.00;
+        String cover = "978-84-376-0494-7.jpg";
+        LocalDate publicationDate = LocalDate.of(2021, 1, 1);
+
+        Book book = new Book(isbn, title, synopsis, basePrice, discountPercentage, cover, publicationDate);
+
+        assertEquals("titleEn", book.getTitle(language), "Titles should match");
+    }
+
+    @Test
+    @DisplayName("Test get synopsis in Spanish")
+    void testGetSynopsisInSpanish(){
+        String language = "es";
+        String isbn = "978-84-376-0494-7";
+        LocaleString title = new LocaleString("titleEs", "titleEn");
+        LocaleString synopsis = new LocaleString("synopsisEs", "synopsisEn");
+        BigDecimal basePrice = new BigDecimal("10.00");
+        double discountPercentage = 5.00;
+        String cover = "978-84-376-0494-7.jpg";
+        LocalDate publicationDate = LocalDate.of(2021, 1, 1);
+
+        Book book = new Book(isbn, title, synopsis, basePrice, discountPercentage, cover, publicationDate);
+
+        assertEquals("synopsisEs", book.getSynopsis(language), "Synopses should match");
+    }
+
+    @Test
+    @DisplayName("Test get synopsis in English")
+    void testGetSynopsisInEnglish(){
+        String language = "en";
+        String isbn = "978-84-376-0494-7";
+        LocaleString title = new LocaleString("titleEs", "titleEn");
+        LocaleString synopsis = new LocaleString("synopsisEs", "synopsisEn");
+        BigDecimal basePrice = new BigDecimal("10.00");
+        double discountPercentage = 5.00;
+        String cover = "978-84-376-0494-7.jpg";
+        LocalDate publicationDate = LocalDate.of(2021, 1, 1);
+
+        Book book = new Book(isbn, title, synopsis, basePrice, discountPercentage, cover, publicationDate);
+
+        assertEquals("synopsisEn", book.getSynopsis(language), "Synopses should match");
+    }
+
+    @Test
+    @DisplayName("Test get title with non supported language should return titleEs")
+    void testGetTitleWithNonSupportedLanguage(){
+        String language = "fr";
+        String isbn = "978-84-376-0494-7";
+        LocaleString title = new LocaleString("titleEs", "titleEn");
+        LocaleString synopsis = new LocaleString("synopsisEs", "synopsisEn");
+        BigDecimal basePrice = new BigDecimal("10.00");
+        double discountPercentage = 5.00;
+        String cover = "978-84-376-0494-7.jpg";
+        LocalDate publicationDate = LocalDate.of(2021, 1, 1);
+
+        Book book = new Book(isbn, title, synopsis, basePrice, discountPercentage, cover, publicationDate);
+
+        assertEquals("titleEs", book.getTitle(language), "Titles should match");
+    }
+
+    @Test
+    @DisplayName("Test get synopsis with non supported language should return synopsisEs")
+    void testGetSynopsisWithNonSupportedLanguage(){
+        String language = "fr";
+        String isbn = "978-84-376-0494-7";
+        LocaleString title = new LocaleString("titleEs", "titleEn");
+        LocaleString synopsis = new LocaleString("synopsisEs", "synopsisEn");
+        BigDecimal basePrice = new BigDecimal("10.00");
+        double discountPercentage = 5.00;
+        String cover = "978-84-376-0494-7.jpg";
+        LocalDate publicationDate = LocalDate.of(2021, 1, 1);
+
+        Book book = new Book(isbn, title, synopsis, basePrice, discountPercentage, cover, publicationDate);
+
+        assertEquals("synopsisEs", book.getSynopsis(language), "Synopses should match");
+    }
+
+    @Test
     @DisplayName("Test discount price")
     void testDiscountPrice(){
         // Arrange
         String isbn = "978-84-376-0494-7";
-        String title = "title";
-        String synopsis = "synopsis";
+        LocaleString title = new LocaleString("titleEs", "titleEn");
+        LocaleString synopsis = new LocaleString("synopsisEs", "synopsisEn");
         BigDecimal basePrice = new BigDecimal("10.00");
         double discountPercentage = 5.00;
         String cover = "978-84-376-0494-7.jpg";
@@ -57,8 +166,8 @@ class BookTest{
     void testDiscountPriceWithZeroDiscount(){
         // Arrange
         String isbn = "978-84-376-0494-7";
-        String title = "title";
-        String synopsis = "synopsis";
+        LocaleString title = new LocaleString("titleEs", "titleEn");
+        LocaleString synopsis = new LocaleString("synopsisEs", "synopsisEn");
         BigDecimal basePrice = new BigDecimal("10.00");
         double discountPercentage = 0.00;
         String cover = "978-84-376-0494-7.jpg";
@@ -74,8 +183,8 @@ class BookTest{
     void testRoundDiscountPrice(){
         // Arrange
         String isbn = "978-84-376-0494-7";
-        String title = "title";
-        String synopsis = "synopsis";
+        LocaleString title = new LocaleString("titleEs", "titleEn");
+        LocaleString synopsis = new LocaleString("synopsisEs", "synopsisEn");
         BigDecimal basePrice = new BigDecimal("10.00");
         double discountPercentage = 33;
         String cover = "978-84-376-0494-7.jpg";
@@ -91,8 +200,8 @@ class BookTest{
     void testDiscountPriceRoundingUp(){
         // Arrange
         String isbn = "978-84-376-0494-7";
-        String title = "title";
-        String synopsis = "synopsis";
+        LocaleString title = new LocaleString("titleEs", "titleEn");
+        LocaleString synopsis = new LocaleString("synopsisEs", "synopsisEn");
         BigDecimal basePrice = new BigDecimal("10.00");
         double discountPercentage = 33.33;
         String cover = "978-84-376-0494-7.jpg";
@@ -108,8 +217,8 @@ class BookTest{
     void testDiscountPriceRoundingDown(){
         // Arrange
         String isbn = "978-84-376-0494-7";
-        String title = "title";
-        String synopsis = "synopsis";
+        LocaleString title = new LocaleString("titleEs", "titleEn");
+        LocaleString synopsis = new LocaleString("synopsisEs", "synopsisEn");
         BigDecimal basePrice = new BigDecimal("10.00");
         double discountPercentage = 33.66;
         String cover = "978-84-376-0494-7.jpg";

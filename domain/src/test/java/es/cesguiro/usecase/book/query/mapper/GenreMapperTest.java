@@ -1,50 +1,77 @@
 package es.cesguiro.usecase.book.query.mapper;
 
+import es.cesguiro.locale.LocaleProvider;
+import es.cesguiro.locale.LocaleUtil;
 import es.cesguiro.model.Genre;
+import es.cesguiro.model.vo.LocaleString;
 import es.cesguiro.repository.model.GenreEntity;
+import es.cesguiro.usecase.book.query.data.GenreData;
 import es.cesguiro.usecase.book.query.model.GenreQuery;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class GenreMapperTest {
+
+    @Mock
+    private LocaleProvider mockLocaleProvider;
+
+    @BeforeEach
+    void setup() {
+        LocaleUtil.resetInstance();
+        LocaleUtil.getInstance(mockLocaleProvider);
+    }
+
+    @AfterEach
+    void teardown() {
+        LocaleUtil.resetInstance();
+    }
+
 
     @Test
     @DisplayName("Test map GenreEntity to Genre")
     void toGenre() {
-        GenreEntity genreEntity = new GenreEntity("Fantasy", "fantasy");
-        Genre genre = GenreMapper.toGenre(genreEntity);
+        GenreEntity genreEntity = GenreData.getGenreEntity(0);
+        Genre result = GenreMapper.toGenre(genreEntity);
         assertAll(
-                () -> assertEquals(genreEntity.name(), genre.getName(), "Names should match"),
-                () -> assertEquals(genreEntity.slug(), genre.getSlug(), "Slugs should match")
+                () -> assertEquals(genreEntity.nameEs(), result.getName("es"), "Names should match"),
+                () -> assertEquals(genreEntity.nameEn(), result.getName("en"), "Names should match"),
+                () -> assertEquals(genreEntity.slug(), result.getSlug(), "Slugs should match")
         );
     }
 
     @Test
     @DisplayName("Test null GenreEntity returns null Genre")
     void toGenreNull() {
-        Genre genre = GenreMapper.toGenre(null);
-        assertNull(genre, "Mapping null GenreEntity should return null Genre");
+        Genre result = GenreMapper.toGenre(null);
+        assertNull(result, "Mapping null GenreEntity should return null Genre");
     }
 
     @Test
     @DisplayName("Test map List of GenreEntity to List of Genre")
     void toGenreList() {
         List<GenreEntity> genreEntities = List.of(
-                new GenreEntity("Fantasy", "fantasy"),
-                new GenreEntity("Science Fiction", "science-fiction")
+                GenreData.getGenreEntity(0),
+                GenreData.getGenreEntity(1)
         );
-        List<Genre> genres = genreEntities.stream()
+        List<Genre> result = genreEntities.stream()
                 .map(GenreMapper::toGenre)
                 .toList();
         assertAll(
-                () -> assertEquals(genreEntities.getFirst().name(), genres.getFirst().getName(), "Names should match"),
-                () -> assertEquals(genreEntities.getFirst().slug(), genres.getFirst().getSlug(), "Slugs should match"),
-                () -> assertEquals(genreEntities.get(1).name(), genres.get(1).getName(), "Names should match"),
-                () -> assertEquals(genreEntities.get(1).slug(), genres.get(1).getSlug(), "Slugs should match")
+                () -> assertEquals(genreEntities.getFirst().nameEs(), result.getFirst().getName("es"), "Names should match"),
+                () -> assertEquals(genreEntities.getFirst().slug(), result.getFirst().getSlug(), "Slugs should match"),
+                () -> assertEquals(genreEntities.getLast().nameEn(), result.get(1).getName("en"), "Names should match"),
+                () -> assertEquals(genreEntities.getLast().slug(), result.get(1).getSlug(), "Slugs should match")
         );
     }
 
@@ -52,56 +79,93 @@ class GenreMapperTest {
     @DisplayName("Test map empty List of GenreEntity to empty List of Genre")
     void toGenreListEmpty() {
         List<GenreEntity> genreEntities = List.of();
-        List<Genre> genres = genreEntities.stream()
+        List<Genre> result = genreEntities.stream()
                 .map(GenreMapper::toGenre)
                 .toList();
-        assertTrue(genres.isEmpty(), "Mapping empty List of GenreEntity should return empty List of Genre");
+        assertTrue(result.isEmpty(), "Mapping empty List of GenreEntity should return empty List of Genre");
     }
 
     @Test
-    @DisplayName("Test map Genre to GenreDto")
-    void toGenreDto() {
-        Genre genre = new Genre("Fantasy", "fantasy");
-        GenreQuery genreQuery = GenreMapper.toGenreDto(genre);
+    @DisplayName("Test map Genre to GenreQuery with Locale es")
+    void toGenreQuery() {
+        when(mockLocaleProvider.getLanguage()).thenReturn("es");
+
+        Genre genre = GenreData.getGenre(0);
+        GenreQuery result = GenreMapper.toGenreQuery(genre);
         assertAll(
-                () -> assertEquals(genre.getName(), genreQuery.name(), "Names should match"),
-                () -> assertEquals(genre.getSlug(), genreQuery.slug(), "Slugs should match")
+                () -> assertEquals(genre.getName("es"), result.name(), "Names should match"),
+                () -> assertEquals(genre.getSlug(), result.slug(), "Slugs should match")
         );
     }
 
     @Test
-    @DisplayName("Test null Genre returns null GenreDto")
-    void toGenreDtoNull() {
-        GenreQuery genreQuery = GenreMapper.toGenreDto(null);
-        assertNull(genreQuery, "Mapping null Genre should return null GenreDto");
+    @DisplayName("Test map Genre to GenreQuery with Locale en")
+    void toGenreQueryEn() {
+        when(mockLocaleProvider.getLanguage()).thenReturn("en");
+
+        Genre genre = GenreData.getGenre(0);
+        GenreQuery result = GenreMapper.toGenreQuery(genre);
+        assertAll(
+                () -> assertEquals(genre.getName("en"), result.name(), "Names should match"),
+                () -> assertEquals(genre.getSlug(), result.slug(), "Slugs should match")
+        );
     }
 
     @Test
-    @DisplayName("Test map List of Genre to List of GenreDto")
-    void toGenreDtoList() {
+    @DisplayName("Test null Genre returns null GenreQuery")
+    void toGenreQueryNull() {
+        GenreQuery result = GenreMapper.toGenreQuery(null);
+        assertNull(result, "Mapping null Genre should return null GenreDto");
+    }
+
+    @Test
+    @DisplayName("Test map List of Genre to List of GenreQuery with Locale es")
+    void toGenreQueryList() {
+        when(mockLocaleProvider.getLanguage()).thenReturn("es");
+
         List<Genre> genres = List.of(
-                new Genre("Fantasy", "fantasy"),
-                new Genre("Science Fiction", "science-fiction")
+                GenreData.getGenre(0),
+                GenreData.getGenre(1)
         );
-        List<GenreQuery> genreQueries = genres.stream()
-                .map(GenreMapper::toGenreDto)
+        List<GenreQuery> result = genres.stream()
+                .map(GenreMapper::toGenreQuery)
                 .toList();
         assertAll(
-                () -> assertEquals(genres.getFirst().getName(), genreQueries.getFirst().name(), "Names should match"),
-                () -> assertEquals(genres.getFirst().getSlug(), genreQueries.getFirst().slug(), "Slugs should match"),
-                () -> assertEquals(genres.get(1).getName(), genreQueries.get(1).name(), "Names should match"),
-                () -> assertEquals(genres.get(1).getSlug(), genreQueries.get(1).slug(), "Slugs should match")
+                () -> assertEquals(genres.getFirst().getName("es"), result.getFirst().name(), "Names should match"),
+                () -> assertEquals(genres.getFirst().getSlug(), result.getFirst().slug(), "Slugs should match"),
+                () -> assertEquals(genres.getLast().getName("en"), result.getLast().name(), "Names should match"),
+                () -> assertEquals(genres.getLast().getSlug(), result.getLast().slug(), "Slugs should match")
         );
     }
 
     @Test
-    @DisplayName("Test map empty List of Genre to empty List of GenreDto")
-    void toGenreDtoListEmpty() {
-        List<Genre> genres = List.of();
-        List<GenreQuery> genreQueries = genres.stream()
-                .map(GenreMapper::toGenreDto)
+    @DisplayName("Test map List of Genre to List of GenreQuery with Locale en")
+    void toGenreQueryListEn() {
+        when(mockLocaleProvider.getLanguage()).thenReturn("en");
+
+        List<Genre> genres = List.of(
+                GenreData.getGenre(0),
+                GenreData.getGenre(1)
+        );
+        List<GenreQuery> result = genres.stream()
+                .map(GenreMapper::toGenreQuery)
                 .toList();
-        assertTrue(genreQueries.isEmpty(), "Mapping empty List of Genre should return empty List of GenreDto");
+        assertAll(
+                () -> assertEquals(genres.getFirst().getName("es"), result.getFirst().name(), "Names should match"),
+                () -> assertEquals(genres.getFirst().getSlug(), result.getFirst().slug(), "Slugs should match"),
+                () -> assertEquals(genres.getLast().getName("es"), result.getLast().name(), "Names should match"),
+                () -> assertEquals(genres.getLast().getSlug(), result.getLast().slug(), "Slugs should match")
+        );
+    }
+
+    @Test
+    @DisplayName("Test map empty List of Genre to empty List of GenreQuery")
+    void toGenreQueryListEmpty() {
+        List<Genre> genres = List.of();
+        List<GenreQuery> result = genres.stream()
+                .map(GenreMapper::toGenreQuery)
+                .toList();
+        assertTrue(result.isEmpty(), "Mapping empty List of Genre should return empty List of GenreDto");
     }
 
 }

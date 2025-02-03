@@ -16,7 +16,7 @@ public class PublisherMapper {
         );
     }
 
-    public static PublisherQuery toPublisherDto(Publisher publisher) {
+    public static PublisherQuery toPublisherQuery(Publisher publisher) {
         if(publisher == null) {
             return null;
         }

@@ -1,6 +1,8 @@
 package es.cesguiro.usecase.book.query.mapper;
 
+import es.cesguiro.locale.LocaleUtil;
 import es.cesguiro.model.Book;
+import es.cesguiro.model.vo.LocaleString;
 import es.cesguiro.repository.model.BookEntity;
 import es.cesguiro.usecase.book.query.model.BookCollectionQuery;
 import es.cesguiro.usecase.book.query.model.BookQuery;
@@ -13,8 +15,8 @@ public class BookMapper {
         }
         return new Book(
                 bookEntity.isbn(),
-                bookEntity.title(),
-                bookEntity.synopsis(),
+                new LocaleString(bookEntity.titleEs(), bookEntity.titleEn()),
+                new LocaleString(bookEntity.synopsisEs(), bookEntity.synopsisEn()),
                 bookEntity.basePrice(),
                 bookEntity.discountPercentage(),
                 bookEntity.cover(),
@@ -22,38 +24,38 @@ public class BookMapper {
         );
     }
 
-    public static BookCollectionQuery toBookCollectionDto(Book book){
+    public static BookCollectionQuery toBookCollectionQuery(Book book){
         if(book == null){
             return null;
         }
         return new BookCollectionQuery(
                 book.getIsbn(),
-                book.getTitle(),
+                book.getTitle(LocaleUtil.getInstance().getLanguage()),
                 book.getBasePrice(),
                 book.getDiscountPercentage(),
                 book.calculateFinalPrice(),
                 book.getCover(),
-                book.getAuthors().stream().map(AuthorMapper::toAuthorCollectionDto).toList()
+                book.getAuthors().stream().map(AuthorMapper::toAuthorCollectionQuery).toList()
         );
     }
 
-    public static BookQuery toBookDto(Book book){
+    public static BookQuery toBookQuery(Book book){
         if(book == null){
             return null;
         }
         return new BookQuery(
                 book.getIsbn(),
-                book.getTitle(),
-                book.getSynopsis(),
+                book.getTitle(LocaleUtil.getInstance().getLanguage()),
+                book.getSynopsis(LocaleUtil.getInstance().getLanguage()),
                 book.getBasePrice(),
                 book.getDiscountPercentage(),
                 book.calculateFinalPrice(),
                 book.getCover(),
                 book.getPublicationDate(),
-                PublisherMapper.toPublisherDto(book.getPublisher()),
-                CategoryMapper.toCategoryDto(book.getCategory()),
-                book.getGenres().stream().map(GenreMapper::toGenreDto).toList(),
-                book.getAuthors().stream().map(AuthorMapper::toAuthorDto).toList()
+                PublisherMapper.toPublisherQuery(book.getPublisher()),
+                CategoryMapper.toCategoryQuery(book.getCategory()),
+                book.getGenres().stream().map(GenreMapper::toGenreQuery).toList(),
+                book.getAuthors().stream().map(AuthorMapper::toAuthorQuery).toList()
         );
     }
 }

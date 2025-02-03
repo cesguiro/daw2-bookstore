@@ -10,11 +10,40 @@
     </parent>
 
     <artifactId>app</artifactId>
+    <packaging>jar</packaging>
+    <version>1.0.0</version>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <org.springframework.boot.version>3.4.2</org.springframework.boot.version>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>es.cesguiro</groupId>
+            <artifactId>api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>es.cesguiro</groupId>
+            <artifactId>util</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>es.cesguiro</groupId>
+            <artifactId>api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>${org.springframework.boot.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <version>${org.springframework.boot.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
 </project>

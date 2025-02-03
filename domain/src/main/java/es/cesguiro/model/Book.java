@@ -1,5 +1,7 @@
 package es.cesguiro.model;
 
+import es.cesguiro.model.vo.LocaleString;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
@@ -8,8 +10,8 @@ import java.util.List;
 public class Book {
 
     private String isbn;
-    private String title;
-    private String synopsis;
+    private LocaleString title;
+    private LocaleString synopsis;
     private BigDecimal basePrice;
     private double discountPercentage;
     private String cover;
@@ -21,8 +23,8 @@ public class Book {
 
     public Book(
             String isbn,
-            String title,
-            String synopsis,
+            LocaleString title,
+            LocaleString synopsis,
             BigDecimal basePrice,
             double discountPercentage,
             String cover,
@@ -45,19 +47,19 @@ public class Book {
         this.isbn = isbn;
     }
 
-    public String getTitle() {
-        return title;
+    public String getTitle(String language) {
+        return title.getValue(language);
     }
 
-    public void setTitle(String title) {
+    public void setTitle(LocaleString title) {
         this.title = title;
     }
 
-    public String getSynopsis() {
-        return synopsis;
+    public String getSynopsis(String language) {
+        return synopsis.getValue(language);
     }
 
-    public void setSynopsis(String synopsis) {
+    public void setSynopsis(LocaleString synopsis) {
         this.synopsis = synopsis;
     }
 

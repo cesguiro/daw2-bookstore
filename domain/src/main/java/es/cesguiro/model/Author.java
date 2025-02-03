@@ -1,15 +1,17 @@
 package es.cesguiro.model;
 
+import es.cesguiro.model.vo.LocaleString;
+
 public class Author {
 
     private String name;
     private String nationality;
-    private String biography;
+    private LocaleString biography;
     private int birthYear;
     private Integer deathYear;
     private String slug;
 
-    public Author(String name, String nationality, String biography, int birthYear, Integer deathYear, String slug) {
+    public Author(String name, String nationality, LocaleString biography, int birthYear, Integer deathYear, String slug) {
         this.name = name;
         this.nationality = nationality;
         this.biography = biography;
@@ -35,11 +37,11 @@ public class Author {
         this.nationality = nationality;
     }
 
-    public String getBiography() {
-        return biography;
+    public String getBiography(String language) {
+        return biography.getValue(language);
     }
 
-    public void setBiography(String biography) {
+    public void setBiography(LocaleString biography) {
         this.biography = biography;
     }
 

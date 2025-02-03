@@ -5,8 +5,10 @@ import java.time.LocalDate;
 
 public record BookEntity(
         String isbn,
-        String title,
-        String synopsis,
+        String titleEs,
+        String titleEn,
+        String synopsisEs,
+        String synopsisEn,
         BigDecimal basePrice,
         double discountPercentage,
         String cover,

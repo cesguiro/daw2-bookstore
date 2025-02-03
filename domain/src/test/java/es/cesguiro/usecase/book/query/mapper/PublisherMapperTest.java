@@ -2,6 +2,7 @@ package es.cesguiro.usecase.book.query.mapper;
 
 import es.cesguiro.model.Publisher;
 import es.cesguiro.repository.model.PublisherEntity;
+import es.cesguiro.usecase.book.query.data.PublisherData;
 import es.cesguiro.usecase.book.query.model.PublisherQuery;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,37 +14,37 @@ class PublisherMapperTest {
     @Test
     @DisplayName("Test map PublisherEntity to Publisher")
     void toPublisher() {
-        PublisherEntity publisherEntity = new PublisherEntity("name", "slug");
-        Publisher publisher = PublisherMapper.toPublisher(publisherEntity);
+        PublisherEntity publisherEntity = PublisherData.getPublisherEntity(0);
+        Publisher result = PublisherMapper.toPublisher(publisherEntity);
         assertAll(
-                () -> assertEquals(publisherEntity.name(), publisher.getName(), "Names should match"),
-                () -> assertEquals(publisherEntity.slug(), publisher.getSlug(), "Slugs should match")
+                () -> assertEquals(publisherEntity.name(), result.getName(), "Names should match"),
+                () -> assertEquals(publisherEntity.slug(), result.getSlug(), "Slugs should match")
         );
     }
 
     @Test
     @DisplayName("Test null PublisherEntity returns null Publisher")
     void toPublisherNull() {
-        Publisher publisher = PublisherMapper.toPublisher(null);
-        assertNull(publisher, "Mapping null PublisherEntity should return null Publisher");
+        Publisher result = PublisherMapper.toPublisher(null);
+        assertNull(result, "Mapping null PublisherEntity should return null Publisher");
     }
 
     @Test
     @DisplayName("Test map Publisher to PublisherDto")
-    void toPublisherDto() {
-        Publisher publisher = new Publisher("name", "slug");
-        PublisherQuery publisherQuery = PublisherMapper.toPublisherDto(publisher);
+    void toPublisherQuery() {
+        Publisher result = PublisherData.getPublishers().get(0);
+        PublisherQuery publisherQuery = PublisherMapper.toPublisherQuery(result);
         assertAll(
-                () -> assertEquals(publisher.getName(), publisherQuery.name(), "Names should match"),
-                () -> assertEquals(publisher.getSlug(), publisherQuery.slug(), "Slugs should match")
+                () -> assertEquals(result.getName(), publisherQuery.name(), "Names should match"),
+                () -> assertEquals(result.getSlug(), publisherQuery.slug(), "Slugs should match")
         );
     }
 
     @Test
     @DisplayName("Test null Publisher returns null PublisherDto")
-    void toPublisherDtoNull() {
-        PublisherQuery publisherQuery = PublisherMapper.toPublisherDto(null);
-        assertNull(publisherQuery, "Mapping null Publisher should return null PublisherDto");
+    void toPublisherQueryNull() {
+        PublisherQuery result = PublisherMapper.toPublisherQuery(null);
+        assertNull(result, "Mapping null Publisher should return null PublisherDto");
     }
 
 }

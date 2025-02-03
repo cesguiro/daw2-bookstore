@@ -10,8 +10,8 @@
     </parent>
 
     <artifactId>persistence</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
+    <version>1.0.0</version>
 
 
     <properties>
@@ -24,7 +24,36 @@
         <org.mariadb.java-client.version>3.5.1</org.mariadb.java-client.version>
         <org.springframework.boot.spring-starter-test>3.4.1</org.springframework.boot.spring-starter-test>
         <com.h2database.version>2.3.232</com.h2database.version>
+        <org.flywaydb.version>11.3.0</org.flywaydb.version>
+        <flyway.url>jdbc:h2:mem:testdb;MODE=MySQL</flyway.url>
+        <flyway.user>root</flyway.user>
+        <flyway.password>root</flyway.password>
     </properties>
+
+    <!--<profiles>
+        <profile>
+            <id>test</id>
+            <properties>
+                <flyway.locations>classpath:db/migration/test</flyway.locations>
+                <flyway.url>jdbc:h2:mem:testdb</flyway.url>
+                <flyway.user>root</flyway.user>
+                <flyway.password>root</flyway.password>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+
+        <profile>
+            <id>prod</id>
+            <properties>
+                <flyway.locations>classpath:db/migration/prod</flyway.locations>
+                <flyway.url>jdbc:mariadb://localhost:3306/bookstore</flyway.url>
+                <flyway.user>root</flyway.user>
+                <flyway.password>root</flyway.password>
+            </properties>
+        </profile>
+    </profiles>-->
 
     <dependencies>
         <dependency>
@@ -52,18 +81,6 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>${org.junit.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-junit-jupiter</artifactId>
-            <version>${org.mockito.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <version>${org.springframework.boot.spring-starter-test}</version>
@@ -78,7 +95,8 @@
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
-            <version>10.6.0</version>
+            <version>${org.flywaydb.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -98,9 +116,40 @@
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
+            <!--<plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>${org.flywaydb.version}</version>
+                <executions>
+                    <execution>
+                        <id>flyway-test</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>clean</goal>
+                            <goal>migrate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <url>${flyway.url}</url>
+                    <user>${flyway.user}</user>
+                    <password>${flyway.password}</password>
+                    <dependency>
+                        <groupId>com.h2database</groupId>
+                        <artifactId>h2</artifactId>
+                        <version>${com.h2database.version}</version>
+                        <scope>test</scope>
+                    </dependency>
+                    <locations>
+                        <location>${flyway.locations}</location>
+                    </locations>
+                    <profiles>
+                        <profile>test</profile>
+                    </profiles>
+
+                </configuration>
+            </plugin>-->
         </plugins>
     </build>
-
-
 
 </project>

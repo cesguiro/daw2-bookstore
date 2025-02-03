@@ -18,9 +18,8 @@ class AuthorMapperTest {
     }
 
     @Test
-    @DisplayName("Test toAuthorEntity with Locale('en') should return AuthorEntity with biography in English")
+    @DisplayName("Test map AuthorEntityJpa to toAuthorEntity")
     void testToAuthorEntityWithLocaleEn() {
-        // Arrange
         AuthorEntityJpa authorEntityJpa = new AuthorEntityJpa();
         authorEntityJpa.setName("Author Name");
         authorEntityJpa.setNationality("Nationality");
@@ -30,69 +29,18 @@ class AuthorMapperTest {
         authorEntityJpa.setDeathYear(2000);
         authorEntityJpa.setSlug("author-name");
 
-        Locale.setDefault(Locale.ENGLISH);
         AuthorEntity authorEntity = AuthorMapper.toAuthorEntity(authorEntityJpa);
 
         assertAll(
                 () -> assertEquals("Author Name", authorEntity.name()),
                 () -> assertEquals("Nationality", authorEntity.nationality()),
-                () -> assertEquals("Biography in English", authorEntity.biography()),
+                () -> assertEquals("Biografía en Español", authorEntity.biographyEs()),
+                () -> assertEquals("Biography in English", authorEntity.biographyEn()),
                 () -> assertEquals(1900, authorEntity.birthYear()),
                 () -> assertEquals(2000, authorEntity.deathYear()),
                 () -> assertEquals("author-name", authorEntity.slug())
         );
     }
 
-    @Test
-    @DisplayName("Test toAuthorEntity with Locale('es') should return AuthorEntity with biography in Spanish")
-    void testToAuthorEntityWithLocaleEs() {
-        // Arrange
-        AuthorEntityJpa authorEntityJpa = new AuthorEntityJpa();
-        authorEntityJpa.setName("Author Name");
-        authorEntityJpa.setNationality("Nationality");
-        authorEntityJpa.setBiographyEn("Biography in English");
-        authorEntityJpa.setBiographyEs("Biografía en Español");
-        authorEntityJpa.setBirthYear(1900);
-        authorEntityJpa.setDeathYear(2000);
-        authorEntityJpa.setSlug("author-name");
-
-        Locale.setDefault(new Locale("es"));
-        AuthorEntity authorEntity = AuthorMapper.toAuthorEntity(authorEntityJpa);
-
-        assertAll(
-                () -> assertEquals("Author Name", authorEntity.name()),
-                () -> assertEquals("Nationality", authorEntity.nationality()),
-                () -> assertEquals("Biografía en Español", authorEntity.biography()),
-                () -> assertEquals(1900, authorEntity.birthYear()),
-                () -> assertEquals(2000, authorEntity.deathYear()),
-                () -> assertEquals("author-name", authorEntity.slug())
-        );
-    }
-
-    @Test
-    @DisplayName("Test toAuthorEntity with Locale('fr') should return AuthorEntity with biography in Spanish")
-    void testToAuthorEntityWithLocaleFr() {
-        // Arrange
-        AuthorEntityJpa authorEntityJpa = new AuthorEntityJpa();
-        authorEntityJpa.setName("Author Name");
-        authorEntityJpa.setNationality("Nationality");
-        authorEntityJpa.setBiographyEn("Biography in English");
-        authorEntityJpa.setBiographyEs("Biografía en Español");
-        authorEntityJpa.setBirthYear(1900);
-        authorEntityJpa.setDeathYear(2000);
-        authorEntityJpa.setSlug("author-name");
-
-        Locale.setDefault(new Locale("fr"));
-        AuthorEntity authorEntity = AuthorMapper.toAuthorEntity(authorEntityJpa);
-
-        assertAll(
-                () -> assertEquals("Author Name", authorEntity.name()),
-                () -> assertEquals("Nationality", authorEntity.nationality()),
-                () -> assertEquals("Biografía en Español", authorEntity.biography()),
-                () -> assertEquals(1900, authorEntity.birthYear()),
-                () -> assertEquals(2000, authorEntity.deathYear()),
-                () -> assertEquals("author-name", authorEntity.slug())
-        );
-    }
 
 }
