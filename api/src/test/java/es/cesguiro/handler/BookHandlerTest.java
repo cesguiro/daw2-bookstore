@@ -321,12 +321,10 @@ class BookHandlerTest {
                 () -> assertEquals(expected.category().links(), result.category().links()),
                 () -> assertEquals(expected.publisher().name(), result.publisher().name()),
                 () -> assertEquals(expected.publisher().links(), result.publisher().links()),
-                () -> assertEquals(expected.genres().get(0).name(), result.genres().get(0).name()),
-                () -> assertEquals(expected.genres().get(0).links(), result.genres().get(0).links()),
-                () -> assertEquals(expected.genres().get(1).name(), result.genres().get(1).name()),
-                () -> assertEquals(expected.genres().get(1).links(), result.genres().get(1).links()),
-                () -> assertEquals(expected.authors().get(0).name(), result.authors().get(0).name()),
-                () -> assertEquals(expected.authors().get(0).links(), result.authors().get(0).links()),
+                () -> assertEquals(expected.genres().getFirst().name(), result.genres().getFirst().name()),
+                () -> assertEquals(expected.genres().getFirst().links(), result.genres().getFirst().links()),
+                () -> assertEquals(expected.authors().getFirst().name(), result.authors().getFirst().name()),
+                () -> assertEquals(expected.authors().getFirst().links(), result.authors().getFirst().links()),
                 () -> assertEquals(expected.authors().get(1).name(), result.authors().get(1).name()),
                 () -> assertEquals(expected.authors().get(1).links(), result.authors().get(1).links())
         );
