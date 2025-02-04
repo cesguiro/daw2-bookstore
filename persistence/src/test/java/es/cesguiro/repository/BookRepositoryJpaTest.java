@@ -35,10 +35,9 @@ class BookRepositoryJpaTest {
         int page = 1;
         int size = 10;
 
-        List<BookEntityJpa> bookEntitiesJpa = List.of(BookData.getBookEntityJpa(0), BookData.getBookEntityJpa(1));
         List<BookEntity> bookEntities = List.of(BookData.getBookEntity(0), BookData.getBookEntity(1));
 
-        when(bookDao.findAll(page, size)).thenReturn(bookEntitiesJpa);
+        when(bookDao.findAll(page, size)).thenReturn(bookEntities);
         when(bookDao.count()).thenReturn(2L);
 
         Page<BookEntity> expected = new Page<>(bookEntities, page, size, 2);
@@ -103,10 +102,9 @@ class BookRepositoryJpaTest {
         int page = 1;
         int size = 3;
 
-        List<BookEntityJpa> bookEntityJpas = List.of(BookData.getBookEntityJpa(0), BookData.getBookEntityJpa(1), BookData.getBookEntityJpa(2));
         List<BookEntity> bookEntities = List.of(BookData.getBookEntity(0), BookData.getBookEntity(1), BookData.getBookEntity(2));
 
-        when(bookDao.findAll(page, size)).thenReturn(bookEntityJpas);
+        when(bookDao.findAll(page, size)).thenReturn(bookEntities);
         when(bookDao.count()).thenReturn(3L);
 
 
@@ -132,10 +130,9 @@ class BookRepositoryJpaTest {
         int page = 1;
         int size = 3;
 
-        List<BookEntityJpa> bookEntityJpas = List.of(BookData.getBookEntityJpa(0), BookData.getBookEntityJpa(1), BookData.getBookEntityJpa(2));
         List<BookEntity> bookEntities = List.of(BookData.getBookEntity(0), BookData.getBookEntity(1), BookData.getBookEntity(2));
 
-        when(bookDao.findAll(page, size)).thenReturn(bookEntityJpas);
+        when(bookDao.findAll(page, size)).thenReturn(bookEntities);
         when(bookDao.count()).thenReturn(9L);
 
         Page<BookEntity> expected = new Page<>(bookEntities, page, size, 9);
@@ -160,10 +157,9 @@ class BookRepositoryJpaTest {
         int page = 2;
         int size = 3;
 
-        List<BookEntityJpa> bookEntityJpas = List.of(BookData.getBookEntityJpa(3), BookData.getBookEntityJpa(4));
         List<BookEntity> bookEntities = List.of(BookData.getBookEntity(3), BookData.getBookEntity(4));
 
-        when(bookDao.findAll(page, size)).thenReturn(bookEntityJpas);
+        when(bookDao.findAll(page, size)).thenReturn(bookEntities);
         when(bookDao.count()).thenReturn(5L);
 
         Page<BookEntity> expected = new Page<>(bookEntities, page, size, 5);
@@ -185,8 +181,8 @@ class BookRepositoryJpaTest {
     void testFindByIsbn() {
         String isbn = "123";
 
-        BookEntityJpa bookEntityJpa = BookData.getBookEntityJpa(0);
-        when(bookDao.findByIsbn(isbn)).thenReturn(Optional.of(bookEntityJpa));
+        BookEntity bookEntity = BookData.getBookEntity(0);
+        when(bookDao.findByIsbn(isbn)).thenReturn(Optional.of(bookEntity));
 
 
         Optional<BookEntity> expected = Optional.of(BookData.getBookEntity(0));
@@ -227,8 +223,5 @@ class BookRepositoryJpaTest {
 
         assertTrue(result.isEmpty());
     }
-
-
-
 
 }

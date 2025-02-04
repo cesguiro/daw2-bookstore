@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -31,6 +32,9 @@ public class BookEntityJpa {
     @Column(name = "discount_percentage")
     private double discountPercentage;
     private String cover;
+    @Column(name = "publication_date")
+    private LocalDate publicationDate;
+
     @ManyToMany
     @JoinTable(
             name = "books_authors",
@@ -38,4 +42,20 @@ public class BookEntityJpa {
             inverseJoinColumns = @JoinColumn(name = "author_id")
     )
     private List<AuthorEntityJpa> authors;
+
+    @ManyToMany
+    @JoinTable(
+            name = "books_genres",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id")
+    )
+    private List<GenreEntityJpa> genres;
+
+    @ManyToOne
+    @JoinColumn(name = "publisher_id")
+    private PublisherEntityJpa publisher;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private CategoryEntityJpa category;
 }

@@ -3,6 +3,7 @@ package es.cesguiro.dao.jpa;
 import es.cesguiro.TestConfig;
 import es.cesguiro.dao.AuthorDao;
 import es.cesguiro.dao.jpa.entity.AuthorEntityJpa;
+import es.cesguiro.repository.model.AuthorEntity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.DisplayName;
@@ -30,10 +31,10 @@ class AuthorDaoJpaTest {
     @DisplayName("Find all authors by book with existing ISBN should return a list with 1 author")
     void findAllAuthorsByBookWithExistingIsbnShouldReturnAListWithAuthors() {
         String isbn = "9780142424179";
-        List<AuthorEntityJpa> result = authorDao.findAllByBookIsbn(isbn);
+        List<AuthorEntity> result = authorDao.findAllByBookIsbn(isbn);
         assertAll(
                 () -> assertNotNull(result.getFirst(), "Author should not be null"),
-                () -> assertEquals("Antoine de Saint-Exupéry", result.getFirst().getName(), "Name should match")
+                () -> assertEquals("Antoine de Saint-Exupéry", result.getFirst().name(), "Name should match")
         );
     }
 
@@ -41,11 +42,11 @@ class AuthorDaoJpaTest {
     @DisplayName("Find all authors by book with existing ISBN should return a list with more than 1 author")
     void findAllAuthorsByBookWithExistingIsbnShouldReturnAListWithMoreThanOneAuthor() {
         String isbn = "9780060557912";
-        List<AuthorEntityJpa> result = authorDao.findAllByBookIsbn(isbn);
+        List<AuthorEntity> result = authorDao.findAllByBookIsbn(isbn);
         assertAll(
                 () -> assertEquals(2, result.size(), "Size should match"),
-                () -> assertEquals("Terry Pratchett", result.getFirst().getName(), "Name author 1 should match"),
-                () -> assertEquals("Neil Gaiman", result.getLast().getName(), "Name author 2 should match")
+                () -> assertEquals("Terry Pratchett", result.getFirst().name(), "Name author 1 should match"),
+                () -> assertEquals("Neil Gaiman", result.getLast().name(), "Name author 2 should match")
         );
     }
 

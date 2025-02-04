@@ -31,12 +31,10 @@ class AuthorRepositoryJpaTest {
     void testFindAllByBookIsbn() {
         String isbn = "123";
 
-        AuthorEntityJpa authorEntityJpa1 = AuthorData.getAuthorEntityJpa(0);
-        AuthorEntityJpa authorEntityJpa2 = AuthorData.getAuthorEntityJpa(1);
         AuthorEntity authorEntity1 = AuthorData.getAuthorEntity(0);
         AuthorEntity authorEntity2 = AuthorData.getAuthorEntity(1);
 
-        when(authorDao.findAllByBookIsbn(isbn)).thenReturn(List.of(authorEntityJpa1, authorEntityJpa2));
+        when(authorDao.findAllByBookIsbn(isbn)).thenReturn(List.of(authorEntity1, authorEntity2));
 
         List<AuthorEntity> expected = List.of(authorEntity1, authorEntity2);
         List<AuthorEntity> result = authorRepositoryJpa.findAllByBookIsbn(isbn);
@@ -59,10 +57,9 @@ class AuthorRepositoryJpaTest {
     void testFindAllByBookIsbnOneAuthor() {
         String isbn = "123";
 
-        AuthorEntityJpa authorEntityJpa1 = AuthorData.getAuthorEntityJpa(0);
         AuthorEntity authorEntity1 = AuthorData.getAuthorEntity(0);
 
-        when(authorDao.findAllByBookIsbn(isbn)).thenReturn(List.of(authorEntityJpa1));
+        when(authorDao.findAllByBookIsbn(isbn)).thenReturn(List.of(authorEntity1));
 
         List<AuthorEntity> expected = List.of(authorEntity1);
         List<AuthorEntity> result = authorRepositoryJpa.findAllByBookIsbn(isbn);

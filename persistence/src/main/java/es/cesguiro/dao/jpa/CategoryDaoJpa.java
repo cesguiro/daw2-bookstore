@@ -2,6 +2,7 @@ package es.cesguiro.dao.jpa;
 
 import es.cesguiro.dao.CategoryDao;
 import es.cesguiro.dao.jpa.entity.CategoryEntityJpa;
+import es.cesguiro.repository.model.CategoryEntity;
 import jakarta.persistence.EntityManager;
 
 import java.util.Optional;
@@ -15,14 +16,21 @@ public class CategoryDaoJpa implements CategoryDao {
     }
 
     @Override
-    public Optional<CategoryEntityJpa> findByBookIsbn(String isbn) {
-        String sql = "SELECT c.* FROM categories c " +
-                "JOIN books b ON b.category_id = c.id " +
+    public Optional<CategoryEntity> findByBookIsbn(String isbn) {
+        String sql = "SELECT " +
+                "new es.cesguiro.repository.model.CategoryEntity(c.nameEs, c.nameEn, c.slug) " +
+                "FROM CategoryEntityJpa c " +
+                "JOIN c.books b " +
                 "WHERE b.isbn = :isbn";
-        return entityManager.createNativeQuery(sql, CategoryEntityJpa.class)
+        return entityManager.createQuery(sql, CategoryEntity.class)
                 .setParameter("isbn", isbn)
                 .getResultList()
                 .stream()
                 .findFirst();
+        /*return entityManager.createNativeQuery(sql, CategoryEntityJpa.class)
+                .setParameter("isbn", isbn)
+                .getResultList()
+                .stream()
+                .findFirst();*/
     }
 }

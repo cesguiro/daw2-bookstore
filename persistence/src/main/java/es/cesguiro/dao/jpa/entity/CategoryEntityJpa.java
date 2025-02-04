@@ -1,12 +1,11 @@
 package es.cesguiro.dao.jpa.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -22,4 +21,7 @@ public class CategoryEntityJpa {
     @Column(name = "name_en")
     private String nameEn;
     private String slug;
+
+    @OneToMany(mappedBy = "category")
+    private List<BookEntityJpa> books;
 }

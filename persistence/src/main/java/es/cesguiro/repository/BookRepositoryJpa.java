@@ -3,7 +3,6 @@ package es.cesguiro.repository;
 import es.cesguiro.dao.BookDao;
 import es.cesguiro.dao.jpa.entity.BookEntityJpa;
 import es.cesguiro.pagination.Page;
-import es.cesguiro.repository.mapper.BookMapper;
 import es.cesguiro.repository.model.BookEntity;
 
 import java.util.List;
@@ -19,10 +18,10 @@ public class BookRepositoryJpa implements BookRepository {
 
     @Override
     public Page<BookEntity> findAll(int page, int size) {
-        List<BookEntityJpa> bookEntityJpaPage = bookDao.findAll(page, size);
+        List<BookEntity> data = bookDao.findAll(page, size);
         long totalElements = bookDao.count();
         return new Page<>(
-                bookEntityJpaPage.stream().map(BookMapper::toBookEntity).toList(),
+                data,
                 page,
                 size,
                 totalElements
@@ -31,7 +30,6 @@ public class BookRepositoryJpa implements BookRepository {
 
     @Override
     public Optional<BookEntity> findByIsbn(String isbn) {
-        BookEntityJpa bookEntityJpa = bookDao.findByIsbn(isbn).orElse(null);
-        return Optional.ofNullable(BookMapper.toBookEntity(bookEntityJpa));
+        return bookDao.findByIsbn(isbn);
     }
 }

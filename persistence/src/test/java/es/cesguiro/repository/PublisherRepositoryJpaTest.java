@@ -30,10 +30,9 @@ class PublisherRepositoryJpaTest {
     void testFindAll() {
         String isbn = "123";
 
-        PublisherEntityJpa publisherEntityJpa = PublisherData.getPublisherEntityJpa();
         PublisherEntity publisherEntity = PublisherData.getPublisherEntity();
 
-        when(publisherDao.findByBookIsbn(isbn)).thenReturn(Optional.of(publisherEntityJpa));
+        when(publisherDao.findByBookIsbn(isbn)).thenReturn(Optional.of(publisherEntity));
 
         Optional<PublisherEntity> expected = Optional.of(publisherEntity);
         Optional<PublisherEntity> result = publisherRepositoryJpa.findByBookIsbn(isbn);

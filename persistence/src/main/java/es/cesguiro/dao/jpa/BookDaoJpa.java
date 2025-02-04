@@ -2,6 +2,7 @@ package es.cesguiro.dao.jpa;
 
 import es.cesguiro.dao.BookDao;
 import es.cesguiro.dao.jpa.entity.BookEntityJpa;
+import es.cesguiro.repository.model.BookEntity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -19,10 +20,13 @@ public class BookDaoJpa implements BookDao {
     }
 
     @Override
-    public Optional<BookEntityJpa> findByIsbn(String isbn) {
-        String query = "SELECT b FROM BookEntityJpa b WHERE b.isbn = :isbn";
+    public Optional<BookEntity> findByIsbn(String isbn) {
+        String query = "SELECT " +
+                "new es.cesguiro.repository.model.BookEntity" +
+                "(b.isbn, b.titleEs, b.titleEn, b.synopsisEs, b.synopsisEn, b.basePrice, b.discountPercentage, b.cover, b.publicationDate)" +
+                "FROM BookEntityJpa b WHERE b.isbn = :isbn";
         try {
-            return Optional.of(entityManager.createQuery(query, BookEntityJpa.class)
+            return Optional.of(entityManager.createQuery(query, BookEntity.class)
                     .setParameter("isbn", isbn)
                     .getSingleResult());
         } catch (Exception e) {
@@ -31,9 +35,12 @@ public class BookDaoJpa implements BookDao {
     }
 
     @Override
-    public List<BookEntityJpa> findAll(int page, int size) {
-        String query = "SELECT b FROM BookEntityJpa b";
-        return entityManager.createQuery(query, BookEntityJpa.class)
+    public List<BookEntity> findAll(int page, int size) {
+        String query = "SELECT " +
+                "new es.cesguiro.repository.model.BookEntity" +
+                "(b.isbn, b.titleEs, b.titleEn, b.synopsisEs, b.synopsisEn, b.basePrice, b.discountPercentage, b.cover, b.publicationDate)" +
+                "FROM BookEntityJpa b";
+        return entityManager.createQuery(query, BookEntity.class)
                 .setFirstResult((page - 1) * size)
                 .setMaxResults(size)
                 .getResultList();

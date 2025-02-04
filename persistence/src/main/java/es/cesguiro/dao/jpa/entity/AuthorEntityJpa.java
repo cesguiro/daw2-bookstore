@@ -1,12 +1,11 @@
 package es.cesguiro.dao.jpa.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -28,4 +27,7 @@ public class AuthorEntityJpa {
     @Column(name = "death_year")
     private Integer deathYear;
     private String slug;
+
+    @ManyToMany(mappedBy = "authors")
+    private List<BookEntityJpa> books;
 }

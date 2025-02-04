@@ -3,6 +3,7 @@ package es.cesguiro.dao.jpa;
 import es.cesguiro.TestConfig;
 import es.cesguiro.dao.PublisherDao;
 import es.cesguiro.dao.jpa.entity.PublisherEntityJpa;
+import es.cesguiro.repository.model.PublisherEntity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.DisplayName;
@@ -30,10 +31,10 @@ class PublisherDaoJpaTest {
     @DisplayName("Find category by book with existing ISBN should return a category")
     void findCategoryByBookWithExistingIsbnShouldReturnACategory() {
         String isbn = "9780142424179";
-        Optional<PublisherEntityJpa> result = publisherDao.findByBookIsbn(isbn);
+        Optional<PublisherEntity> result = publisherDao.findByBookIsbn(isbn);
         assertAll(
                 () -> assertNotNull(result.orElse(null), "Category should not be null"),
-                () -> assertEquals("Editorial Sudamericana", result.get().getName(), "Name should match")
+                () -> assertEquals("Editorial Sudamericana", result.get().name(), "Name should match")
         );
     }
 

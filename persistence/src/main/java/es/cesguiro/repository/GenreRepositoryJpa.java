@@ -1,7 +1,6 @@
 package es.cesguiro.repository;
 
 import es.cesguiro.dao.GenreDao;
-import es.cesguiro.repository.mapper.GenreMapper;
 import es.cesguiro.repository.model.GenreEntity;
 
 import java.util.List;
@@ -16,10 +15,6 @@ public class GenreRepositoryJpa implements GenreRepository {
 
     @Override
     public List<GenreEntity> findAllByBookIsbn(String isbn) {
-        return genreDao
-                .findAllByBookIsbn(isbn)
-                .stream()
-                .map(GenreMapper::toGenreEntity)
-                .toList();
+        return genreDao.findAllByBookIsbn(isbn);
     }
 }

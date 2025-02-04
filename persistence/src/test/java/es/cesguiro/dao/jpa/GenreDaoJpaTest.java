@@ -3,6 +3,7 @@ package es.cesguiro.dao.jpa;
 import es.cesguiro.TestConfig;
 import es.cesguiro.dao.GenreDao;
 import es.cesguiro.dao.jpa.entity.GenreEntityJpa;
+import es.cesguiro.repository.model.GenreEntity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.DisplayName;
@@ -30,10 +31,10 @@ class GenreDaoJpaTest {
     @DisplayName("Find all genres by book with existing ISBN should return a list with 1 genre")
     void findAllGenresByBookWithExistingIsbnShouldReturnAListWithGenres() {
         String isbn = "9780142424179";
-        List<GenreEntityJpa> result = genreDao.findAllByBookIsbn(isbn);
+        List<GenreEntity> result = genreDao.findAllByBookIsbn(isbn);
         assertAll(
                 () -> assertNotNull(result.getFirst(), "Genre should not be null"),
-                () -> assertEquals("Children's", result.getFirst().getNameEn(), "Name should match")
+                () -> assertEquals("Children's", result.getFirst().nameEn(), "Name should match")
         );
     }
 
@@ -41,11 +42,11 @@ class GenreDaoJpaTest {
     @DisplayName("Find all genres by book with existing ISBN should return a list with more than 1 genre")
     void findAllGenresByBookWithExistingIsbnShouldReturnAListWithMoreThanOneGenre() {
         String isbn = "9780618260300";
-        List<GenreEntityJpa> result = genreDao.findAllByBookIsbn(isbn);
+        List<GenreEntity> result = genreDao.findAllByBookIsbn(isbn);
         assertAll(
                 () -> assertEquals(2, result.size(), "Size should match"),
-                () -> assertEquals("Children's", result.getFirst().getNameEn(), "Name genre 1 should match"),
-                () -> assertEquals("Fiction", result.getLast().getNameEn(), "Name genre 2 should match")
+                () -> assertEquals("Children's", result.getFirst().nameEn(), "Name genre 1 should match"),
+                () -> assertEquals("Fiction", result.getLast().nameEn(), "Name genre 2 should match")
         );
     }
 

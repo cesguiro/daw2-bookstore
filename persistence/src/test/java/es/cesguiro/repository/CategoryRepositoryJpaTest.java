@@ -31,19 +31,18 @@ class CategoryRepositoryJpaTest {
     void testFindByIsbnBook() {
         String isbn = "123";
 
-        CategoryEntityJpa categoryEntityJpa = CategoryData.getCategoryEntityJpa();
         CategoryEntity categoryEntity = CategoryData.getCategoryEntity();
 
-        when(categoryDao.findByBookIsbn(isbn)).thenReturn(Optional.of(categoryEntityJpa));
+        when(categoryDao.findByBookIsbn(isbn)).thenReturn(Optional.of(categoryEntity));
 
         Optional<CategoryEntity> expected = Optional.of(categoryEntity);
-        Optional<CategoryEntityJpa> result = categoryDao.findByBookIsbn(isbn);
+        Optional<CategoryEntity> result = categoryDao.findByBookIsbn(isbn);
 
         assertAll(
                 () -> assertTrue(result.isPresent()),
-                () -> assertEquals(expected.get().nameEs(), result.get().getNameEs()),
-                () -> assertEquals(expected.get().nameEn(), result.get().getNameEn()),
-                () -> assertEquals(expected.get().slug(), result.get().getSlug())
+                () -> assertEquals(expected.get().nameEs(), result.get().nameEs()),
+                () -> assertEquals(expected.get().nameEn(), result.get().nameEn()),
+                () -> assertEquals(expected.get().slug(), result.get().slug())
         );
 
     }

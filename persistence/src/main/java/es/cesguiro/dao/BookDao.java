@@ -1,13 +1,13 @@
 package es.cesguiro.dao;
 
-import es.cesguiro.dao.jpa.entity.BookEntityJpa;
+import es.cesguiro.repository.model.BookEntity;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface BookDao {
 
-    Optional<BookEntityJpa> findByIsbn(String isbn);
-    List<BookEntityJpa> findAll(int page, int size);
+    Optional<BookEntity> findByIsbn(String isbn);
+    List<BookEntity> findAll(int page, int size);
     long count();
 }

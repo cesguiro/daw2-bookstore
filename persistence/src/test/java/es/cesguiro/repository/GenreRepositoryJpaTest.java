@@ -30,12 +30,10 @@ class GenreRepositoryJpaTest {
     void testFindAllByBookIsbn() {
         String isbn = "123";
 
-        GenreEntityJpa genreEntityJpa1 = GenreData.getGenreEntityJpas().getFirst();
-        GenreEntityJpa genreEntityJpa2 = GenreData.getGenreEntityJpas().get(1);
         GenreEntity genreEntity1 = GenreData.getGenreEntities().getFirst();
         GenreEntity genreEntity2 = GenreData.getGenreEntities().get(1);
 
-        when(genreDao.findAllByBookIsbn(isbn)).thenReturn(List.of(genreEntityJpa1, genreEntityJpa2));
+        when(genreDao.findAllByBookIsbn(isbn)).thenReturn(List.of(genreEntity1, genreEntity2));
 
         List<GenreEntity> expected = List.of(genreEntity1, genreEntity2);
         List<GenreEntity> result = genreRepositoryJpa.findAllByBookIsbn(isbn);
@@ -56,10 +54,9 @@ class GenreRepositoryJpaTest {
     void testFindAllByBookIsbnSingle() {
         String isbn = "123";
 
-        GenreEntityJpa genreEntityJpa = GenreData.getGenreEntityJpas().getFirst();
         GenreEntity genreEntity = GenreData.getGenreEntities().getFirst();
 
-        when(genreDao.findAllByBookIsbn(isbn)).thenReturn(List.of(genreEntityJpa));
+        when(genreDao.findAllByBookIsbn(isbn)).thenReturn(List.of(genreEntity));
 
         List<GenreEntity> expected = List.of(genreEntity);
         List<GenreEntity> result = genreRepositoryJpa.findAllByBookIsbn(isbn);

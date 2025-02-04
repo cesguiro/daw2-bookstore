@@ -3,6 +3,7 @@ package es.cesguiro.dao.jpa;
 import es.cesguiro.TestConfig;
 import es.cesguiro.dao.CategoryDao;
 import es.cesguiro.dao.jpa.entity.CategoryEntityJpa;
+import es.cesguiro.repository.model.CategoryEntity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.DisplayName;
@@ -31,10 +32,10 @@ class CategoryDaoJpaTest {
     @DisplayName("Find category by book with existing ISBN should return a category")
     void findCategoryByBookWithExistingIsbnShouldReturnACategory() {
         String isbn = "9780142424179";
-        Optional<CategoryEntityJpa> result = categoryDao.findByBookIsbn(isbn);
+        Optional<CategoryEntity> result = categoryDao.findByBookIsbn(isbn);
         assertAll(
                 () -> assertNotNull(result.orElse(null), "Category should not be null"),
-                () -> assertEquals("New Releases", result.get().getNameEn(), "Name should match")
+                () -> assertEquals("New Releases", result.get().nameEn(), "Name should match")
         );
     }
 

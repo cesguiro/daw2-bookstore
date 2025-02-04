@@ -2,6 +2,7 @@ package es.cesguiro.dao.jpa;
 
 import es.cesguiro.dao.GenreDao;
 import es.cesguiro.dao.jpa.entity.GenreEntityJpa;
+import es.cesguiro.repository.model.GenreEntity;
 import jakarta.persistence.EntityManager;
 
 import java.util.List;
@@ -15,12 +16,13 @@ public class GenreDaoJpa implements GenreDao {
     }
 
     @Override
-    public List<GenreEntityJpa> findAllByBookIsbn(String isbn) {
-        String sql = "SELECT g.* FROM genres g " +
-                "JOIN books_genres bg ON g.id = bg.genre_id " +
-                "JOIN books b ON bg.book_id = b.id " +
+    public List<GenreEntity> findAllByBookIsbn(String isbn) {
+        String sql = "SELECT " +
+                "new es.cesguiro.repository.model.GenreEntity(g.nameEs, g.nameEn, g.slug)" +
+                "FROM GenreEntityJpa g " +
+                "JOIN g.books b " +
                 "WHERE b.isbn = :isbn";
-        return entityManager.createNativeQuery(sql, GenreEntityJpa.class)
+        return entityManager.createQuery(sql, GenreEntity.class)
                 .setParameter("isbn", isbn)
                 .getResultList();
     }

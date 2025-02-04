@@ -2,6 +2,7 @@ package es.cesguiro.dao.jpa;
 
 import es.cesguiro.dao.PublisherDao;
 import es.cesguiro.dao.jpa.entity.PublisherEntityJpa;
+import es.cesguiro.repository.model.PublisherEntity;
 import jakarta.persistence.EntityManager;
 
 import java.util.Optional;
@@ -15,11 +16,13 @@ public class PublisherDaoJpa implements PublisherDao {
     }
 
     @Override
-    public Optional<PublisherEntityJpa> findByBookIsbn(String isbn) {
-        String sql = "SELECT p.* FROM publishers p " +
-                "JOIN books b ON b.publisher_id = p.id " +
+    public Optional<PublisherEntity> findByBookIsbn(String isbn) {
+        String sql = "SELECT " +
+                "new es.cesguiro.repository.model.PublisherEntity(p.name, p.slug)" +
+                "FROM PublisherEntityJpa p " +
+                "JOIN p.books b " +
                 "WHERE b.isbn = :isbn";
-        return entityManager.createNativeQuery(sql, PublisherEntityJpa.class)
+        return entityManager.createQuery(sql, PublisherEntity.class)
                 .setParameter("isbn", isbn)
                 .getResultList()
                 .stream()

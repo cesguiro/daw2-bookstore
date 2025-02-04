@@ -1,7 +1,7 @@
 package es.cesguiro.dao.jpa;
 
 import es.cesguiro.dao.AuthorDao;
-import es.cesguiro.dao.jpa.entity.AuthorEntityJpa;
+import es.cesguiro.repository.model.AuthorEntity;
 import jakarta.persistence.EntityManager;
 
 import java.util.List;
@@ -16,12 +16,14 @@ public class AuthorDaoJpa implements AuthorDao {
 
 
     @Override
-    public List<AuthorEntityJpa> findAllByBookIsbn(String isbn) {
-        String sql = "SELECT a.* FROM authors a " +
-                "JOIN books_authors ba ON a.id = ba.author_id " +
-                "JOIN books b ON ba.book_id = b.id " +
+    public List<AuthorEntity> findAllByBookIsbn(String isbn) {
+        String sql = "SELECT " +
+                "new es.cesguiro.repository.model.AuthorEntity(" +
+                "a.name, a.nationality, a.biographyEs, a.biographyEn, a.birthYear, a.deathYear, a.slug) " +
+                "FROM AuthorEntityJpa a " +
+                "JOIN a.books b " +
                 "WHERE b.isbn = :isbn";
-        return entityManager.createNativeQuery(sql, AuthorEntityJpa.class)
+        return entityManager.createQuery(sql, AuthorEntity.class)
                 .setParameter("isbn", isbn)
                 .getResultList();
     }

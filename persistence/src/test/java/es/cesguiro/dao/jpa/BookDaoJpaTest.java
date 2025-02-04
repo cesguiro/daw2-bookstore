@@ -3,6 +3,7 @@ package es.cesguiro.dao.jpa;
 import es.cesguiro.TestConfig;
 import es.cesguiro.dao.BookDao;
 import es.cesguiro.dao.jpa.entity.BookEntityJpa;
+import es.cesguiro.repository.model.BookEntity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.*;
@@ -31,11 +32,11 @@ class BookDaoJpaTest {
     void findAllBooksWithPage1AndSize10() {
         int page = 1;
         int size = 10;
-        List<BookEntityJpa> result = bookDao.findAll(page, size);
+        List<BookEntity> result = bookDao.findAll(page, size);
         assertAll(
                 () -> assertEquals(10, result.size(), "Size should match"),
-                () -> assertEquals("9780142424179", result.getFirst().getIsbn(), "ISBN should match"),
-                () -> assertEquals("9781423103349", result.getLast().getIsbn(), "ISBN should match")
+                () -> assertEquals("9780142424179", result.getFirst().isbn(), "ISBN should match"),
+                () -> assertEquals("9781423103349", result.getLast().isbn(), "ISBN should match")
         );
     }
 
@@ -44,11 +45,11 @@ class BookDaoJpaTest {
     void findAllBooksWithPage2AndSize10() {
         int page = 2;
         int size = 10;
-        List<BookEntityJpa> result = bookDao.findAll(page, size);
+        List<BookEntity> result = bookDao.findAll(page, size);
         assertAll(
                 () -> assertEquals(10, result.size(), "Size should match"),
-                () -> assertEquals("9780316015844", result.getFirst().getIsbn(), "ISBN should match"),
-                () -> assertEquals("9780316029186", result.getLast().getIsbn(), "ISBN should match")
+                () -> assertEquals("9780316015844", result.getFirst().isbn(), "ISBN should match"),
+                () -> assertEquals("9780316029186", result.getLast().isbn(), "ISBN should match")
         );
     }
 
@@ -57,11 +58,11 @@ class BookDaoJpaTest {
     void findAllBooksWithPage3AndSize10() {
         int page = 3;
         int size = 10;
-        List<BookEntityJpa> result = bookDao.findAll(page, size);
+        List<BookEntity> result = bookDao.findAll(page, size);
         assertAll(
                 () -> assertEquals(4, result.size(), "Size should match"),
-                () -> assertEquals("9780316073797", result.getFirst().getIsbn(), "ISBN should match"),
-                () -> assertEquals("9780060557812", result.getLast().getIsbn(), "ISBN should match")
+                () -> assertEquals("9780316073797", result.getFirst().isbn(), "ISBN should match"),
+                () -> assertEquals("9780060557812", result.getLast().isbn(), "ISBN should match")
         );
     }
 
@@ -70,7 +71,7 @@ class BookDaoJpaTest {
     void findAllBooksWithPage4AndSize10ShouldReturnAnEmptyList() {
         int page = 4;
         int size = 10;
-        List<BookEntityJpa> result = bookDao.findAll(page, size);
+        List<BookEntity> result = bookDao.findAll(page, size);
         assertTrue(result.isEmpty(), "List should be empty");
     }
 
@@ -78,11 +79,11 @@ class BookDaoJpaTest {
     @DisplayName("FindByIsbn with existing isbn should return a book")
     void findByIsbnShouldReturnABook() {
         String isbn = "9780618260300";
-        Optional<BookEntityJpa> result = bookDao.findByIsbn(isbn);
+        Optional<BookEntity> result = bookDao.findByIsbn(isbn);
         assertAll(
                 () -> assertFalse(result.isEmpty(), "Book should not be null"),
-                () -> assertEquals(isbn, result.get().getIsbn(), "ISBN should match"),
-                () -> assertEquals("The Lion, the Witch and the Wardrobe", result.get().getTitleEn(), "Title should match")
+                () -> assertEquals(isbn, result.get().isbn(), "ISBN should match"),
+                () -> assertEquals("The Lion, the Witch and the Wardrobe", result.get().titleEn(), "Title should match")
         );
     }
 
@@ -90,7 +91,7 @@ class BookDaoJpaTest {
     @DisplayName("FindByIsbn with non existing isbn should return an empty optional")
     void findByIsbnShouldReturnAnEmptyOptional() {
         String isbn = "111111111";
-        Optional<BookEntityJpa> result = bookDao.findByIsbn(isbn);
+        Optional<BookEntity> result = bookDao.findByIsbn(isbn);
         assertAll(
                 () -> assertTrue(result.isEmpty(), "Optional should be empty")
         );
