@@ -1,6 +1,7 @@
 package es.cesguiro.service.book.query;
 
 import es.cesguiro.exception.DomainException;
+import es.cesguiro.exception.ResourceNotFoundException;
 import es.cesguiro.model.*;
 import es.cesguiro.repository.*;
 import es.cesguiro.usecase.book.query.FindBookByCriteriaUseCase;
@@ -30,7 +31,7 @@ public class FindBookByCriteriaService implements FindBookByCriteriaUseCase {
     public BookQuery findByIsbn(String isbn) {
         Book book = BookMapper.toBook(
                 bookRepository.findByIsbn(isbn)
-                        .orElseThrow(() -> new DomainException("Book not found"))
+                        .orElseThrow(() -> new ResourceNotFoundException("Book with ISBN " + isbn + " not found"))
         );
         List<Author> authors = authorRepository
                 .findAllByBookIsbn(book.getIsbn())

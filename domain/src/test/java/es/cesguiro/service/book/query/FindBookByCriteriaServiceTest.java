@@ -1,6 +1,7 @@
 package es.cesguiro.service.book.query;
 
 import es.cesguiro.exception.DomainException;
+import es.cesguiro.exception.ResourceNotFoundException;
 import es.cesguiro.locale.LocaleProvider;
 import es.cesguiro.locale.LocaleUtil;
 import es.cesguiro.pagination.Page;
@@ -109,14 +110,14 @@ class FindBookByCriteriaServiceTest {
     }
 
     @Test
-    @DisplayName("Test when book not found then throw DomainException")
+    @DisplayName("Test when book not found then throw ResourceNotFoundException")
     void testWhenBookNotFoundThenThrowIllegalArgumentException() {
         // Arrange
         String isbn = "978-84-376-0494-7";
         // Act
         when(bookRepository.findByIsbn(isbn)).thenReturn(Optional.empty());
         // Assert
-        assertThrows(DomainException.class, () -> findByCriterialService.findByIsbn(isbn));
+        assertThrows(ResourceNotFoundException.class, () -> findByCriterialService.findByIsbn(isbn));
     }
 
 

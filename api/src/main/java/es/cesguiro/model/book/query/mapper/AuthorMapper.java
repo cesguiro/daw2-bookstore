@@ -1,7 +1,7 @@
 package es.cesguiro.model.book.query.mapper;
 
-import es.cesguiro.handler.AuthorHandler;
-import es.cesguiro.handler.BookHandler;
+import es.cesguiro.handler.impl.AuthorHandlerImpl;
+import es.cesguiro.handler.impl.BookHandlerImpl;
 import es.cesguiro.model.book.query.AuthorCollectionResponse;
 import es.cesguiro.model.book.query.AuthorReponse;
 import es.cesguiro.property.PropertyUtil;
@@ -22,12 +22,12 @@ public class AuthorMapper {
         return new AuthorCollectionResponse(
                 authorCollectionQuery.name(),
                 Map.of("_self", PropertyUtil.getInstance().getProperty("app.base.url")
-                                + AuthorHandler.RESOURCE_PATH + "/"
+                                + AuthorHandlerImpl.RESOURCE_PATH + "/"
                                 + authorCollectionQuery.slug(),
                         "books", PropertyUtil.getInstance().getProperty("app.base.url")
-                                + AuthorHandler.RESOURCE_PATH + "/"
+                                + AuthorHandlerImpl.RESOURCE_PATH + "/"
                                 + authorCollectionQuery.slug() + "/"
-                                + BookHandler.RESOURCE
+                                + BookHandlerImpl.RESOURCE
                 )
         );
     }
@@ -39,12 +39,12 @@ public class AuthorMapper {
         return new AuthorReponse(
                 authorQuery.name(),
                 Map.of("_self", PropertyUtil.getInstance().getProperty("app.base.url")
-                                + AuthorHandler.RESOURCE_PATH + "/"
+                                + AuthorHandlerImpl.RESOURCE_PATH + "/"
                                 + authorQuery.slug(),
                         "books", PropertyUtil.getInstance().getProperty("app.base.url")
-                                + AuthorHandler.RESOURCE_PATH + "/"
+                                + AuthorHandlerImpl.RESOURCE_PATH + "/"
                                 + authorQuery.slug() + "/"
-                                + BookHandler.RESOURCE
+                                + BookHandlerImpl.RESOURCE
                 )
         );
     }

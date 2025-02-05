@@ -1,6 +1,7 @@
 package es.cesguiro.handler;
 
 import es.cesguiro.data.BookData;
+import es.cesguiro.handler.impl.BookHandlerImpl;
 import es.cesguiro.model.PageResponse;
 import es.cesguiro.model.book.query.*;
 import es.cesguiro.pagination.Page;
@@ -21,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class BookHandlerTest {
+class BookHandlerImplTest {
 
     @Mock
     private FindAllBooksByCriteriaUseCase findAllBooksByCriteriaUseCase;
@@ -30,7 +31,7 @@ class BookHandlerTest {
     private FindBookByCriteriaUseCase findBookByCriteriaUseCase;
 
     @InjectMocks
-    private BookHandler bookHandler;
+    private BookHandlerImpl bookHandlerImpl;
 
     @Test
     @DisplayName("Test findAll method with page = 1 and size = 5 should return a PagedCollectionResponse with all books and no previous and next links")
@@ -68,7 +69,7 @@ class BookHandlerTest {
                         null,
                         null
                 );
-        PageResponse<BookCollectionResponse> result = bookHandler.findAll(1, 5);
+        PageResponse<BookCollectionResponse> result = bookHandlerImpl.findAll(1, 5);
         assertAll(
                 () -> assertEquals(expected.page(), result.page(), "Page should match"),
                 () -> assertEquals(expected.pageSize(), result.pageSize(), "Page size should match"),
@@ -104,7 +105,7 @@ class BookHandlerTest {
                         null,
                         "http://localhost:8080/api/books?page=2&size=2"
                 );
-        PageResponse<BookCollectionResponse> result = bookHandler.findAll(1, 2);
+        PageResponse<BookCollectionResponse> result = bookHandlerImpl.findAll(1, 2);
         assertAll(
                 () -> assertEquals(expected.page(), result.page(), "Page should match"),
                 () -> assertEquals(expected.pageSize(), result.pageSize(), "Page size should match"),
@@ -140,7 +141,7 @@ class BookHandlerTest {
                         "http://localhost:8080/api/books?page=1&size=2",
                         "http://localhost:8080/api/books?page=3&size=2"
                 );
-        PageResponse<BookCollectionResponse> result = bookHandler.findAll(2, 2);
+        PageResponse<BookCollectionResponse> result = bookHandlerImpl.findAll(2, 2);
         assertAll(
                 () -> assertEquals(expected.page(), result.page(), "Page should match"),
                 () -> assertEquals(expected.pageSize(), result.pageSize(), "Page size should match"),
@@ -176,7 +177,7 @@ class BookHandlerTest {
                         "http://localhost:8080/api/books?page=2&size=2",
                         null
                 );
-        PageResponse<BookCollectionResponse> result = bookHandler.findAll(3, 2);
+        PageResponse<BookCollectionResponse> result = bookHandlerImpl.findAll(3, 2);
         assertAll(
                 () -> assertEquals(expected.page(), result.page(), "Page should match"),
                 () -> assertEquals(expected.pageSize(), result.pageSize(), "Page size should match"),
@@ -212,7 +213,7 @@ class BookHandlerTest {
                         null,
                         null
                 );
-        PageResponse<BookCollectionResponse> result = bookHandler.findAll(null, 5);
+        PageResponse<BookCollectionResponse> result = bookHandlerImpl.findAll(null, 5);
         assertAll(
                 () -> assertEquals(expected.page(), result.page(), "Page should match"),
                 () -> assertEquals(expected.pageSize(), result.pageSize(), "Page size should match"),
@@ -248,7 +249,7 @@ class BookHandlerTest {
                         null,
                         null
                 );
-        PageResponse<BookCollectionResponse> result = bookHandler.findAll(1, null);
+        PageResponse<BookCollectionResponse> result = bookHandlerImpl.findAll(1, null);
         assertAll(
                 () -> assertEquals(expected.page(), result.page(), "Page should match"),
                 () -> assertEquals(expected.pageSize(), result.pageSize(), "Page size should match"),
@@ -284,7 +285,7 @@ class BookHandlerTest {
                         null,
                         null
                 );
-        PageResponse<BookCollectionResponse> result = bookHandler.findAll(null, null);
+        PageResponse<BookCollectionResponse> result = bookHandlerImpl.findAll(null, null);
         assertAll(
                 () -> assertEquals(expected.page(), result.page(), "Page should match"),
                 () -> assertEquals(expected.pageSize(), result.pageSize(), "Page size should match"),
@@ -306,7 +307,7 @@ class BookHandlerTest {
                 .thenReturn(bookQuery);
 
         BookResponse expected = BookData.getBookResponseEs(1);
-        BookResponse result = bookHandler.findByIsbn("isbn1");
+        BookResponse result = bookHandlerImpl.findByIsbn("isbn1");
 
         assertAll(
                 () -> assertEquals(expected.isbn(), result.isbn(), "Isbn should match"),

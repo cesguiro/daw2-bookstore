@@ -1,7 +1,7 @@
 package es.cesguiro.model.book.query.mapper;
 
-import es.cesguiro.handler.BookHandler;
-import es.cesguiro.handler.GenreHandler;
+import es.cesguiro.handler.impl.BookHandlerImpl;
+import es.cesguiro.handler.impl.GenreHandlerImpl;
 import es.cesguiro.model.book.query.GenreResponse;
 import es.cesguiro.property.PropertyUtil;
 import es.cesguiro.usecase.book.query.model.GenreQuery;
@@ -20,9 +20,9 @@ public class GenreMapper {
         return new GenreResponse(
                 genreQuery.name(),
                 Map.of("books", PropertyUtil.getInstance().getProperty("app.base.url")
-                                + GenreHandler.RESOURCE_PATH + "/"
+                                + GenreHandlerImpl.RESOURCE_PATH + "/"
                                 + genreQuery.slug() + "/"
-                                + BookHandler.RESOURCE
+                                + BookHandlerImpl.RESOURCE
                 )
         );
     }

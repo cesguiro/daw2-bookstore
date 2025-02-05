@@ -1,6 +1,6 @@
 package es.cesguiro.model.book.query.mapper;
 
-import es.cesguiro.handler.BookHandler;
+import es.cesguiro.handler.impl.BookHandlerImpl;
 import es.cesguiro.locale.LocaleUtil;
 import es.cesguiro.model.book.query.BookCollectionResponse;
 import es.cesguiro.model.book.query.BookResponse;
@@ -28,7 +28,7 @@ public class BookMapper {
                 bookCollectionQuery.cover(),
                 bookCollectionQuery.authors().stream().map(AuthorMapper::toAuthorCollectionResponse).toList(),
                 Map.of("_self", PropertyUtil.getInstance().getProperty("app.base.url")
-                        + BookHandler.RESOURCE_PATH + "/"
+                        + BookHandlerImpl.RESOURCE_PATH + "/"
                         + bookCollectionQuery.isbn())
         );
     }
