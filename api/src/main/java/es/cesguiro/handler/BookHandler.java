@@ -1,13 +1,13 @@
 package es.cesguiro.handler;
 
-import es.cesguiro.model.PagedCollectionResponse;
+import es.cesguiro.model.PageResponse;
 import es.cesguiro.model.book.query.BookCollectionResponse;
 import es.cesguiro.model.book.query.BookResponse;
 import es.cesguiro.model.book.query.mapper.BookMapper;
 import es.cesguiro.pagination.Page;
 import es.cesguiro.property.PropertyUtil;
-import es.cesguiro.usecase.book.query.FindAllUseCase;
-import es.cesguiro.usecase.book.query.FindByIsbnUseCase;
+import es.cesguiro.usecase.book.query.FindAllBooksByCriteriaUseCase;
+import es.cesguiro.usecase.book.query.FindBookByCriteriaUseCase;
 import es.cesguiro.usecase.book.query.model.BookCollectionQuery;
 import es.cesguiro.usecase.book.query.model.BookQuery;
 import es.cesguiro.util.PaginationUtil;
@@ -22,20 +22,20 @@ public class BookHandler {
 
     private final int DEFAULT_PAGE_SIZE = Integer.parseInt(PropertyUtil.getInstance().getProperty("app.default.page.size", "10"));
 
-    private final FindAllUseCase findAllUseCase;
-    private final FindByIsbnUseCase findByIsbnUseCase;
+    private final FindAllBooksByCriteriaUseCase findAllBooksByCriteriaUseCase;
+    private final FindBookByCriteriaUseCase findBookByCriteriaUseCase;
 
-    public BookHandler(FindAllUseCase findAllUseCase, FindByIsbnUseCase findByIsbnUseCase) {
-        this.findAllUseCase = findAllUseCase;
-        this.findByIsbnUseCase = findByIsbnUseCase;
+    public BookHandler(FindAllBooksByCriteriaUseCase findAllBooksByCriteriaUseCase, FindBookByCriteriaUseCase findBookByCriteriaUseCase) {
+        this.findAllBooksByCriteriaUseCase = findAllBooksByCriteriaUseCase;
+        this.findBookByCriteriaUseCase = findBookByCriteriaUseCase;
     }
 
-    public PagedCollectionResponse<BookCollectionResponse> findAll(Integer page, Integer size) {
+    public PageResponse<BookCollectionResponse> findAll(Integer page, Integer size) {
 
         int pageNumber = page != null ? page : 1;
         int pageSize = size != null ? size : DEFAULT_PAGE_SIZE;
 
-        Page<BookCollectionQuery> pagedCollection = findAllUseCase.findAll(pageNumber, pageSize);
+        Page<BookCollectionQuery> pagedCollection = findAllBooksByCriteriaUseCase.findAll(pageNumber, pageSize);
         List<BookCollectionResponse> bookCollectionResponses = pagedCollection.data().stream()
                 .map(BookMapper::toBookCollectionResponse)
                 .toList();
@@ -50,7 +50,7 @@ public class BookHandler {
     }
 
     public BookResponse findByIsbn(String isbn) {
-        BookQuery bookQuery = findByIsbnUseCase.findByIsbn(isbn);
+        BookQuery bookQuery = findBookByCriteriaUseCase.findByIsbn(isbn);
         return BookMapper.toBookResponse(bookQuery);
     }
 

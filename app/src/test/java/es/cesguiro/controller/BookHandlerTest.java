@@ -1,8 +1,8 @@
 package es.cesguiro.controller;
 
 import es.cesguiro.handler.BookHandler;
-import es.cesguiro.usecase.book.query.FindAllUseCase;
-import es.cesguiro.usecase.book.query.FindByIsbnUseCase;
+import es.cesguiro.usecase.book.query.FindAllBooksByCriteriaUseCase;
+import es.cesguiro.usecase.book.query.FindBookByCriteriaUseCase;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -21,10 +21,10 @@ class BookHandlerTest {
     private MockMvc mockMvc;
 
     @MockitoBean
-    private FindAllUseCase findAllUseCase;
+    private FindAllBooksByCriteriaUseCase findAllBooksByCriteriaUseCase;
 
     @MockitoBean
-    private FindByIsbnUseCase findByIsbnUseCase;
+    private FindBookByCriteriaUseCase findBookByCriteriaUseCase;
 
     @InjectMocks
     private BookHandler bookHandler;

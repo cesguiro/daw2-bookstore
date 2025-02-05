@@ -2,7 +2,7 @@ package es.cesguiro.usecase.book.query;
 
 import es.cesguiro.usecase.book.query.model.BookQuery;
 
-public interface FindByIsbnUseCase {
+public interface FindBookByCriteriaUseCase {
 
     BookQuery findByIsbn(String isbn);
 }

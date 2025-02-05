@@ -1,19 +1,15 @@
-package es.cesguiro.usecase.book.query.service;
+package es.cesguiro.service.book.query;
 
 import es.cesguiro.exception.DomainException;
 import es.cesguiro.model.*;
-import es.cesguiro.pagination.Page;
 import es.cesguiro.repository.*;
-import es.cesguiro.repository.model.BookEntity;
-import es.cesguiro.usecase.book.query.FindAllUseCase;
-import es.cesguiro.usecase.book.query.FindByIsbnUseCase;
+import es.cesguiro.usecase.book.query.FindBookByCriteriaUseCase;
 import es.cesguiro.usecase.book.query.mapper.*;
-import es.cesguiro.usecase.book.query.model.BookCollectionQuery;
 import es.cesguiro.usecase.book.query.model.BookQuery;
 
 import java.util.List;
 
-public class FindByCriterialService implements FindAllUseCase, FindByIsbnUseCase {
+public class FindBookByCriteriaService implements FindBookByCriteriaUseCase {
 
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
@@ -22,42 +18,12 @@ public class FindByCriterialService implements FindAllUseCase, FindByIsbnUseCase
     private final PublisherRepository publisherRepository;
 
 
-    public FindByCriterialService(BookRepository bookRepository, AuthorRepository authorRepository, GenreRepository genreRepository, CategoryRepository categoryRepository, PublisherRepository publisherRepository) {
+    public FindBookByCriteriaService(BookRepository bookRepository, AuthorRepository authorRepository, GenreRepository genreRepository, CategoryRepository categoryRepository, PublisherRepository publisherRepository) {
         this.bookRepository = bookRepository;
         this.authorRepository = authorRepository;
         this.genreRepository = genreRepository;
         this.categoryRepository = categoryRepository;
         this.publisherRepository = publisherRepository;
-    }
-
-    @Override
-    public Page<BookCollectionQuery> findAll(int page, int size) {
-        if(page <= 0 || size <= 0) {
-            throw new DomainException("Page number and page size must be greater than zero");
-        }
-        Page<BookEntity> bookEntityPage = bookRepository.findAll(page, size);
-        List<Book> books = bookEntityPage
-                .data()
-                .stream()
-                .map(BookMapper::toBook)
-                .toList();
-        books.forEach(
-                book -> {
-                    book.setAuthors(
-                            authorRepository
-                                    .findAllByBookIsbn(book.getIsbn())
-                                    .stream()
-                                    .map(AuthorMapper::toAuthor)
-                                    .toList()
-                    );
-                }
-        );
-        return new Page<>(
-                books.stream().map(BookMapper::toBookCollectionQuery).toList(),
-                page,
-                size,
-                bookEntityPage.totalElements()
-        );
     }
 
     @Override

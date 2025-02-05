@@ -1,11 +1,11 @@
 package es.cesguiro.handler;
 
 import es.cesguiro.data.BookData;
-import es.cesguiro.model.PagedCollectionResponse;
+import es.cesguiro.model.PageResponse;
 import es.cesguiro.model.book.query.*;
 import es.cesguiro.pagination.Page;
-import es.cesguiro.usecase.book.query.FindAllUseCase;
-import es.cesguiro.usecase.book.query.FindByIsbnUseCase;
+import es.cesguiro.usecase.book.query.FindAllBooksByCriteriaUseCase;
+import es.cesguiro.usecase.book.query.FindBookByCriteriaUseCase;
 import es.cesguiro.usecase.book.query.model.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,10 +24,10 @@ import static org.mockito.Mockito.when;
 class BookHandlerTest {
 
     @Mock
-    private FindAllUseCase findAllUseCase;
+    private FindAllBooksByCriteriaUseCase findAllBooksByCriteriaUseCase;
 
     @Mock
-    private FindByIsbnUseCase findByIsbnUseCase;
+    private FindBookByCriteriaUseCase findBookByCriteriaUseCase;
 
     @InjectMocks
     private BookHandler bookHandler;
@@ -48,12 +48,12 @@ class BookHandlerTest {
                 5,
                 5);
 
-        when(findAllUseCase
+        when(findAllBooksByCriteriaUseCase
                 .findAll(1, 5))
                 .thenReturn(page);
 
-        PagedCollectionResponse<BookCollectionResponse> expected =
-                new PagedCollectionResponse<BookCollectionResponse>(
+        PageResponse<BookCollectionResponse> expected =
+                new PageResponse<BookCollectionResponse>(
                         List.of(
                                 BookData.getBookCollectionResponseEs(0),
                                 BookData.getBookCollectionResponseEs(1),
@@ -68,7 +68,7 @@ class BookHandlerTest {
                         null,
                         null
                 );
-        PagedCollectionResponse<BookCollectionResponse> result = bookHandler.findAll(1, 5);
+        PageResponse<BookCollectionResponse> result = bookHandler.findAll(1, 5);
         assertAll(
                 () -> assertEquals(expected.page(), result.page(), "Page should match"),
                 () -> assertEquals(expected.pageSize(), result.pageSize(), "Page size should match"),
@@ -90,12 +90,12 @@ class BookHandlerTest {
                 2,
                 5);
 
-        when(findAllUseCase
+        when(findAllBooksByCriteriaUseCase
                 .findAll(1, 2))
                 .thenReturn(page);
 
-        PagedCollectionResponse<BookCollectionResponse> expected =
-                new PagedCollectionResponse<BookCollectionResponse>(
+        PageResponse<BookCollectionResponse> expected =
+                new PageResponse<BookCollectionResponse>(
                         List.of(BookData.getBookCollectionResponseEs(0), BookData.getBookCollectionResponseEs(1)),
                         1,
                         2,
@@ -104,7 +104,7 @@ class BookHandlerTest {
                         null,
                         "http://localhost:8080/api/books?page=2&size=2"
                 );
-        PagedCollectionResponse<BookCollectionResponse> result = bookHandler.findAll(1, 2);
+        PageResponse<BookCollectionResponse> result = bookHandler.findAll(1, 2);
         assertAll(
                 () -> assertEquals(expected.page(), result.page(), "Page should match"),
                 () -> assertEquals(expected.pageSize(), result.pageSize(), "Page size should match"),
@@ -126,12 +126,12 @@ class BookHandlerTest {
                 2,
                 5);
 
-        when(findAllUseCase
+        when(findAllBooksByCriteriaUseCase
                 .findAll(2, 2))
                 .thenReturn(page);
 
-        PagedCollectionResponse<BookCollectionResponse> expected =
-                new PagedCollectionResponse<BookCollectionResponse>(
+        PageResponse<BookCollectionResponse> expected =
+                new PageResponse<BookCollectionResponse>(
                         List.of(BookData.getBookCollectionResponseEs(2), BookData.getBookCollectionResponseEs(3)),
                         2,
                         2,
@@ -140,7 +140,7 @@ class BookHandlerTest {
                         "http://localhost:8080/api/books?page=1&size=2",
                         "http://localhost:8080/api/books?page=3&size=2"
                 );
-        PagedCollectionResponse<BookCollectionResponse> result = bookHandler.findAll(2, 2);
+        PageResponse<BookCollectionResponse> result = bookHandler.findAll(2, 2);
         assertAll(
                 () -> assertEquals(expected.page(), result.page(), "Page should match"),
                 () -> assertEquals(expected.pageSize(), result.pageSize(), "Page size should match"),
@@ -162,12 +162,12 @@ class BookHandlerTest {
                 2,
                 5);
 
-        when(findAllUseCase
+        when(findAllBooksByCriteriaUseCase
                 .findAll(3, 2))
                 .thenReturn(page);
 
-        PagedCollectionResponse<BookCollectionResponse> expected =
-                new PagedCollectionResponse<BookCollectionResponse>(
+        PageResponse<BookCollectionResponse> expected =
+                new PageResponse<BookCollectionResponse>(
                         List.of(BookData.getBookCollectionResponseEs(4)),
                         3,
                         2,
@@ -176,7 +176,7 @@ class BookHandlerTest {
                         "http://localhost:8080/api/books?page=2&size=2",
                         null
                 );
-        PagedCollectionResponse<BookCollectionResponse> result = bookHandler.findAll(3, 2);
+        PageResponse<BookCollectionResponse> result = bookHandler.findAll(3, 2);
         assertAll(
                 () -> assertEquals(expected.page(), result.page(), "Page should match"),
                 () -> assertEquals(expected.pageSize(), result.pageSize(), "Page size should match"),
@@ -198,12 +198,12 @@ class BookHandlerTest {
                 5,
                 5);
 
-        when(findAllUseCase
+        when(findAllBooksByCriteriaUseCase
                 .findAll(1, 5))
                 .thenReturn(page);
 
-        PagedCollectionResponse<BookCollectionResponse> expected =
-                new PagedCollectionResponse<BookCollectionResponse>(
+        PageResponse<BookCollectionResponse> expected =
+                new PageResponse<BookCollectionResponse>(
                         BookData.getBookCollectionResponsesEs(),
                         1,
                         5,
@@ -212,7 +212,7 @@ class BookHandlerTest {
                         null,
                         null
                 );
-        PagedCollectionResponse<BookCollectionResponse> result = bookHandler.findAll(null, 5);
+        PageResponse<BookCollectionResponse> result = bookHandler.findAll(null, 5);
         assertAll(
                 () -> assertEquals(expected.page(), result.page(), "Page should match"),
                 () -> assertEquals(expected.pageSize(), result.pageSize(), "Page size should match"),
@@ -234,12 +234,12 @@ class BookHandlerTest {
                 10,
                 5);
 
-        when(findAllUseCase
+        when(findAllBooksByCriteriaUseCase
                 .findAll(1, 10))
                 .thenReturn(page);
 
-        PagedCollectionResponse<BookCollectionResponse> expected =
-                new PagedCollectionResponse<BookCollectionResponse>(
+        PageResponse<BookCollectionResponse> expected =
+                new PageResponse<BookCollectionResponse>(
                         BookData.getBookCollectionResponsesEs(),
                         1,
                         10,
@@ -248,7 +248,7 @@ class BookHandlerTest {
                         null,
                         null
                 );
-        PagedCollectionResponse<BookCollectionResponse> result = bookHandler.findAll(1, null);
+        PageResponse<BookCollectionResponse> result = bookHandler.findAll(1, null);
         assertAll(
                 () -> assertEquals(expected.page(), result.page(), "Page should match"),
                 () -> assertEquals(expected.pageSize(), result.pageSize(), "Page size should match"),
@@ -270,12 +270,12 @@ class BookHandlerTest {
                 5,
                 5);
 
-        when(findAllUseCase
+        when(findAllBooksByCriteriaUseCase
                 .findAll(1, 10))
                 .thenReturn(page);
 
-        PagedCollectionResponse<BookCollectionResponse> expected =
-                new PagedCollectionResponse<BookCollectionResponse>(
+        PageResponse<BookCollectionResponse> expected =
+                new PageResponse<BookCollectionResponse>(
                         BookData.getBookCollectionResponsesEs(),
                         1,
                         10,
@@ -284,7 +284,7 @@ class BookHandlerTest {
                         null,
                         null
                 );
-        PagedCollectionResponse<BookCollectionResponse> result = bookHandler.findAll(null, null);
+        PageResponse<BookCollectionResponse> result = bookHandler.findAll(null, null);
         assertAll(
                 () -> assertEquals(expected.page(), result.page(), "Page should match"),
                 () -> assertEquals(expected.pageSize(), result.pageSize(), "Page size should match"),
@@ -301,7 +301,7 @@ class BookHandlerTest {
     @DisplayName("Test findByIsbn method with isbn = isbn1 should return a BookResponse with isbn1")
     void testFindByIsbn() throws Exception {
         BookQuery bookQuery = BookData.getBookQueryEs(1);
-        when(findByIsbnUseCase
+        when(findBookByCriteriaUseCase
                 .findByIsbn("isbn1"))
                 .thenReturn(bookQuery);
 

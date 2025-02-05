@@ -2,7 +2,7 @@ package es.cesguiro.model;
 
 import java.util.List;
 
-public record PagedCollectionResponse<T>(
+public record PageResponse<T>(
         List<T> data,
         int page,
         int pageSize,

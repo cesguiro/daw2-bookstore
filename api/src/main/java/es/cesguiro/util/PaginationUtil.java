@@ -1,6 +1,6 @@
 package es.cesguiro.util;
 
-import es.cesguiro.model.PagedCollectionResponse;
+import es.cesguiro.model.PageResponse;
 
 import java.util.List;
 
@@ -35,8 +35,8 @@ public class PaginationUtil {
      * @param <T>         Type of items
      * @return PagedCollectionResponse
      */
-    public static <T> PagedCollectionResponse<T> generatePagedCollectionResponse(List<T> data, int page, int pageSize, long totalItems, int totalPages, String resourcePath) {
-        return new PagedCollectionResponse<>(
+    public static <T> PageResponse<T> generatePagedCollectionResponse(List<T> data, int page, int pageSize, long totalItems, int totalPages, String resourcePath) {
+        return new PageResponse<>(
                 data,
                 page,
                 pageSize,

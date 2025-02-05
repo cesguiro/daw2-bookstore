@@ -20,9 +20,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <org.projectlombok.version>1.18.36</org.projectlombok.version>
         <maven.compiler.plugin.version>3.8.0</maven.compiler.plugin.version>
-        <org.springframework.boot.spring-starter-data-jpa>3.4.1</org.springframework.boot.spring-starter-data-jpa>
         <org.mariadb.java-client.version>3.5.1</org.mariadb.java-client.version>
-        <org.springframework.boot.spring-starter-test>3.4.1</org.springframework.boot.spring-starter-test>
         <com.h2database.version>2.3.232</com.h2database.version>
         <org.flywaydb.version>11.3.0</org.flywaydb.version>
         <flyway.url>jdbc:h2:mem:testdb;MODE=MySQL</flyway.url>
