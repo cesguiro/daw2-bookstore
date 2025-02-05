@@ -10,4 +10,10 @@ public interface BookDao {
     Optional<BookEntity> findByIsbn(String isbn);
     List<BookEntity> findAll(int page, int size);
     long count();
+
+    /********** CriteriaBuilder version **********/
+
+    List<BookEntity> findAllCB(int page, int size);
+    Optional<BookEntity> findByIsbnCB(String isbn);
+    long countCB();
 }

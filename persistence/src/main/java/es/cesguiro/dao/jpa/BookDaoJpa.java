@@ -52,11 +52,69 @@ public class BookDaoJpa implements BookDao {
         return entityManager.createQuery(query, Long.class).getSingleResult();
     }
 
-    public List<BookEntityJpa> findAllAC() {
+    /********** CriteriaBuilder version **********/
+
+    public List<BookEntity> findAllCB(int page, int size) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<BookEntityJpa> criteriaQuery = criteriaBuilder.createQuery(BookEntityJpa.class);
+        CriteriaQuery<BookEntity> criteriaQuery = criteriaBuilder.createQuery(BookEntity.class);
         Root<BookEntityJpa> root = criteriaQuery.from(BookEntityJpa.class);
-        criteriaQuery.select(root);
-        return entityManager.createQuery(criteriaQuery).getResultList();
+
+        criteriaQuery.select(criteriaBuilder.construct(
+                BookEntity.class,
+                root.get("isbn"),
+                root.get("titleEs"),
+                root.get("titleEn"),
+                root.get("synopsisEs"),
+                root.get("synopsisEn"),
+                root.get("basePrice"),
+                root.get("discountPercentage"),
+                root.get("cover"),
+                root.get("publicationDate")
+        ));
+
+        return entityManager
+                .createQuery(criteriaQuery)
+                .setFirstResult((page - 1) * size)
+                .setMaxResults(size)
+                .getResultList();
+    }
+
+    @Override
+    public Optional<BookEntity> findByIsbnCB(String isbn) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<BookEntity> criteriaQuery = criteriaBuilder.createQuery(BookEntity.class);
+        Root<BookEntityJpa> root = criteriaQuery.from(BookEntityJpa.class);
+
+        criteriaQuery.select(criteriaBuilder.construct(
+                BookEntity.class,
+                root.get("isbn"),
+                root.get("titleEs"),
+                root.get("titleEn"),
+                root.get("synopsisEs"),
+                root.get("synopsisEn"),
+                root.get("basePrice"),
+                root.get("discountPercentage"),
+                root.get("cover"),
+                root.get("publicationDate")
+        ));
+        criteriaQuery.where(criteriaBuilder.equal(root.get("isbn"), isbn));
+
+        try {
+            return Optional.of(entityManager
+                    .createQuery(criteriaQuery)
+                    .getSingleResult());
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+
+    @Override
+    public long countCB() {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
+        Root<BookEntityJpa> root = criteriaQuery.from(BookEntityJpa.class);
+
+        criteriaQuery.select(criteriaBuilder.count(root));
+        return entityManager.createQuery(criteriaQuery).getSingleResult();
     }
 }

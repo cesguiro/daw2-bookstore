@@ -14,6 +14,7 @@
         <org.apache.maven.plugins.version>3.5.2</org.apache.maven.plugins.version>
         <org.springframework.boot.spring-starter-test>3.4.1</org.springframework.boot.spring-starter-test>
         <org.springframework.boot.spring-starter-data-jpa>3.4.1</org.springframework.boot.spring-starter-data-jpa>
+        <org.flywaydb.version>11.3.0</org.flywaydb.version>
     </properties>
 
     <groupId>es.cesguiro</groupId>
@@ -48,8 +49,8 @@
     <modules>
         <module>domain</module>
         <module>persistence</module>
+        <module>application</module>
         <module>api</module>
-        <module>app</module>
         <module>util</module>
     </modules>
 
@@ -73,6 +74,11 @@
             <dependency>
                 <groupId>es.cesguiro</groupId>
                 <artifactId>util</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>es.cesguiro</groupId>
+                <artifactId>application</artifactId>
                 <version>1.0.0</version>
             </dependency>
         </dependencies>

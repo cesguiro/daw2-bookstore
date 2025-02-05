@@ -30,13 +30,6 @@ class BookControllerTest {
     @MockitoBean
     private BookHandler mockBookHandler;
 
-    @BeforeEach
-    void setUp() {
-        /*ReflectionTestUtils.setField(mockBookHandler, "RESOURCE", "books");
-        ReflectionTestUtils.setField(mockBookHandler, "RESOURCE_PATH", "http://localhost:8080/api/books");
-        ReflectionTestUtils.setField(mockBookHandler, "DEFAULT_PAGE_SIZE", 10);*/
-    }
-
     @Test
     @DisplayName("GET /api/books")
     void findAll() throws Exception {

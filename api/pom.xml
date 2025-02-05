@@ -17,16 +17,89 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <org.springframework.boot.version>3.4.2</org.springframework.boot.version>
+        <!--<flyway.url>jdbc:mariadb://localhost:3306/bookstore</flyway.url>
+        <flyway.user>root</flyway.user>
+        <flyway.password>root</flyway.password>-->
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>es.cesguiro</groupId>
+            <artifactId>util</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>es.cesguiro</groupId>
+            <artifactId>application</artifactId>
+        </dependency>
         <dependency>
             <groupId>es.cesguiro</groupId>
             <artifactId>domain</artifactId>
         </dependency>
         <dependency>
             <groupId>es.cesguiro</groupId>
-            <artifactId>util</artifactId>
+            <artifactId>persistence</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>${org.springframework.boot.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <version>${org.springframework.boot.spring-starter-data-jpa}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <version>${org.springframework.boot.spring-starter-test}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>${org.flywaydb.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <!--<build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+                <configuration>
+                    <source>21</source>
+                    <target>21</target>
+                    <compilerArgs>
+                        <arg>-parameters</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>${org.apache.maven.plugins.version}</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>es.cesguiro.app.App</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>-->
+
 </project>

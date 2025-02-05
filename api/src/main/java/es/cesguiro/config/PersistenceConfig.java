@@ -17,6 +17,12 @@ public class PersistenceConfig {
         return new BookDaoJpa(entityManager);
     }
 
+    /*@Bean
+    public Dao<T> getDao(EntityManager entityManager,class<T> clazz) {
+        return new AuthorDaoJpa(entityManager);
+    }*/
+
+
     @Bean
     public AuthorDao authorDao(EntityManager entityManager) {
         return new AuthorDaoJpa(entityManager);

@@ -104,6 +104,42 @@ class BookDaoJpaTest {
         assertEquals(24, result, "Count should match");
     }
 
+
+    /********** CriteriaBuilder version **********/
+
+    @Test
+    @DisplayName("Find all books with page 1 and size 10 with CriteriaBuilder")
+    void findAllBooksWithPage1AndSize10WithCriteriaBuilder() {
+        int page = 1;
+        int size = 10;
+        List<BookEntity> result = bookDao.findAllCB(page, size);
+        assertAll(
+                () -> assertEquals(10, result.size(), "Size should match"),
+                () -> assertEquals("9780142424179", result.getFirst().isbn(), "ISBN should match"),
+                () -> assertEquals("9781423103349", result.getLast().isbn(), "ISBN should match")
+        );
+    }
+
+    @Test
+    @DisplayName("Find book by isbn with CriteriaBuilder")
+    void findBookByIsbnWithCriteriaBuilder() {
+        String isbn = "9780618260300";
+        Optional<BookEntity> result = bookDao.findByIsbnCB(isbn);
+        assertAll(
+                () -> assertFalse(result.isEmpty(), "Book should not be null"),
+                () -> assertEquals(isbn, result.get().isbn(), "ISBN should match"),
+                () -> assertEquals("The Lion, the Witch and the Wardrobe", result.get().titleEn(), "Title should match")
+        );
+    }
+
+    @Test
+    @DisplayName("Count all books with CriteriaBuilder should return the total number of books")
+    void countAllBooksWithCriteriaBuilderShouldReturnTheTotalNumberOfBooks() {
+        long result = bookDao.countCB();
+        assertEquals(24, result, "Count should match");
+    }
+
+
 }
 
 
