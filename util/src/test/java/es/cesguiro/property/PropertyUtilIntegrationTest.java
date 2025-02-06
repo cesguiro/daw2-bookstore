@@ -10,47 +10,53 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class PropertyUtilIntegrationTest {
 
-    /*@AfterEach
-    void resetPropertyUtil() {
-        PropertyUtil.resetInstance();
-    }
 
     @Test
-    @DisplayName("Test getProperty with default propertiesFile should return correct value from default PropertyProvider")
-    void testGetProperty() {
-        String property = PropertyUtil.getInstance().getProperty("app.name");
+    @DisplayName("Test getProperty should return correct value if key exists in system properties")
+    void testGetPropertyFromSystemProperties() {
+        System.setProperty("app.name", "App Name");
+        String property = PropertyUtil.getProperty("app.name");
         assertAll(
                 () -> assertNotNull(property),
-                () -> assertEquals("app.default", property)
+                () -> assertEquals("App Name", property)
         );
     }
 
     @Test
-    @DisplayName("Test getProperty with custom propertiesFile should return correct value from custom PropertyProvider")
-    void testGetPropertyCustom() {
-        PropertyProvider propertyProvider = new DefaultPropertyProvider("custom.properties");
-        String property = PropertyUtil.getInstance(propertyProvider).getProperty("app.name");
+    @DisplayName("getProperty should return correct value if key exists in application.properties")
+    void testGetPropertyFromPropertiesFile() {
+        String property = PropertyUtil.getProperty("app.version");
         assertAll(
                 () -> assertNotNull(property),
-                () -> assertEquals("app.custom", property)
+                () -> assertEquals("1.0", property)
+        );
+    }
+
+    @Test
+    @DisplayName("Test getProperty should return default value if key is not found")
+    void testGetPropertyDefaultValue() {
+        String property = PropertyUtil.getProperty("app.nonexistent", "default");
+        assertAll(
+                () -> assertNotNull(property),
+                () -> assertEquals("default", property)
         );
     }
 
     @Test
     @DisplayName("Test get non-existing property should throw KeyNotFoundException")
     void testGetNonExistingProperty() {
-        assertThrows(KeyNotFoundException.class, () -> PropertyUtil.getInstance().getProperty("non.existing"));
+        assertThrows(KeyNotFoundException.class, () -> PropertyUtil.getProperty("non.existing"));
     }
 
     @Test
     @DisplayName("Test get property with empty key should throw KeyNotFoundException")
     void testGetPropertyEmptyKey() {
-        assertThrows(KeyNotFoundException.class, () -> PropertyUtil.getInstance().getProperty(""));
+        assertThrows(KeyNotFoundException.class, () -> PropertyUtil.getProperty(""));
     }
 
     @Test
     @DisplayName("Test get property with null key should throw KeyNotFoundException")
     void testGetPropertyNullKey() {
-        assertThrows(KeyNotFoundException.class, () -> PropertyUtil.getInstance().getProperty(null));
-    }*/
+        assertThrows(KeyNotFoundException.class, () -> PropertyUtil.getProperty(null));
+    }
 }

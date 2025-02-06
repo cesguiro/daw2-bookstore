@@ -4,24 +4,24 @@ import es.cesguiro.exception.KeyNotFoundException;
 import es.cesguiro.exception.PropertyUtilException;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class PropertyUtilTest {
 
-    /*@Mock
-    private PropertyProvider mockPropertyProvider;*/
+    @Mock
+    private PropertyProvider mockPropertyProvider;
 
-    @BeforeAll
-    static void setUp() {
-        PropertyProvider mockPropertyProvider = Mockito.mock(PropertyProvider.class);
+    @BeforeEach
+    void setUp() {
         PropertyUtil.setPropertyProvider(mockPropertyProvider);
     }
-
 
     @Test
     @DisplayName("Test set null PropertyProvider should throw PropertyUtilException")
@@ -34,17 +34,20 @@ class PropertyUtilTest {
     @Test
     @DisplayName("Test getProperty should return correct value if key exists")
     void testGetProperty() {
+        when(mockPropertyProvider.getProperty("app.name")).thenReturn("App Name");
         String property = PropertyUtil.getProperty("app.name");
 
         assertAll(
                 () -> assertNotNull(property),
-                () -> assertEquals("util", property)
+                () -> assertEquals("App Name", property)
         );
     }
 
     @Test
     @DisplayName("Test get non-existing property should throw KeyNotFoundException")
     void testGetPropertyKeyNotFound() {
+        when(mockPropertyProvider.getProperty("app.name")).thenThrow(KeyNotFoundException.class);
+
         assertThrows(KeyNotFoundException.class, () -> PropertyUtil.getProperty("app.name"),
                 "getProperty should throw KeyNotFoundException if key is not found");
     }
@@ -52,6 +55,7 @@ class PropertyUtilTest {
     @Test
     @DisplayName("Test get property with empty key should throw KeyNotFoundException")
     void testGetPropertyEmptyKey() {
+        when(mockPropertyProvider.getProperty("")).thenThrow(KeyNotFoundException.class);
         assertThrows(KeyNotFoundException.class, () -> PropertyUtil.getProperty(""),
                 "getProperty should throw KeyNotFoundException if key is empty");
     }
@@ -59,9 +63,21 @@ class PropertyUtilTest {
     @Test
     @DisplayName("Test get property with null key should throw KeyNotFoundException")
     void testGetPropertyNullKey() {
+        when(mockPropertyProvider.getProperty(null)).thenThrow(KeyNotFoundException.class);
         assertThrows(KeyNotFoundException.class, () -> PropertyUtil.getProperty(null),
                 "getProperty should throw KeyNotFoundException if key is null");
     }
 
+    @Test
+    @DisplayName("Test getProperty should return default value if key is not found")
+    void testGetPropertyDefaultValue() {
+        when(mockPropertyProvider.getProperty("app.nonexistent", "default")).thenReturn("default");
+        String property = PropertyUtil.getProperty("app.nonexistent", "default");
+
+        assertAll(
+                () -> assertNotNull(property),
+                () -> assertEquals("default", property)
+        );
+    }
 
 }

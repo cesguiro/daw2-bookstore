@@ -6,45 +6,30 @@ import java.time.LocalDate;
 
 public class LocaleUtil {
 
-    private static LocaleUtil instance;
-    private final LocaleProvider localeProvider;
+    private static LocaleProvider localeProvider = new DefaultLocaleProvider();
 
-    private LocaleUtil(LocaleProvider localeProvider) {
-        this.localeProvider = localeProvider;
+    private LocaleUtil() {
+        throw new LocaleException("Utility class");
     }
 
 
-    public static synchronized LocaleUtil getInstance() {
-        if (instance == null) {
-            instance = new LocaleUtil(new DefaultLocaleProvider());
-        }
-        return instance;
+    public static LocaleProvider getLocaleProvider() {
+        return LocaleUtil.localeProvider;
     }
 
-    public static synchronized LocaleUtil getInstance(LocaleProvider localeProvider) {
+    public static void setLocaleProvider(LocaleProvider localeProvider) {
         if (localeProvider == null) {
             throw new LocaleException("Locale provider is required");
         }
-        if (instance == null) {
-            instance = new LocaleUtil(localeProvider);
-        }
-        return instance;
+        LocaleUtil.localeProvider = localeProvider;
     }
 
-
-    public String getLanguage() {
+    public static String getLanguage() {
         return localeProvider.getLanguage();
     }
 
-    public String formatDate(LocalDate date) {
+    public static String formatDate(LocalDate date) {
         return localeProvider.formatDate(date);
-    }
-
-    /**
-     * This method is used to reset the instance. It is used for testing purposes.
-     */
-    public static synchronized void resetInstance() {
-        instance = null;
     }
 
 }

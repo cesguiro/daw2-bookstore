@@ -3,8 +3,10 @@ package es.cesguiro.locale;
 import es.cesguiro.property.PropertyProvider;
 import es.cesguiro.property.PropertyUtil;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
@@ -19,14 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class DefaultLocaleProviderTest {
 
-    /*private final DefaultLocaleProvider defaultLanguageProvider = new DefaultLocaleProvider();
-
-    private PropertyUtil propertyUtil;
-
-    @AfterEach
-    void resetSingleton() {
-        PropertyUtil.resetInstance();
-    }
+    private final DefaultLocaleProvider defaultLanguageProvider = new DefaultLocaleProvider();
 
     @Test
     @DisplayName("Test getLanguage method with Locale('es') should return es")
@@ -55,7 +50,7 @@ class DefaultLocaleProviderTest {
     void getLanguageWithUnsupportedLanguageLocale() {
         PropertyProvider mockProvider = Mockito.mock(PropertyProvider.class);
         Mockito.when(mockProvider.getProperty("app.default.language")).thenReturn("es");
-        PropertyUtil.getInstance(mockProvider);
+        PropertyUtil.setPropertyProvider(mockProvider);
         Locale.setDefault(Locale.FRANCE);
         String language = defaultLanguageProvider.getLanguage();
         assertAll(
@@ -141,6 +136,6 @@ class DefaultLocaleProviderTest {
 
         String formattedDate = defaultLocaleProvider.formatDate(testDate);
         assertEquals("2025/05/02", formattedDate);
-    }*/
+    }
 
 }

@@ -45,7 +45,7 @@ public class BookMapper {
                 bookQuery.discount(),
                 bookQuery.finalPrice(),
                 bookQuery.cover(),
-                LocaleUtil.getInstance().formatDate(bookQuery.publicationDate()),
+                LocaleUtil.formatDate(bookQuery.publicationDate()),
                 PublisherMapper.toPublisherResponse(bookQuery.publisher()),
                 CategoryMapper.toCategoryResponse(bookQuery.category()),
                 bookQuery.genres().stream().map(GenreMapper::toGenreResponse).toList(),

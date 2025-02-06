@@ -9,48 +9,38 @@ import java.util.List;
 import java.util.Locale;
 
 public class DefaultLocaleProvider implements LocaleProvider {
-    @Override
-    public String getLanguage() {
-        return "";
-    }
 
-    @Override
-    public String formatDate(LocalDate date) {
-        return "";
-    }
-
-    /*private final List<String> supportedLanguages;
+    private final List<String> supportedLanguages;
     private final String defaultLanguage;
     private final Locale locale;
 
     public DefaultLocaleProvider() {
-        this.defaultLanguage = PropertyUtil.getInstance().getProperty("app.default.language", "es");
-        String supportedLanguagesConfig = PropertyUtil.getInstance().getProperty("app.supported.languages", this.defaultLanguage);
+        this.defaultLanguage = PropertyUtil.getProperty("app.default.language", "es");
+        String supportedLanguagesConfig = PropertyUtil.getProperty("app.supported.languages", this.defaultLanguage);
         this.supportedLanguages = Arrays.asList(supportedLanguagesConfig.split(","));
-        this.locale = Locale.getDefault();
-    }
 
-    public DefaultLocaleProvider(Locale locale) {
-        this.defaultLanguage = PropertyUtil.getInstance().getProperty("app.default.language", "es");
-        String supportedLanguagesConfig = PropertyUtil.getInstance().getProperty("app.supported.languages", this.defaultLanguage);
-        this.supportedLanguages = Arrays.asList(supportedLanguagesConfig.split(","));
-        this.locale = locale;
+        String systemLanguage = Locale.getDefault().getLanguage();
+        if (supportedLanguages.contains(systemLanguage)) {
+            this.locale = Locale.getDefault();
+        } else {
+            this.locale = Locale.of(defaultLanguage); // Si no, usa el idioma por defecto configurado
+        }
+
     }
 
     @Override
     public String getLanguage() {
-        String language = Locale.getDefault().getLanguage();
+        String language = this.locale.getLanguage();
         if(language.isEmpty() || !supportedLanguages.contains(language)) {
             return defaultLanguage;
         }
         return language;
     }
 
-
     @Override
     public String formatDate(LocalDate date) {
         String pattern;
-        if (locale.getLanguage().equals("es")) {
+        if (this.locale.getLanguage().equals("es")) {
             pattern = "dd/MM/yyyy";
         } else {
             pattern = "yyyy/MM/dd";
@@ -59,5 +49,5 @@ public class DefaultLocaleProvider implements LocaleProvider {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, locale);
         return simpleDateFormat.format(java.sql.Date.valueOf(date));
 
-    }*/
+    }
 }
