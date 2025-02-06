@@ -1,5 +1,6 @@
 package es.cesguiro.usecase.book.query.mapper;
 
+import es.cesguiro.locale.DefaultLocaleProvider;
 import es.cesguiro.locale.LocaleProvider;
 import es.cesguiro.locale.LocaleUtil;
 import es.cesguiro.model.Genre;
@@ -28,13 +29,12 @@ class GenreMapperTest {
 
     @BeforeEach
     void setup() {
-        LocaleUtil.resetInstance();
-        LocaleUtil.getInstance(mockLocaleProvider);
+        LocaleUtil.setLocaleProvider(mockLocaleProvider);
     }
 
     @AfterEach
     void teardown() {
-        LocaleUtil.resetInstance();
+        LocaleUtil.resetLocaleProvider();
     }
 
 

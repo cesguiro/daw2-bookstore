@@ -6,14 +6,16 @@ import java.time.LocalDate;
 
 public class LocaleUtil {
 
-    private static LocaleProvider localeProvider = new DefaultLocaleProvider();
+    private static LocaleProvider localeProvider;
 
     private LocaleUtil() {
         throw new LocaleException("Utility class");
     }
 
-
     public static LocaleProvider getLocaleProvider() {
+        if (localeProvider == null) {
+            LocaleUtil.localeProvider = new DefaultLocaleProvider();
+        }
         return LocaleUtil.localeProvider;
     }
 
@@ -25,11 +27,24 @@ public class LocaleUtil {
     }
 
     public static String getLanguage() {
-        return localeProvider.getLanguage();
+        if (getLocaleProvider() == null) {
+            throw new LocaleException("Locale provider is required");
+        }
+        return getLocaleProvider().getLanguage();
     }
 
     public static String formatDate(LocalDate date) {
-        return localeProvider.formatDate(date);
+        if (getLocaleProvider() == null) {
+            throw new LocaleException("Locale provider is required");
+        }
+        return getLocaleProvider().formatDate(date);
+    }
+
+    /**
+     * Reset the locale provider to null. This method is intended for testing purposes only.
+     */
+    public static void resetLocaleProvider() {
+        LocaleUtil.localeProvider = null;
     }
 
 }

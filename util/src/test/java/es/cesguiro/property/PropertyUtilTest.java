@@ -23,6 +23,11 @@ class PropertyUtilTest {
         PropertyUtil.setPropertyProvider(mockPropertyProvider);
     }
 
+    @AfterEach
+    void tearDown() {
+        PropertyUtil.resetPropertyProvider();
+    }
+
     @Test
     @DisplayName("Test set null PropertyProvider should throw PropertyUtilException")
     void testSetPropertyProviderNull() {

@@ -1,8 +1,3 @@
-#DROP DATABASE IF EXISTS bookstore;
-#CREATE DATABASE IF NOT EXISTS bookstore;
-
-USE bookstore;
-
 CREATE TABLE genres (
                         id INT PRIMARY KEY AUTO_INCREMENT,
                         name_es VARCHAR(255) NOT NULL,

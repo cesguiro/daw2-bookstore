@@ -1,12 +1,10 @@
 package es.cesguiro.usecase.book.query.mapper;
 
-import es.cesguiro.locale.LocaleUtil;
 import es.cesguiro.model.Author;
 import es.cesguiro.repository.model.AuthorEntity;
 import es.cesguiro.usecase.book.query.data.AuthorData;
 import es.cesguiro.usecase.book.query.model.AuthorCollectionQuery;
 import es.cesguiro.usecase.book.query.model.AuthorQuery;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -16,11 +14,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AuthorMapperTest {
-
-    @AfterEach
-    void teardown() {
-        LocaleUtil.resetInstance();
-    }
 
     @Test
     @DisplayName("Test map AuthorEntity to Author")

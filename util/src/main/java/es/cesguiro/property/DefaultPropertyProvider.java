@@ -27,21 +27,25 @@ import java.util.Properties;
 public class DefaultPropertyProvider implements PropertyProvider{
 
     private final Properties properties = new Properties();
-    private final String propertiesFile = "application.properties";
+    private final String PROPERTIES_FILE = "application.properties";
 
     /**
-     * Constructor that loads the properties file during initialization.
-     * This file must be located in the classpath as {@code application.properties}.
+     * Constructor that loads the properties files during initialization.
+     * This files must be located in the classpath as {@code application.properties}.
+     * If a profile is set in the system properties or environment variables, the properties file will be loaded from {@code application-{profile}.properties}.
      */
     public DefaultPropertyProvider() {
-        this.loadProperties();
+        this.loadProperties(PROPERTIES_FILE);
+        if(properties.containsKey("app.active.profile")) {
+            this.loadProperties("application-" + properties.getProperty("app.active.profile") + ".properties");
+        }
     }
 
     /**
      * Loads the properties file from the classpath.
      * @throws  {@link AppFileNotFoundException} if the properties file cannot be found or loaded.
      */
-    private void loadProperties() {
+    private void loadProperties(String propertiesFile) {
         try (InputStream input = getClass().getClassLoader().getResourceAsStream(propertiesFile)) {
             if (input == null) {
                 throw new AppFileNotFoundException(propertiesFile);

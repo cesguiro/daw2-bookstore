@@ -5,13 +5,16 @@ import es.cesguiro.exception.PropertyUtilException;
 
 public class PropertyUtil {
 
-    private static PropertyProvider propertyProvider = new DefaultPropertyProvider();
+    private static PropertyProvider propertyProvider;
 
     private PropertyUtil() {
         throw new PropertyUtilException("Utility class");
     }
 
     public static PropertyProvider getPropertyProvider() {
+        if (propertyProvider == null) {
+            PropertyUtil.propertyProvider = new DefaultPropertyProvider();
+        }
         return PropertyUtil.propertyProvider;
     }
 
@@ -30,4 +33,10 @@ public class PropertyUtil {
         return getPropertyProvider().getProperty(key, defaultValue);
     }
 
+    /**
+     * Reset the property provider to null. This method is intended for testing purposes only.
+     */
+    public static void resetPropertyProvider() {
+        PropertyUtil.propertyProvider = null;
+    }
 }

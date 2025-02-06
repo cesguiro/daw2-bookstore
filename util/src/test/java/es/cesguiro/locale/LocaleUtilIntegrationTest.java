@@ -9,14 +9,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class LocaleUtilIntegrationTest {
 
-    /*private final LocaleUtil localeUtil = LocaleUtil.getInstance();
-
     @Test
     @DisplayName("Test getLanguage should return es")
     void testGetLanguage() {
-        LocaleUtil localeUtil = LocaleUtil.getInstance();
         Locale.setDefault(Locale.of("es"));
-        String language = localeUtil.getLanguage();
+        String language = LocaleUtil.getLanguage();
         assertEquals("es", language, "LanguageUtil should return the default language");
     }
 
@@ -24,7 +21,7 @@ public class LocaleUtilIntegrationTest {
     @DisplayName("Test getLanguage should return en")
     void testGetLanguageEn() {
         Locale.setDefault(Locale.ENGLISH);
-        String language = localeUtil.getLanguage();
+        String language = LocaleUtil.getLanguage();
         assertEquals("en", language, "LanguageUtil should return the default language");
     }
 
@@ -32,8 +29,16 @@ public class LocaleUtilIntegrationTest {
     @DisplayName("Test getLanguage should return app.default.language property when language Locale is not supported")
     void testGetLanguageWithUnsupportedLanguageLocale() {
         Locale.setDefault(Locale.FRANCE);
-        String language = localeUtil.getLanguage();
+        String language = LocaleUtil.getLanguage();
         assertEquals("es", language, "LanguageUtil should return the default language");
-    }*/
+    }
+
+    @Test
+    @DisplayName("Test getLanguage should handle case-insensitive language codes")
+    void testGetLanguageCaseInsensitive() {
+        Locale.setDefault(Locale.of("ES"));
+        String language = LocaleUtil.getLanguage();
+        assertEquals("es", language, "LanguageUtil should return the default language");
+    }
 
 }

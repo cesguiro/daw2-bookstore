@@ -1,20 +1,9 @@
 package es.cesguiro.locale;
 
-import es.cesguiro.property.PropertyProvider;
-import es.cesguiro.property.PropertyUtil;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -48,9 +37,6 @@ class DefaultLocaleProviderTest {
     @Test
     @DisplayName("Test getLanguage method should return app.default.language property when language Locale is not supported")
     void getLanguageWithUnsupportedLanguageLocale() {
-        PropertyProvider mockProvider = Mockito.mock(PropertyProvider.class);
-        Mockito.when(mockProvider.getProperty("app.default.language")).thenReturn("es");
-        PropertyUtil.setPropertyProvider(mockProvider);
         Locale.setDefault(Locale.FRANCE);
         String language = defaultLanguageProvider.getLanguage();
         assertAll(
@@ -86,10 +72,6 @@ class DefaultLocaleProviderTest {
     @DisplayName("Test getLanguage should return default language when language is close but unsupported")
     void getLanguageWithUnsupportedVariant() {
         Locale.setDefault(Locale.of("en-US"));
-
-        PropertyProvider mockProvider = Mockito.mock(PropertyProvider.class);
-        Mockito.when(mockProvider.getProperty("app.default.language")).thenReturn("es");
-
 
         String language = defaultLanguageProvider.getLanguage();
         assertAll(

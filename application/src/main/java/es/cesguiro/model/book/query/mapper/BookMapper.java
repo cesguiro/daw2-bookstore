@@ -27,7 +27,7 @@ public class BookMapper {
                 bookCollectionQuery.finalPrice(),
                 bookCollectionQuery.cover(),
                 bookCollectionQuery.authors().stream().map(AuthorMapper::toAuthorCollectionResponse).toList(),
-                Map.of("_self", PropertyUtil.getInstance().getProperty("app.base.url")
+                Map.of("_self", PropertyUtil.getProperty("app.base.url")
                         + BookHandlerImpl.RESOURCE_PATH + "/"
                         + bookCollectionQuery.isbn())
         );

@@ -18,19 +18,16 @@ public class DefaultLocaleProvider implements LocaleProvider {
         this.defaultLanguage = PropertyUtil.getProperty("app.default.language", "es");
         String supportedLanguagesConfig = PropertyUtil.getProperty("app.supported.languages", this.defaultLanguage);
         this.supportedLanguages = Arrays.asList(supportedLanguagesConfig.split(","));
-
-        String systemLanguage = Locale.getDefault().getLanguage();
-        if (supportedLanguages.contains(systemLanguage)) {
-            this.locale = Locale.getDefault();
-        } else {
-            this.locale = Locale.of(defaultLanguage); // Si no, usa el idioma por defecto configurado
+        this.locale = Locale.getDefault();
+        if (!supportedLanguages.contains(this.locale.getLanguage())) {
+            Locale.setDefault(Locale.of(this.defaultLanguage));
         }
-
     }
+
 
     @Override
     public String getLanguage() {
-        String language = this.locale.getLanguage();
+        String language = Locale.getDefault().getLanguage();
         if(language.isEmpty() || !supportedLanguages.contains(language)) {
             return defaultLanguage;
         }

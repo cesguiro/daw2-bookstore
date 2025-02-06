@@ -67,4 +67,15 @@ class DefaultPropertyProviderTest {
         assertThrows(KeyNotFoundException.class, () -> provider.getProperty(null),
                 "getProperty should throw KeyNotFoundException if key is null");
     }
+
+    @Test
+    @DisplayName("getProperty should return correct value app.active.profile is set in application.properties and exists application-profile.properties")
+    void testGetPropertyProfile() {
+        String property = provider.getProperty("app.profile");
+
+        assertAll(
+                () -> assertNotNull(property),
+                () -> assertEquals("test", property)
+        );
+    }
 }

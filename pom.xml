@@ -15,6 +15,7 @@
         <org.springframework.boot.spring-starter-test>3.4.1</org.springframework.boot.spring-starter-test>
         <org.springframework.boot.spring-starter-data-jpa>3.4.1</org.springframework.boot.spring-starter-data-jpa>
         <org.flywaydb.version>11.3.0</org.flywaydb.version>
+        <org.maridb.java-client.version>3.5.1</org.maridb.java-client.version>
     </properties>
 
     <groupId>es.cesguiro</groupId>
@@ -80,6 +81,11 @@
                 <groupId>es.cesguiro</groupId>
                 <artifactId>application</artifactId>
                 <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mariadb.jdbc</groupId>
+                <artifactId>mariadb-java-client</artifactId>
+                <version>${org.maridb.java-client.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

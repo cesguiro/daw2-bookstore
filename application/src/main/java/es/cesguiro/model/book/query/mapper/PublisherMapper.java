@@ -19,7 +19,7 @@ public class PublisherMapper {
         }
         return new PublisherResponse(
                 publisherQuery.name(),
-                Map.of("books", PropertyUtil.getInstance().getProperty("app.base.url")
+                Map.of("books", PropertyUtil.getProperty("app.base.url")
                                 + PublisherHandlerImpl.RESOURCE_PATH + "/"
                                 + publisherQuery.slug() + "/"
                                 + BookHandlerImpl.RESOURCE

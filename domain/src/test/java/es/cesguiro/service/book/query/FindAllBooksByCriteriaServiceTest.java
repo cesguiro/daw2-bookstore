@@ -1,6 +1,7 @@
 package es.cesguiro.service.book.query;
 
 import es.cesguiro.exception.DomainException;
+import es.cesguiro.locale.DefaultLocaleProvider;
 import es.cesguiro.locale.LocaleProvider;
 import es.cesguiro.locale.LocaleUtil;
 import es.cesguiro.pagination.Page;
@@ -45,13 +46,12 @@ class FindAllBooksByCriteriaServiceTest {
 
     @BeforeEach
     void setup() {
-        LocaleUtil.resetInstance();
-        LocaleUtil.getInstance(mockLocaleProvider);
+        LocaleUtil.setLocaleProvider(mockLocaleProvider);
     }
 
     @AfterEach
     void teardown() {
-        LocaleUtil.resetInstance();
+        LocaleUtil.resetLocaleProvider();
     }
 
     @Test

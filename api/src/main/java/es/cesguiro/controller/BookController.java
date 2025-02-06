@@ -11,10 +11,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("${app.api.path}/" + BookHandlerImpl.RESOURCE)
+//@RequestMapping("${app.api.path}/" + BookHandlerImpl.RESOURCE)
+//@RequestMapping(BookController.URL)
+@RequestMapping("/api/books")
 public class BookController {
 
-    private final int DEFAULT_PAGE_SIZE = Integer.parseInt(PropertyUtil.getInstance().getProperty("app.default.page.size", "10"));
+    //public static final String URL = PropertyUtil.getProperty("app.api.path");
+    private final int DEFAULT_PAGE_SIZE = Integer.parseInt(PropertyUtil.getProperty("app.default.pageSize", "10"));
 
     private final BookHandler bookHandler;
 

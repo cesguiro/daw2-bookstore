@@ -1,7 +1,7 @@
 #DROP DATABASE IF EXISTS bookstore;
-#CREATE DATABASE IF NOT EXISTS bookstore;
+#CREATE DATABASE IF NOT EXISTS bookstore_dev;
 
-USE bookstore;
+USE bookstore_dev;
 
 CREATE TABLE genres (
                         id INT PRIMARY KEY AUTO_INCREMENT,

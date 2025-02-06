@@ -30,7 +30,7 @@ public class BookMapper {
         }
         return new BookCollectionQuery(
                 book.getIsbn(),
-                book.getTitle(LocaleUtil.getInstance().getLanguage()),
+                book.getTitle(LocaleUtil.getLanguage()),
                 book.getBasePrice(),
                 book.getDiscountPercentage(),
                 book.calculateFinalPrice(),
@@ -45,8 +45,8 @@ public class BookMapper {
         }
         return new BookQuery(
                 book.getIsbn(),
-                book.getTitle(LocaleUtil.getInstance().getLanguage()),
-                book.getSynopsis(LocaleUtil.getInstance().getLanguage()),
+                book.getTitle(LocaleUtil.getLanguage()),
+                book.getSynopsis(LocaleUtil.getLanguage()),
                 book.getBasePrice(),
                 book.getDiscountPercentage(),
                 book.calculateFinalPrice(),
