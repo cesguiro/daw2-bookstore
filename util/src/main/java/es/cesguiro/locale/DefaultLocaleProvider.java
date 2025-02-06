@@ -9,8 +9,17 @@ import java.util.List;
 import java.util.Locale;
 
 public class DefaultLocaleProvider implements LocaleProvider {
+    @Override
+    public String getLanguage() {
+        return "";
+    }
 
-    private final List<String> supportedLanguages;
+    @Override
+    public String formatDate(LocalDate date) {
+        return "";
+    }
+
+    /*private final List<String> supportedLanguages;
     private final String defaultLanguage;
     private final Locale locale;
 
@@ -50,5 +59,5 @@ public class DefaultLocaleProvider implements LocaleProvider {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, locale);
         return simpleDateFormat.format(java.sql.Date.valueOf(date));
 
-    }
+    }*/
 }

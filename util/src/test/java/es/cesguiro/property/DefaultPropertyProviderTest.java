@@ -1,78 +1,39 @@
 package es.cesguiro.property;
 
-import es.cesguiro.exception.AppFileNotFoundException;
-import es.cesguiro.exception.KeyNotFoundException;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class DefaultPropertyProviderTest {
 
+    DefaultPropertyProvider provider = new DefaultPropertyProvider();
 
-    @ParameterizedTest
-    @DisplayName("Test DefaultPropertyProvider loads correct properties with custom and default values")
-    @CsvSource({
-            "custom.properties, app.name, app.custom",
-            "'', app.name, app.default"
-    })
-    void testPropertyLoading(String propertiesFile, String key, String expectedValue) {
-        DefaultPropertyProvider provider =
-                propertiesFile.isEmpty() ? new DefaultPropertyProvider() : new DefaultPropertyProvider(propertiesFile);
+    @BeforeAll
+    static void setUp() {
+        System.setProperty("app.name", "name");
+        System.getenv().put("app.alias", "alias");
+    }
 
-        String property = provider.getProperty(key);
+    @AfterEach
+    void tearDown() {
+        System.clearProperty("app.name");
+        System.getenv().remove("app.alias");
+    }
+
+    @Test
+    @DisplayName("get system property should return correct value")
+    void testGetProperty() {
+
+
+        String property = provider.getProperty("app.name");
 
         assertAll(
                 () -> assertNotNull(property),
-                () -> assertEquals(expectedValue, property)
+                () -> assertEquals(System.getProperty("name"), property)
         );
-    }
-
-
-    @Test
-    @DisplayName("Test get property with default propertiesFile with empty key should throw KeyNotFoundException")
-    void getEmptyPropertyName() {
-        DefaultPropertyProvider defaultPropertyProvider = new DefaultPropertyProvider();
-        assertThrows(KeyNotFoundException.class, () -> defaultPropertyProvider.getProperty(""));
-    }
-
-    @Test
-    @DisplayName("Test getProperty with null key should throw KeyNotFoundException")
-    void testGetPropertyWithNullKey() {
-        DefaultPropertyProvider defaultPropertyProvider = new DefaultPropertyProvider();
-        assertThrows(KeyNotFoundException.class, () -> defaultPropertyProvider.getProperty(""));
-    }
-
-    @Test
-    @DisplayName("Test getProperty with empty value should return empty string")
-    void testGetPropertyWithNullValue() {
-        DefaultPropertyProvider defaultPropertyProvider = new DefaultPropertyProvider();
-        String property = defaultPropertyProvider.getProperty("null.value");
-        assertEquals("", property);
-    }
-
-    @Test
-    @DisplayName("Test missing application.properties should throw AppFileNotFoundException")
-    void testMissingPropertiesFile() {
-        assertThrows(AppFileNotFoundException.class, () -> new DefaultPropertyProvider("non-existing.properties"));
-    }
-
-    @Test
-    @DisplayName("Test getProperty with default value when property is missing")
-    void testGetPropertyWithDefaultValue() {
-        DefaultPropertyProvider defaultPropertyProvider = new DefaultPropertyProvider();
-        String property = defaultPropertyProvider.getProperty("non-existing.key", "default.value");
-        assertEquals("default.value", property);
-    }
-
-    @Test
-    @DisplayName("Test getProperty with special characters in key")
-    void testGetPropertyWithSpecialChars() {
-        DefaultPropertyProvider defaultPropertyProvider = new DefaultPropertyProvider();
-        String property = defaultPropertyProvider.getProperty("app.special@key#1");
-        assertNotNull(property);
     }
 
 

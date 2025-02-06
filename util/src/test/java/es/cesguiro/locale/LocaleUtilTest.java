@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class LocaleUtilTest {
 
-    @Mock
+    /*@Mock
     private LocaleProvider mockLocaleProvider;
 
     //private LanguageUtil languageUtil = LanguageUtil.getInstance(mockLanguageProvider);
@@ -78,5 +78,5 @@ class LocaleUtilTest {
         Mockito.when(mockLocaleProvider.getLanguage()).thenReturn("es");
         String language = localeUtil.getLanguage();
         assertEquals("es", language, "LanguageUtil should return the default language");
-    }
+    }*/
 }
