@@ -16,6 +16,13 @@ public class DefaultPropertyProvider implements PropertyProvider{
 
     public DefaultPropertyProvider(String propertiesFile) {
         this.loadProperties(propertiesFile);
+
+        String activeProfile = properties.getProperty("spring.profiles.active", "").trim();
+
+        // 3️⃣ Si hay un perfil activo, cargar application-{profile}.properties
+        if (!activeProfile.isEmpty()) {
+            loadProperties("application-" + activeProfile + ".properties");
+        }
     }
 
     public DefaultPropertyProvider() {
