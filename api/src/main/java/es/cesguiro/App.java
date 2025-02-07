@@ -10,17 +10,16 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class App {
 
     public static void main(String[] args) {
-        /*String url = PropertyUtil.getProperty("flyway.datasource.url");
+        String url = PropertyUtil.getProperty("flyway.datasource.url");
         String user = PropertyUtil.getProperty("flyway.datasource.username");
         String password = PropertyUtil.getProperty("flyway.datasource.password");
-        String locations = PropertyUtil.getProperty("flyway.locations");
         System.out.println("url: " + url);
         System.out.println("user: " + user);
         System.out.println("password: " + password);
         Flyway flyway = Flyway.configure()
                 .dataSource(url, user, password)
                 .load();
-        flyway.migrate();*/
+        flyway.migrate();
 
         SpringApplication.run(App.class, args);
     }
