@@ -19,7 +19,7 @@ public class GenreMapper {
         }
         return new GenreResponse(
                 genreQuery.name(),
-                Map.of("books", PropertyUtil.getProperty("app.base.url")
+                Map.of("books", PropertyUtil.getPropertyProvider().getProperty("app.base.url")
                                 + GenreHandlerImpl.RESOURCE_PATH + "/"
                                 + genreQuery.slug() + "/"
                                 + BookHandlerImpl.RESOURCE

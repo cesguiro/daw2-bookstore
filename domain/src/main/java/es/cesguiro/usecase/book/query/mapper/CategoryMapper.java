@@ -24,7 +24,7 @@ public class CategoryMapper {
             return null;
         }
         return new CategoryQuery(
-                category.getName(LocaleUtil.getLanguage()),
+                category.getName(LocaleUtil.getLocaleProvider().getLanguage()),
                 category.getSlug()
         );
     }

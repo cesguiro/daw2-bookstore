@@ -21,10 +21,10 @@ public class AuthorMapper {
         }
         return new AuthorCollectionResponse(
                 authorCollectionQuery.name(),
-                Map.of("_self", PropertyUtil.getProperty("app.base.url")
+                Map.of("_self", PropertyUtil.getPropertyProvider().getProperty("app.base.url")
                                 + AuthorHandlerImpl.RESOURCE_PATH + "/"
                                 + authorCollectionQuery.slug(),
-                        "books", PropertyUtil.getProperty("app.base.url")
+                        "books", PropertyUtil.getPropertyProvider().getProperty("app.base.url")
                                 + AuthorHandlerImpl.RESOURCE_PATH + "/"
                                 + authorCollectionQuery.slug() + "/"
                                 + BookHandlerImpl.RESOURCE
@@ -38,10 +38,10 @@ public class AuthorMapper {
         }
         return new AuthorReponse(
                 authorQuery.name(),
-                Map.of("_self", PropertyUtil.getProperty("app.base.url")
+                Map.of("_self", PropertyUtil.getPropertyProvider().getProperty("app.base.url")
                                 + AuthorHandlerImpl.RESOURCE_PATH + "/"
                                 + authorQuery.slug(),
-                        "books", PropertyUtil.getProperty("app.base.url")
+                        "books", PropertyUtil.getPropertyProvider().getProperty("app.base.url")
                                 + AuthorHandlerImpl.RESOURCE_PATH + "/"
                                 + authorQuery.slug() + "/"
                                 + BookHandlerImpl.RESOURCE

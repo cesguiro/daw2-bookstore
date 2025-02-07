@@ -27,7 +27,7 @@ public class BookMapper {
                 bookCollectionQuery.finalPrice(),
                 bookCollectionQuery.cover(),
                 bookCollectionQuery.authors().stream().map(AuthorMapper::toAuthorCollectionResponse).toList(),
-                Map.of("_self", PropertyUtil.getProperty("app.base.url")
+                Map.of("_self", PropertyUtil.getPropertyProvider().getProperty("app.base.url")
                         + BookHandlerImpl.RESOURCE_PATH + "/"
                         + bookCollectionQuery.isbn())
         );
@@ -45,7 +45,7 @@ public class BookMapper {
                 bookQuery.discount(),
                 bookQuery.finalPrice(),
                 bookQuery.cover(),
-                LocaleUtil.formatDate(bookQuery.publicationDate()),
+                LocaleUtil.getLocaleProvider().formatDate(bookQuery.publicationDate()),
                 PublisherMapper.toPublisherResponse(bookQuery.publisher()),
                 CategoryMapper.toCategoryResponse(bookQuery.category()),
                 bookQuery.genres().stream().map(GenreMapper::toGenreResponse).toList(),

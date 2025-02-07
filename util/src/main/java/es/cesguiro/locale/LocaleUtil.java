@@ -26,20 +26,6 @@ public class LocaleUtil {
         LocaleUtil.localeProvider = localeProvider;
     }
 
-    public static String getLanguage() {
-        if (getLocaleProvider() == null) {
-            throw new LocaleException("Locale provider is required");
-        }
-        return getLocaleProvider().getLanguage();
-    }
-
-    public static String formatDate(LocalDate date) {
-        if (getLocaleProvider() == null) {
-            throw new LocaleException("Locale provider is required");
-        }
-        return getLocaleProvider().formatDate(date);
-    }
-
     /**
      * Reset the locale provider to null. This method is intended for testing purposes only.
      */

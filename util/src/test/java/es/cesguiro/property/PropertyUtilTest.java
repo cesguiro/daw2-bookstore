@@ -40,7 +40,7 @@ class PropertyUtilTest {
     @DisplayName("Test getProperty should return correct value if key exists")
     void testGetProperty() {
         when(mockPropertyProvider.getProperty("app.name")).thenReturn("App Name");
-        String property = PropertyUtil.getProperty("app.name");
+        String property = PropertyUtil.getPropertyProvider().getProperty("app.name");
 
         assertAll(
                 () -> assertNotNull(property),
@@ -53,7 +53,7 @@ class PropertyUtilTest {
     void testGetPropertyKeyNotFound() {
         when(mockPropertyProvider.getProperty("app.name")).thenThrow(KeyNotFoundException.class);
 
-        assertThrows(KeyNotFoundException.class, () -> PropertyUtil.getProperty("app.name"),
+        assertThrows(KeyNotFoundException.class, () -> PropertyUtil.getPropertyProvider().getProperty("app.name"),
                 "getProperty should throw KeyNotFoundException if key is not found");
     }
 
@@ -61,7 +61,7 @@ class PropertyUtilTest {
     @DisplayName("Test get property with empty key should throw KeyNotFoundException")
     void testGetPropertyEmptyKey() {
         when(mockPropertyProvider.getProperty("")).thenThrow(KeyNotFoundException.class);
-        assertThrows(KeyNotFoundException.class, () -> PropertyUtil.getProperty(""),
+        assertThrows(KeyNotFoundException.class, () -> PropertyUtil.getPropertyProvider().getProperty(""),
                 "getProperty should throw KeyNotFoundException if key is empty");
     }
 
@@ -69,7 +69,7 @@ class PropertyUtilTest {
     @DisplayName("Test get property with null key should throw KeyNotFoundException")
     void testGetPropertyNullKey() {
         when(mockPropertyProvider.getProperty(null)).thenThrow(KeyNotFoundException.class);
-        assertThrows(KeyNotFoundException.class, () -> PropertyUtil.getProperty(null),
+        assertThrows(KeyNotFoundException.class, () -> PropertyUtil.getPropertyProvider().getProperty(null),
                 "getProperty should throw KeyNotFoundException if key is null");
     }
 
@@ -77,7 +77,7 @@ class PropertyUtilTest {
     @DisplayName("Test getProperty should return default value if key is not found")
     void testGetPropertyDefaultValue() {
         when(mockPropertyProvider.getProperty("app.nonexistent", "default")).thenReturn("default");
-        String property = PropertyUtil.getProperty("app.nonexistent", "default");
+        String property = PropertyUtil.getPropertyProvider().getProperty("app.nonexistent", "default");
 
         assertAll(
                 () -> assertNotNull(property),

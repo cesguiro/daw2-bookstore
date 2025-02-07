@@ -25,14 +25,6 @@ public class PropertyUtil {
         PropertyUtil.propertyProvider = propertyProvider;
     }
 
-    public static String getProperty(String key) {
-        return getPropertyProvider().getProperty(key);
-    }
-
-    public static String getProperty(String key, String defaultValue) {
-        return getPropertyProvider().getProperty(key, defaultValue);
-    }
-
     /**
      * Reset the property provider to null. This method is intended for testing purposes only.
      */

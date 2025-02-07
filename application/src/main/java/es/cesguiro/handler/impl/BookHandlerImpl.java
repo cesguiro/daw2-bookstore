@@ -18,9 +18,9 @@ import java.util.List;
 public class BookHandlerImpl implements BookHandler {
 
     public static final String RESOURCE = "books";
-    public static final String RESOURCE_PATH = PropertyUtil.getProperty("app.api.path") + "/" + RESOURCE;
+    public static final String RESOURCE_PATH = PropertyUtil.getPropertyProvider().getProperty("app.api.path") + "/" + RESOURCE;
 
-    private final int DEFAULT_PAGE_SIZE = Integer.parseInt(PropertyUtil.getProperty("app.default.page.size", "10"));
+    private final int DEFAULT_PAGE_SIZE = Integer.parseInt(PropertyUtil.getPropertyProvider().getProperty("app.default.page.size", "10"));
 
     private final FindAllBooksByCriteriaUseCase findAllBooksByCriteriaUseCase;
     private final FindBookByCriteriaUseCase findBookByCriteriaUseCase;
@@ -45,7 +45,7 @@ public class BookHandlerImpl implements BookHandler {
                 pageSize,
                 pagedCollection.totalElements(),
                 pagedCollection.totalPages(),
-                PropertyUtil.getProperty("app.base.url") + RESOURCE_PATH
+                PropertyUtil.getPropertyProvider().getProperty("app.base.url") + RESOURCE_PATH
         );
     }
 

@@ -13,7 +13,7 @@ public class LocaleUtilIntegrationTest {
     @DisplayName("Test getLanguage should return es")
     void testGetLanguage() {
         Locale.setDefault(Locale.of("es"));
-        String language = LocaleUtil.getLanguage();
+        String language = LocaleUtil.getLocaleProvider().getLanguage();
         assertEquals("es", language, "LanguageUtil should return the default language");
     }
 
@@ -21,7 +21,7 @@ public class LocaleUtilIntegrationTest {
     @DisplayName("Test getLanguage should return en")
     void testGetLanguageEn() {
         Locale.setDefault(Locale.ENGLISH);
-        String language = LocaleUtil.getLanguage();
+        String language = LocaleUtil.getLocaleProvider().getLanguage();
         assertEquals("en", language, "LanguageUtil should return the default language");
     }
 
@@ -29,7 +29,7 @@ public class LocaleUtilIntegrationTest {
     @DisplayName("Test getLanguage should return app.default.language property when language Locale is not supported")
     void testGetLanguageWithUnsupportedLanguageLocale() {
         Locale.setDefault(Locale.FRANCE);
-        String language = LocaleUtil.getLanguage();
+        String language = LocaleUtil.getLocaleProvider().getLanguage();
         assertEquals("es", language, "LanguageUtil should return the default language");
     }
 
@@ -37,7 +37,7 @@ public class LocaleUtilIntegrationTest {
     @DisplayName("Test getLanguage should handle case-insensitive language codes")
     void testGetLanguageCaseInsensitive() {
         Locale.setDefault(Locale.of("ES"));
-        String language = LocaleUtil.getLanguage();
+        String language = LocaleUtil.getLocaleProvider().getLanguage();
         assertEquals("es", language, "LanguageUtil should return the default language");
     }
 

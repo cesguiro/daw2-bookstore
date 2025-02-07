@@ -35,7 +35,7 @@ class LocaleUtilTest {
     @DisplayName("Test getLanguage should return es")
     void testGetLanguageShouldReturnEs() {
         Mockito.when(mockLocaleProvider.getLanguage()).thenReturn("es");
-        String language = LocaleUtil.getLanguage();
+        String language = LocaleUtil.getLocaleProvider().getLanguage();
         assertEquals("es", language, "LanguageUtil should return the default language");
     }
 
@@ -43,7 +43,7 @@ class LocaleUtilTest {
     @DisplayName("Test getLanguage should return en")
     void testGetLanguageShouldReturnEn() {
         Mockito.when(mockLocaleProvider.getLanguage()).thenReturn("en");
-        String language = LocaleUtil.getLanguage();
+        String language = LocaleUtil.getLocaleProvider().getLanguage();
         assertEquals("en", language, "LanguageUtil should return the default language");
     }
 
@@ -52,7 +52,7 @@ class LocaleUtilTest {
     void testGetDateFormatShouldReturnDdMmYyyy() {
         LocalDate date = LocalDate.of(2021, 1, 1);
         Mockito.when(mockLocaleProvider.formatDate(date)).thenReturn("01/01/2021");
-        String dateFormat = LocaleUtil.formatDate(date);
+        String dateFormat = LocaleUtil.getLocaleProvider().formatDate(date);
         assertEquals("01/01/2021", dateFormat, "LanguageUtil should return dd/mm/yyyy date format");
     }
 
@@ -61,7 +61,7 @@ class LocaleUtilTest {
     void testGetDateFormatShouldReturnYyyyMmDd() {
         LocalDate date = LocalDate.of(2021, 1, 1);
         Mockito.when(mockLocaleProvider.formatDate(date)).thenReturn("2021/01/01");
-        String dateFormat = LocaleUtil.formatDate(date);
+        String dateFormat = LocaleUtil.getLocaleProvider().formatDate(date);
         assertEquals("2021/01/01", dateFormat, "LanguageUtil should return yyyy/mm/dd date format");
     }
 

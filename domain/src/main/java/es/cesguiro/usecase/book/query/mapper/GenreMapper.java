@@ -23,7 +23,7 @@ public class GenreMapper {
             return null;
         }
         return new GenreQuery(
-                genre.getName(LocaleUtil.getLanguage()),
+                genre.getName(LocaleUtil.getLocaleProvider().getLanguage()),
                 genre.getSlug()
         );
     }

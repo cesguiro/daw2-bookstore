@@ -19,7 +19,7 @@ public class CategoryMapper {
         }
         return new CategoryResponse(
                 categoryQuery.name(),
-                Map.of("books", PropertyUtil.getProperty("app.base.url")
+                Map.of("books", PropertyUtil.getPropertyProvider().getProperty("app.base.url")
                                 + CategoryHandlerImpl.RESOURCE_PATH + "/"
                                 + categoryQuery.slug() + "/"
                                 + BookHandlerImpl.RESOURCE
