@@ -21,6 +21,30 @@
         <org.flyway.maven.plugin>11.3.1</org.flyway.maven.plugin>
     </properties>
 
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <org.flyway.configFile>src/main/resources/application-dev.properties</org.flyway.configFile>
+            </properties>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <org.flyway.configFile>src/main/resources/application-prod.properties</org.flyway.configFile>
+            </properties>
+        </profile>
+        <profile>
+            <id>test</id>
+            <properties>
+                <org.flyway.configFile>src/main/resources/application-test.properties</org.flyway.configFile>
+            </properties>
+        </profile>
+    </profiles>
+
     <dependencies>
         <dependency>
             <groupId>es.cesguiro</groupId>
@@ -54,26 +78,30 @@
             <version>${org.springframework.boot.spring-starter-test}</version>
             <scope>test</scope>
         </dependency>
-        <!--<dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-core</artifactId>
-            <version>${org.flywaydb.version}</version>
-        </dependency>
+
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-mysql</artifactId>
-            <version>${org.flywaydb.version}</version>
-        </dependency>-->
-        <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-maven-plugin</artifactId>
             <version>${org.flyway.maven.plugin}</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.mariadb.jdbc</groupId>
-            <artifactId>mariadb-java-client</artifactId>
-        </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>${org.flyway.maven.plugin}</version>
+                <configuration>
+                    <configFiles>
+                        <!--<configFile>${flyway.config.file}</configFile>-->
+                        <!--<configFile>src/main/resources/application-dev.properties</configFile>-->
+                        <configFile>${org.flyway.configFile}</configFile>
+                    </configFiles>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
