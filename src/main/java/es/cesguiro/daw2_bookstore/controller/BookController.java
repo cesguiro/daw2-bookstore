@@ -3,9 +3,8 @@ package es.cesguiro.daw2_bookstore.controller;
 import es.cesguiro.domain.model.Page;
 import es.cesguiro.domain.service.BookService;
 import es.cesguiro.domain.service.dto.BookDto;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import jakarta.websocket.server.PathParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,7 +19,8 @@ public class BookController {
     }
 
     @GetMapping
-    public Page<BookDto> listBooks() {
-        return bookService.getAll(1, 10);
+    public Page<BookDto> listBooks(@RequestParam(required = false, defaultValue = "1") int page,
+                                   @RequestParam(required = false, defaultValue = "10") int size) {
+        return bookService.getAll(page, size);
     }
 }

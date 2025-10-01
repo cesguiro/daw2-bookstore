@@ -9,67 +9,54 @@ import es.cesguiro.domain.service.impl.AuthorServiceImpl;
 import es.cesguiro.domain.service.impl.BookServiceImpl;
 import es.cesguiro.domain.service.BookService;
 import es.cesguiro.domain.service.impl.PublisherServiceImpl;
+import es.cesguiro.persistence.PersistenceConfig;
 import es.cesguiro.persistence.dao.AuthorDao;
 import es.cesguiro.persistence.dao.BookDao;
 import es.cesguiro.persistence.dao.PublisherDao;
-import es.cesguiro.persistence.dao.jpa.AuthorDaoJpa;
-import es.cesguiro.persistence.dao.jpa.BookDaoJpa;
-import es.cesguiro.persistence.dao.jpa.PublisherDaoJpa;
 import es.cesguiro.persistence.repository.AuthorRepositoryImpl;
 import es.cesguiro.persistence.repository.BookRepositoryImpl;
 import es.cesguiro.persistence.repository.PublisherRepositoryImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 @Configuration
+@Import(PersistenceConfig.class)
 public class SpringConfig {
 
     /************* BOOK *************/
+
     @Bean
-    public BookDao bookDao() {
-        return new BookDaoJpa();
+    public BookRepository bookRepository(BookDao bookDao) {
+        return new BookRepositoryImpl(bookDao);
     }
 
     @Bean
-    public BookRepository bookRepository() {
-        return new BookRepositoryImpl(bookDao());
-    }
-
-    @Bean
-    public BookService bookService() {
-        return new BookServiceImpl(bookRepository(), publisherRepository());
+    public BookService bookService(BookRepository bookRepository, PublisherRepository publisherRepository) {
+        return new BookServiceImpl(bookRepository, publisherRepository);
     }
 
     /************* PUBLISHER *************/
+
     @Bean
-    public PublisherDao publisherDao() {
-        return new PublisherDaoJpa();
+    public PublisherRepository publisherRepository(PublisherDao publisherDao) {
+        return new PublisherRepositoryImpl(publisherDao);
     }
 
     @Bean
-    public PublisherRepository publisherRepository() {
-        return new PublisherRepositoryImpl(publisherDao());
+    public PublisherService publisherService(PublisherRepository publisherRepository) {
+        return new PublisherServiceImpl(publisherRepository);
+    }
+
+    /*************** AUTHOR **************/
+    @Bean
+    public AuthorRepository authorRepository(AuthorDao authorDao) {
+        return new AuthorRepositoryImpl(authorDao);
     }
 
     @Bean
-    public PublisherService publisherService() {
-        return new PublisherServiceImpl(publisherRepository());
-    }
-
-    /*************** AUTHOR *************/
-    @Bean
-    public AuthorDao authorDao() {
-        return new AuthorDaoJpa();
-    }
-
-    @Bean
-    public AuthorRepository authorRepository() {
-        return new AuthorRepositoryImpl(authorDao());
-    }
-
-    @Bean
-    public AuthorService authorService() {
-        return new AuthorServiceImpl(authorRepository());
+    public AuthorService authorService(AuthorRepository authorRepository) {
+        return new AuthorServiceImpl(authorRepository);
     }
 
 }

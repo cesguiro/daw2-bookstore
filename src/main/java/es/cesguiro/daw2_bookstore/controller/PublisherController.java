@@ -3,6 +3,7 @@ package es.cesguiro.daw2_bookstore.controller;
 import es.cesguiro.domain.service.PublisherService;
 import es.cesguiro.domain.service.dto.PublisherDto;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,7 +20,12 @@ public class PublisherController {
     }
 
     @GetMapping("/{slug}")
-    public PublisherDto listPublishers(String slug) {
-        return publisherService.getBySlug(slug);
+    public PublisherDto findBySlug(@PathVariable String slug) {
+        try {
+            return publisherService.getBySlug(slug);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 }
