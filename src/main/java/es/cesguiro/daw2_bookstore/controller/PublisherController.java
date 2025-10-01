@@ -1,0 +1,25 @@
+package es.cesguiro.daw2_bookstore.controller;
+
+import es.cesguiro.domain.service.PublisherService;
+import es.cesguiro.domain.service.dto.PublisherDto;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/publishers")
+public class PublisherController {
+
+    private final PublisherService publisherService;
+
+    public PublisherController(PublisherService publisherService) {
+        this.publisherService = publisherService;
+    }
+
+    @GetMapping("/{slug}")
+    public PublisherDto listPublishers(String slug) {
+        return publisherService.getBySlug(slug);
+    }
+}

@@ -29,6 +29,7 @@
 	<properties>
 		<java.version>21</java.version>
 		<es.cesguiro.daw2-bookstore-domain.version>1.0-SNAPSHOT</es.cesguiro.daw2-bookstore-domain.version>
+		<es.cesguiro.daw2-bookstore-persistence.version>1.0-SNAPSHOT</es.cesguiro.daw2-bookstore-persistence.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -36,11 +37,23 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.mariadb.jdbc</groupId>
+			<artifactId>mariadb-java-client</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>es.cesguiro</groupId>
 			<artifactId>daw2-bookstore-domain</artifactId>
 			<version>${es.cesguiro.daw2-bookstore-domain.version}</version>
 		</dependency>
-
+		<dependency>
+			<groupId>es.cesguiro</groupId>
+			<artifactId>daw2-bookstore-persistence</artifactId>
+			<version>${es.cesguiro.daw2-bookstore-persistence.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
