@@ -32,8 +32,8 @@ public class SpringConfig {
     }
 
     @Bean
-    public BookService bookService(BookRepository bookRepository, PublisherRepository publisherRepository) {
-        return new BookServiceImpl(bookRepository, publisherRepository);
+    public BookService bookService(BookRepository bookRepository, PublisherRepository publisherRepository, AuthorRepository authorRepository) {
+        return new BookServiceImpl(bookRepository, publisherRepository, authorRepository);
     }
 
     /************* PUBLISHER *************/

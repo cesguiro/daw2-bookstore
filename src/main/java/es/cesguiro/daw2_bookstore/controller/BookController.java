@@ -23,4 +23,9 @@ public class BookController {
                                    @RequestParam(required = false, defaultValue = "10") int size) {
         return bookService.getAll(page, size);
     }
+
+    @PostMapping
+    public BookDto createBook(@RequestBody BookDto bookDto) {
+        return bookService.create(bookDto);
+    }
 }
