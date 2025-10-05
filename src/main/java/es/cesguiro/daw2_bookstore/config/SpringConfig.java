@@ -13,6 +13,7 @@ import es.cesguiro.persistence.PersistenceConfig;
 import es.cesguiro.persistence.dao.AuthorDao;
 import es.cesguiro.persistence.dao.BookDao;
 import es.cesguiro.persistence.dao.PublisherDao;
+import es.cesguiro.persistence.dao.redis.BookRedisDao;
 import es.cesguiro.persistence.repository.AuthorRepositoryImpl;
 import es.cesguiro.persistence.repository.BookRepositoryImpl;
 import es.cesguiro.persistence.repository.PublisherRepositoryImpl;
@@ -27,8 +28,8 @@ public class SpringConfig {
     /************* BOOK *************/
 
     @Bean
-    public BookRepository bookRepository(BookDao bookDao) {
-        return new BookRepositoryImpl(bookDao);
+    public BookRepository bookRepository(BookDao bookDao, BookRedisDao bookRedisDao) {
+        return new BookRepositoryImpl(bookDao, bookRedisDao);
     }
 
     @Bean

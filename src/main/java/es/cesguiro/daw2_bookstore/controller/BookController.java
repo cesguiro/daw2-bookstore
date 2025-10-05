@@ -24,6 +24,11 @@ public class BookController {
         return bookService.getAll(page, size);
     }
 
+    @GetMapping("/{isbn}")
+    public BookDto getBookByIsbn(@PathVariable String isbn) {
+        return bookService.getByIsbn(isbn);
+    }
+
     @PostMapping
     public BookDto createBook(@RequestBody BookDto bookDto) {
         return bookService.create(bookDto);
