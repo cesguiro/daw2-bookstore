@@ -30,12 +30,13 @@
 		<java.version>21</java.version>
 		<es.cesguiro.daw2-bookstore-domain.version>1.0-SNAPSHOT</es.cesguiro.daw2-bookstore-domain.version>
 		<es.cesguiro.daw2-bookstore-persistence.version>1.0-SNAPSHOT</es.cesguiro.daw2-bookstore-persistence.version>
-        <spring.boot.validation.version>3.5.6</spring.boot.validation.version>
+        <spring.boot.version>3.5.6</spring.boot.version>
 	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+			<version>${spring.boot.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.mariadb.jdbc</groupId>
@@ -44,16 +45,18 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
+			<version>${spring.boot.version}</version>
 		</dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
+			<version>${spring.boot.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
-            <version>${spring.boot.validation.version}</version>
+            <version>${spring.boot.version}</version>
             <scope>test</scope>
         </dependency>
 		<dependency>
@@ -69,6 +72,7 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
+			<version>${spring.boot.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -78,6 +82,7 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>${spring.boot.version}</version>
 			</plugin>
 		</plugins>
 	</build>
