@@ -10,9 +10,9 @@ import es.cesguiro.domain.service.impl.BookServiceImpl;
 import es.cesguiro.domain.service.BookService;
 import es.cesguiro.domain.service.impl.PublisherServiceImpl;
 import es.cesguiro.persistence.PersistenceConfig;
-import es.cesguiro.persistence.dao.AuthorDao;
-import es.cesguiro.persistence.dao.BookDao;
-import es.cesguiro.persistence.dao.PublisherDao;
+import es.cesguiro.persistence.dao.jpa.AuthorJpaDao;
+import es.cesguiro.persistence.dao.jpa.BookJpaDao;
+import es.cesguiro.persistence.dao.jpa.PublisherJpaDao;
 import es.cesguiro.persistence.dao.redis.BookRedisDao;
 import es.cesguiro.persistence.repository.AuthorRepositoryImpl;
 import es.cesguiro.persistence.repository.BookRepositoryImpl;
@@ -28,8 +28,8 @@ public class SpringConfig {
     /************* BOOK *************/
 
     @Bean
-    public BookRepository bookRepository(BookDao bookDao, BookRedisDao bookRedisDao) {
-        return new BookRepositoryImpl(bookDao, bookRedisDao);
+    public BookRepository bookRepository(BookJpaDao bookJpaDao, BookRedisDao bookRedisDao) {
+        return new BookRepositoryImpl(bookJpaDao, bookRedisDao);
     }
 
     @Bean
@@ -40,8 +40,8 @@ public class SpringConfig {
     /************* PUBLISHER *************/
 
     @Bean
-    public PublisherRepository publisherRepository(PublisherDao publisherDao) {
-        return new PublisherRepositoryImpl(publisherDao);
+    public PublisherRepository publisherRepository(PublisherJpaDao publisherJpaDao) {
+        return new PublisherRepositoryImpl(publisherJpaDao);
     }
 
     @Bean
@@ -51,8 +51,8 @@ public class SpringConfig {
 
     /*************** AUTHOR **************/
     @Bean
-    public AuthorRepository authorRepository(AuthorDao authorDao) {
-        return new AuthorRepositoryImpl(authorDao);
+    public AuthorRepository authorRepository(AuthorJpaDao authorJpaDao) {
+        return new AuthorRepositoryImpl(authorJpaDao);
     }
 
     @Bean
