@@ -27,9 +27,14 @@ public class SpringConfig {
 
     /************* BOOK *************/
 
+    /*@Bean
+    public BookRepository bookRepository(BookJpaDao bookJpaDao, BookRedisDao bookRedisDao, AuthorJpaDao authorJpaDao) {
+        return new BookRepositoryImpl(bookJpaDao, bookRedisDao, authorJpaDao);
+    }*/
+
     @Bean
-    public BookRepository bookRepository(BookJpaDao bookJpaDao, BookRedisDao bookRedisDao) {
-        return new BookRepositoryImpl(bookJpaDao, bookRedisDao);
+    public BookRepository bookRepository(BookJpaDao bookJpaDao) {
+        return new BookRepositoryImpl(bookJpaDao);
     }
 
     @Bean
