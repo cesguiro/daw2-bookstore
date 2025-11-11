@@ -3,7 +3,7 @@ package es.cesguiro.daw2_bookstore;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
+@SpringBootApplication()
 public class Daw2BookstoreApplication {
 
 	public static void main(String[] args) {
