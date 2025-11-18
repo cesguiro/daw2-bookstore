@@ -1,10 +1,13 @@
 package es.cesguiro.daw2_bookstore.controller.webModel.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
 public record BookDetailResponse(
+        Long id,
         String isbn,
         String titleEs,
         String titleEn,
@@ -14,6 +17,7 @@ public record BookDetailResponse(
         BigDecimal discountPercentage,
         BigDecimal price,
         String cover,
+        @JsonFormat(pattern = "dd-MM-yyyy")
         LocalDate publicationDate,
         PublisherSummaryResponse publisher,
         List<AuthorSummaryResponse> authors

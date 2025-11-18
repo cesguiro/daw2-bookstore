@@ -32,6 +32,8 @@
 		<es.cesguiro.daw2-bookstore-persistence.version>1.0-SNAPSHOT</es.cesguiro.daw2-bookstore-persistence.version>
         <spring.boot.version>3.5.6</spring.boot.version>
 		<org.instancio.version>5.5.1</org.instancio.version>
+        <com.fasterxml.jackson.version>2.20.1</com.fasterxml.jackson.version>
+        <org.flywaydb.version>11.17.0</org.flywaydb.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -53,12 +55,20 @@
             <artifactId>spring-boot-starter-data-redis</artifactId>
 			<version>${spring.boot.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
             <version>${spring.boot.version}</version>
-            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>${com.fasterxml.jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-mysql</artifactId>
+            <version>${org.flywaydb.version}</version>
         </dependency>
 		<dependency>
 			<groupId>es.cesguiro</groupId>
@@ -70,6 +80,8 @@
 			<artifactId>daw2-bookstore-persistence</artifactId>
 			<version>${es.cesguiro.daw2-bookstore-persistence.version}</version>
 		</dependency>
+
+        <!-- Test dependencies -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>

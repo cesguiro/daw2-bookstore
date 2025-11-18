@@ -1,6 +1,7 @@
 package es.cesguiro.daw2_bookstore.util;
 
 import es.cesguiro.daw2_bookstore.controller.webModel.request.BookInsertRequest;
+import es.cesguiro.daw2_bookstore.controller.webModel.request.BookUpdateRequest;
 import es.cesguiro.domain.service.dto.AuthorDto;
 import es.cesguiro.domain.service.dto.BookDto;
 import es.cesguiro.domain.service.dto.PublisherDto;
@@ -51,6 +52,12 @@ public class InstancioModel {
             .generate(field(BookInsertRequest::basePrice), gen -> gen.math().bigDecimal().range(new BigDecimal("1.00"), new BigDecimal("500.00")))
             .generate(field(BookInsertRequest::discountPercentage), gen -> gen.math().bigDecimal().range(new BigDecimal("0.00"), new BigDecimal("100.00")))
             .generate(field(BookInsertRequest::publicationDate), gen -> gen.temporal().localDate().past())
+            .toModel();
+    public static final Model<BookUpdateRequest> BOOK_UPDATE_REQUEST_MODEL = Instancio.of(BookUpdateRequest.class)
+            .generate(field(BookUpdateRequest::isbn), gen -> gen.text().pattern(ISBN_PATTERN))
+            .generate(field(BookUpdateRequest::basePrice), gen -> gen.math().bigDecimal().range(new BigDecimal("1.00"), new BigDecimal("500.00")))
+            .generate(field(BookUpdateRequest::discountPercentage), gen -> gen.math().bigDecimal().range(new BigDecimal("0.00"), new BigDecimal("100.00")))
+            .generate(field(BookUpdateRequest::publicationDate), gen -> gen.temporal().localDate().past())
             .toModel();
 
 }

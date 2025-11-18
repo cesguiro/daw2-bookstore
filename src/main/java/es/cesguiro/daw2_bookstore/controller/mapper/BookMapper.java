@@ -36,6 +36,7 @@ public class BookMapper {
             return null;
         }
         return new BookDetailResponse(
+            bookDto.id(),
             bookDto.isbn(),
             bookDto.titleEs(),
             bookDto.titleEn(),
@@ -57,7 +58,7 @@ public class BookMapper {
         if (bookInsertRequest == null) {
             return null;
         }
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         return new BookDto(
             null,
             bookInsertRequest.isbn(),
@@ -65,11 +66,11 @@ public class BookMapper {
             bookInsertRequest.titleEn(),
             bookInsertRequest.synopsisEs(),
             bookInsertRequest.synopsisEn(),
-            BigDecimal.valueOf(bookInsertRequest.basePrice()),
-            BigDecimal.valueOf(bookInsertRequest.discountPercentage()),
+            bookInsertRequest.basePrice(),
+            bookInsertRequest.discountPercentage(),
             null,
             bookInsertRequest.cover(),
-            LocalDate.parse(bookInsertRequest.publicationDate(), formatter),
+            bookInsertRequest.publicationDate(),
             mapPublisher(bookInsertRequest.publisherId()),
             bookInsertRequest.authorIds() != null ?
                 Arrays.stream(bookInsertRequest.authorIds())
@@ -83,7 +84,7 @@ public class BookMapper {
         if (bookUpdateRequest == null) {
             return null;
         }
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         return new BookDto(
                 bookUpdateRequest.id(),
                 bookUpdateRequest.isbn(),
@@ -91,11 +92,11 @@ public class BookMapper {
                 bookUpdateRequest.titleEn(),
                 bookUpdateRequest.synopsisEs(),
                 bookUpdateRequest.synopsisEn(),
-                BigDecimal.valueOf(bookUpdateRequest.basePrice()),
-                BigDecimal.valueOf(bookUpdateRequest.discountPercentage()),
+                bookUpdateRequest.basePrice(),
+                bookUpdateRequest.discountPercentage(),
                 null,
                 bookUpdateRequest.cover(),
-                LocalDate.parse(bookUpdateRequest.publicationDate(), formatter),
+                bookUpdateRequest.publicationDate(),
                 mapPublisher(bookUpdateRequest.publisherId()),
                 bookUpdateRequest.authorIds() != null ?
                         Arrays.stream(bookUpdateRequest.authorIds())

@@ -8,8 +8,7 @@ import es.cesguiro.daw2_bookstore.controller.mapper.BookMapper;
 import es.cesguiro.domain.model.Page;
 import es.cesguiro.domain.service.BookService;
 import es.cesguiro.domain.service.dto.BookDto;
-import jakarta.validation.constraints.Null;
-import org.antlr.v4.runtime.atn.SemanticContext;
+import es.cesguiro.domain.validation.spring_validator.DtoValidator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -54,6 +53,7 @@ public class BookController {
     @PostMapping
     public ResponseEntity<BookDetailResponse> createBook(@RequestBody BookInsertRequest bookInsertRequest) {
         BookDto bookDto = BookMapper.fromBookInsertRequestToBookDto(bookInsertRequest);
+        DtoValidator.validate(bookDto);
         BookDto createdBook = bookService.create(bookDto);
         return new ResponseEntity<>(BookMapper.fromBookDtoToBookDetailResponse(createdBook), HttpStatus.CREATED);
     }
@@ -64,6 +64,7 @@ public class BookController {
             throw new IllegalArgumentException("ID in path and request body must match");
         }
         BookDto bookDto = BookMapper.fromBookUpdateRequestToBookDto(bookUpdateRequest);
+        DtoValidator.validate(bookDto);
         BookDto updatedBook = bookService.update(bookDto);
         return new ResponseEntity<>(BookMapper.fromBookDtoToBookDetailResponse(updatedBook), HttpStatus.OK);
     }

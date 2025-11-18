@@ -1,5 +1,8 @@
 package es.cesguiro.daw2_bookstore.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import es.cesguiro.domain.repository.AuthorRepository;
 import es.cesguiro.domain.repository.BookRepository;
 import es.cesguiro.domain.repository.PublisherRepository;
@@ -63,6 +66,14 @@ public class SpringConfig {
     @Bean
     public AuthorService authorService(AuthorRepository authorRepository) {
         return new AuthorServiceImpl(authorRepository);
+    }
+
+    /* *************** ObjectMapper **************/
+    @Bean
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper()
+                .registerModule(new JavaTimeModule())
+                .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
     }
 
 }
