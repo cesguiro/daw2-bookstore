@@ -7,6 +7,9 @@ import es.cesguiro.domain.service.dto.AuthorDto;
 public class AuthorMapper {
 
     public static AuthorSummaryResponse fromAuthorDtoToAuthorSummaryResponse(AuthorDto authorDto) {
+        if (authorDto == null) {
+            return null;
+        }
         return new AuthorSummaryResponse(
             authorDto.name(),
             authorDto.slug()
@@ -14,6 +17,9 @@ public class AuthorMapper {
     }
 
     public static AuthorDetailResponse fromAuthorDtoToAuthorDetailResponse(AuthorDto authorDto) {
+        if (authorDto == null) {
+            return null;
+        }
         return new AuthorDetailResponse(
             authorDto.name(),
             authorDto.nationality(),

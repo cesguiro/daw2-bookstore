@@ -1,11 +1,15 @@
 package es.cesguiro.daw2_bookstore.controller;
 
+import es.cesguiro.daw2_bookstore.controller.webModel.request.BookInsertRequest;
+import es.cesguiro.daw2_bookstore.controller.webModel.request.BookUpdateRequest;
 import es.cesguiro.daw2_bookstore.controller.webModel.response.BookDetailResponse;
 import es.cesguiro.daw2_bookstore.controller.webModel.response.BookSummaryResponse;
 import es.cesguiro.daw2_bookstore.controller.mapper.BookMapper;
 import es.cesguiro.domain.model.Page;
 import es.cesguiro.domain.service.BookService;
 import es.cesguiro.domain.service.dto.BookDto;
+import jakarta.validation.constraints.Null;
+import org.antlr.v4.runtime.atn.SemanticContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -48,20 +52,25 @@ public class BookController {
     }
 
     @PostMapping
-    public BookDto createBook(@RequestBody BookDto bookDto) {
-        return bookService.create(bookDto);
+    public ResponseEntity<BookDetailResponse> createBook(@RequestBody BookInsertRequest bookInsertRequest) {
+        BookDto bookDto = BookMapper.fromBookInsertRequestToBookDto(bookInsertRequest);
+        BookDto createdBook = bookService.create(bookDto);
+        return new ResponseEntity<>(BookMapper.fromBookDtoToBookDetailResponse(createdBook), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public BookDto updateBook(@PathVariable("id") Long id, @RequestBody BookDto bookDto) {
-        if (!id.equals(bookDto.id())) {
+    public ResponseEntity<BookDetailResponse> updateBook(@PathVariable("id") Long id, @RequestBody BookUpdateRequest bookUpdateRequest) {
+        if (!id.equals(bookUpdateRequest.id())) {
             throw new IllegalArgumentException("ID in path and request body must match");
         }
-        return bookService.update(bookDto);
+        BookDto bookDto = BookMapper.fromBookUpdateRequestToBookDto(bookUpdateRequest);
+        BookDto updatedBook = bookService.update(bookDto);
+        return new ResponseEntity<>(BookMapper.fromBookDtoToBookDetailResponse(updatedBook), HttpStatus.OK);
     }
 
     @DeleteMapping("/{isbn}")
-    public void deleteBook(@PathVariable("isbn") String isbn) {
+    public ResponseEntity<Void> deleteBook(@PathVariable("isbn") String isbn) {
         bookService.deleteByIsbn(isbn);
+        return ResponseEntity.noContent().build();
     }
 }

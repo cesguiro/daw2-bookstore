@@ -1,5 +1,9 @@
 package es.cesguiro.daw2_bookstore.exception;
 
+
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 public class ErrorMessage {
 
     private final String error;

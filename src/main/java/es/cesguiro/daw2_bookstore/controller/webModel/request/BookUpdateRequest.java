@@ -2,7 +2,8 @@ package es.cesguiro.daw2_bookstore.controller.webModel.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public record BookInsertRequest(
+public record BookUpdateRequest(
+        Long id,
         String isbn,
         String titleEs,
         String titleEn,
