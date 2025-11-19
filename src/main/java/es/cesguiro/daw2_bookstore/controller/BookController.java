@@ -38,8 +38,7 @@ public class BookController {
                 bookSummaries,
                 bookDtoPage.pageNumber(),
                 bookDtoPage.pageSize(),
-                bookDtoPage.totalElements(),
-                bookDtoPage.totalPages()
+                bookDtoPage.totalElements()
         );
         return new ResponseEntity<>(bookSummaryPage, HttpStatus.OK);
     }

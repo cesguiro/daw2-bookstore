@@ -57,7 +57,11 @@ class BookControllerShould {
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.data.length()").value(2))
                 .andExpect(jsonPath("$.data[0].isbn").value(bookDtos.getFirst().isbn()))
-                .andExpect(jsonPath("$.data[1].isbn").value(bookDtos.getLast().isbn()));
+                .andExpect(jsonPath("$.data[1].isbn").value(bookDtos.getLast().isbn()))
+                .andExpect(jsonPath("$.pageNumber").value(1))
+                .andExpect(jsonPath("$.pageSize").value(10))
+                .andExpect(jsonPath("$.totalElements").value(2))
+                .andExpect(jsonPath("$.totalPages").value(1));
     }
 
     @Test
