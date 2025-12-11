@@ -1,6 +1,6 @@
 package es.cesguiro.daw2_bookstore.config;
 
-import es.cesguiro.daw2_bookstore.filter.LoginFilter;
+import es.cesguiro.daw2_bookstore.filter.TokenAuthenticationFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,10 +10,10 @@ public class SecurityFilterConfig {
 
     // --- ORDEN 1: LoginFilter ---
     @Bean
-    public FilterRegistrationBean<LoginFilter> loginFilterFilterRegistrationBean() {
-        FilterRegistrationBean<LoginFilter> registrationBean = new FilterRegistrationBean<>();
-        registrationBean.setFilter(new LoginFilter());
-        registrationBean.addUrlPatterns("/api/login");
+    public FilterRegistrationBean<TokenAuthenticationFilter> tokenAuthenticationFilterFilterRegistrationBean() {
+        FilterRegistrationBean<TokenAuthenticationFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(new TokenAuthenticationFilter());
+        registrationBean.addUrlPatterns("/api/*");
         registrationBean.setOrder(10);
         return registrationBean;
     }
